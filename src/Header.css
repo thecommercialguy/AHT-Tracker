@@ -1,0 +1,39 @@
+.header {
+    width: 100vw;
+    height: 78px;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 2.75rem;
+    background-color: black;
+}
+
+.header a {
+    text-decoration: none;
+    color: 'white';
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo {
+    width: 50px;
+}
+
+.logo-text {
+    font-size: 28px;
+    font-style: italic;
+    padding-top: 5px;
+    padding-left: 6px;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+}
+
