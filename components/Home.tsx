@@ -1,4 +1,8 @@
 import { useLoaderData } from "react-router";
+import type { ChannelInfo, ChannelInfoResponse } from '../types/callTypes';
+import { Temporal } from "@js-temporal/polyfill";
+import { useState } from "react";
+import { msToTime } from '../helpers/timeHelpers'
 
 
 // totalDuration -- Total time logged in
@@ -171,6 +175,8 @@ query AgentSession($from: Long!, $to: Long!) {
 }
 `
 
+
+
 // a11e3db7-67ce-4bea-9f36-09d4686c6470
 
 export async function loader() {
@@ -200,15 +206,41 @@ export async function loader() {
 
     const queryData = await response.json();
 
+    // queryData.agentSession.agentSessions[0].channelInfo[0]
+
     // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0]);
-    return queryData
+    console.log('Call Logs:', queryData.data.agentSession.agentSessions[0].channelInfo[0]);
+    
+    const channelInfo = queryData.data.agentSession.agentSessions[0].channelInfo[0] as ChannelInfoResponse;
+    // return queryData
+    console.log('Call Logs:', channelInfo);
+    return channelInfo;
 }
 
 export default function Home() { 
-    const { data } = useLoaderData();
+    const data: ChannelInfoResponse = useLoaderData();  // Difference between destructuring and just using the response
+    Temporal.PlainTime.from({ millisecond: data.connectedCount}).minute
+    const [channelInfo, setChannelInfo] = useState<ChannelInfo>({
+        agentPhoneNumber: data.agentPhoneNumber,
+        channelId: data.channelId,
+        channelType: data.channelType,
+        connectedCount: data.connectedCount.toString(),
+        connectedDuration: msToTime(data.connectedDuration),
+        currentState: data.currentState,
+        notRespondedCount: data.notRespondedCount.toString(),
+        outdialCount: data.outdialCount.toString(),
+        overallEvalScore: data.overallEvalScore ? data.overallEvalScore.toString() : null,
+        postCallDuration: data.postCallDuration.toString(),
+        reservationCount: data.reservationCount.toString(),
+        ronaCount: data.ronaCount.toString(),
+        totalDuration: data.totalDuration.toString(),
+        wordRatioCount: data.wordRatioCount.toString(),
+        wrapupDuration: data.wrapupDuration.toString()
+    })
 
     
-    console.log(data.agentSession.agentSessions[0].channelInfo)
+    console.log(data)
+    console.log(channelInfo)
     // console.log(queryData.data)
 
     return (
@@ -217,7 +249,7 @@ export default function Home() {
                 <h2 className="dashboard-header-text">Welcome back, William Walter</h2>
                 <div className="call-count-container">
                     <span className="call-count-header">Total Calls</span>
-                    <span className="call-count">{data.agentSession.agentSessions[0].channelInfo[0].connectedCount}</span>
+                    <span className="call-count">{channelInfo.connectedCount}</span>
                 </div>
             </div>
             <div className="call-stats-container">
@@ -227,7 +259,7 @@ export default function Home() {
                 </div>
                 <div className="call-stats-item total-connected-container">
                     <div className="call-stats-label">Total Connected Time</div>
-                    <div className="call-stats-value">{'1:00:00'}</div>
+                    <div className="call-stats-value">{channelInfo.connectedDuration}</div>
                 </div>
                 <div className="call-stats-item last-five-average-container">
                     <div className="call-stats-label">Last Five Call Average</div>
