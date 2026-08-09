@@ -1,0 +1,68 @@
+{
+  "data": {
+    "agentSession": {
+      "agentSessions": [
+        {
+          "agentSessionId": "1cbdec29-5627-43cb-8ae3-49742d2005e2",
+          "agentId": "b4c5ed82-ccd0-4a09-9dd9-94535c021b47",
+          "agentName": "William Walter",
+          "userLoginId": "William.Walter1@loves.com",
+          "siteId": "91d0d286-5e0d-4560-8dca-0b481e5d3323",
+          "siteName": "Helpdesk",
+          "startTime": 1786142705912,
+          "channelInfo": [
+            {
+              "channelId": "e118dcf9-34cf-44c3-b488-50c08ebc9c3d",
+              "channelType": "telephony",
+              "connectedDuration": 6140576,
+              "postCallDuration": 0,
+              "connectedCount": 23,
+              "wrapupDuration": 367477,
+              "notRespondedCount": 0,
+              "reservationCount": 0,
+              "totalDuration": 17129237,
+              "currentState": "logged_out",
+              "agentPhoneNumber": "+14058472700",
+              "wordRatioCount": 0,
+              "ronaCount": 0,
+              "overallEvalScore": null,
+              "outdialCount": 2
+            }
+          ]
+        },
+        {
+          "agentSessionId": "48637409-fa96-47d5-b7c6-3621b60b1f82",
+          "agentId": "b4c5ed82-ccd0-4a09-9dd9-94535c021b47",
+          "agentName": "William Walter",
+          "userLoginId": "William.Walter1@loves.com",
+          "siteId": "91d0d286-5e0d-4560-8dca-0b481e5d3323",
+          "siteName": "Helpdesk",
+          "startTime": 1786129520726,
+          "channelInfo": [
+            {
+              "channelId": "7e7c3a6d-0d67-4966-9c84-05f9e30897e3",
+              "channelType": "telephony",
+              "connectedDuration": 5827682,
+              "postCallDuration": 0,
+              "connectedCount": 20,
+              "wrapupDuration": 183554,
+              "notRespondedCount": 0,
+              "reservationCount": 0,
+              "totalDuration": 13111067,
+              "currentState": "logged_out",
+              "agentPhoneNumber": "+14058472700",
+              "wordRatioCount": 0,
+              "ronaCount": 0,
+              "overallEvalScore": null,
+              "outdialCount": 1
+            }
+          ]
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": null
+      }
+    }
+  }
+} 
