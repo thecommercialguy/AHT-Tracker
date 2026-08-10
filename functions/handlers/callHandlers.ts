@@ -1,3 +1,4 @@
+import { getFirestore } from "firebase-admin/firestore";
 import { onRequest } from "firebase-functions/https";
 
 const taskLegQuery = `
@@ -91,10 +92,9 @@ query AgentSession($from: Long!, $to: Long!) {
 }
 `
 
+const db = getFirestore('AHT-Trakcer-0');
+
 const webexQuery = async (from: number, to: number, query: any) => {
-
-    
-
     const response = await fetch('/api/webex', {
     // const response = await fetch('/api/webex/v1/search', {
         method: 'POST',
@@ -107,9 +107,13 @@ const webexQuery = async (from: number, to: number, query: any) => {
 
     if (!response.ok) {
         console.error('Failed to fetch call logs:', response.statusText);
-        throw Error(response.statusText)
-        return {data: 'error', status: response.status};
+        throw Error(response.statusText);
+        // return {data: 'error', status: response.status};
     }
+
+    const queryData = await response.json();
+
+    return queryData.data;
 
 };
 
@@ -121,10 +125,11 @@ export const getCallDashboard = onRequest(
     },
     async (req, res) => {
 
-        const userId = req.query.text;
+        const userId = req.query.text as string | undefined | null;
         if (userId == null || userId == undefined) {
             res.status(400);
             res.json({result: 'No user id provided'});
+            return;
         }
 
         // Get Current "time"
@@ -161,6 +166,44 @@ export const getCallDashboard = onRequest(
             res.status(500);
             res.json({result: error.message});
         }
+
+        // compare number of calls from response to number of calls from database
+
+        const taskLegs = taskLegResponse.taskLegDetails.taskLegs;
+        if (!taskLegs) {
+            res.status(400);
+            res.json({result: 'No task legs'});
+            return;
+        }
+
+
+        const currCalls = await db.collection('users')
+            .doc(userId)
+            .collection('calls')
+            .where('createdTime', '>', from)
+            .orderBy('createdTime', 'desc')
+            .get();
+            
+        
+        if (currCalls.size == taskLegs.size()) {
+            res.status(206);
+            res.json({result: 'No task legs'});
+            return;
+        }
+        
+        
+
+
+
+
+        const previousCall = await db.collection('users').doc(userId).collection('calls')
+
+
+
+        const previousSession = await db.collection('users').doc(userId).collection('calls')
+
+
+         
 
 
 
