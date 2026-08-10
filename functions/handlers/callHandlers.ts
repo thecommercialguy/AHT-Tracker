@@ -1,5 +1,4 @@
-import type { ChannelInfo, ChannelInfoResponse } from '../types/callTypes';
-
+import { onRequest } from "firebase-functions/https";
 
 const taskLegQuery = `
 query TaskLegs($from: Long!, $to: Long!) {
@@ -40,6 +39,7 @@ query TaskLegs($from: Long!, $to: Long!) {
     }
 }
 `
+
 const agentSessionQuery = `
 query AgentSession($from: Long!, $to: Long!) {
   agentSession(from: $from, to: $to 
@@ -91,14 +91,9 @@ query AgentSession($from: Long!, $to: Long!) {
 }
 `
 
-export const getAgentSession = async () => {
-    const to = Date.now();
-    const from = to - 48 * 60 * 60 * 1000;
-    // const endTime = Date.now();
-    // const startTime = endTime - 24 * 60 * 60 * 1000;
-    const query = agentSessionQuery;
+const webexQuery = async (from: number, to: number, query: any) => {
 
-
+    
 
     const response = await fetch('/api/webex', {
     // const response = await fetch('/api/webex/v1/search', {
@@ -107,67 +102,98 @@ export const getAgentSession = async () => {
         body: JSON.stringify({ 
             query,
             variables: { from, to }
-            // variables: { startTime, endTime}
         })
     });
 
     if (!response.ok) {
         console.error('Failed to fetch call logs:', response.statusText);
-        return {data: 'error'};
+        throw Error(response.statusText)
+        return {data: 'error', status: response.status};
     }
 
-    const queryData = await response.json();
-    console.log(JSON.stringify(queryData, null, 2));
+};
 
-    // queryData.agentSession.agentSessions[0].channelInfo[0]
+export const getCallDashboard = onRequest(
+    {   
+        cors: true,
+        region: "us-central1", 
+        timeoutSeconds: 1200
+    },
+    async (req, res) => {
 
-    // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0]);
-    console.log('Call Logs:', queryData.data.agentSession.agentSessions[0].channelInfo[0]);
-    
-    const channelInfo = queryData.data.agentSession.agentSessions[0].channelInfo[0] as ChannelInfoResponse;
-    // return queryData
-    console.log('Call Logs:', channelInfo);
-    return channelInfo;
-}
+        const userId = req.query.text;
+        if (userId == null || userId == undefined) {
+            res.status(400);
+            res.json({result: 'No user id provided'});
+        }
 
-export const getTaskLegs = async () => {
-    const to = Date.now();
-    const from = to - 48 * 60 * 60 * 1000;
-    // const endTime = Date.now();
-    // const startTime = endTime - 24 * 60 * 60 * 1000;
+        // Get Current "time"
+        const currInstantMS = Date.now();
+        const currInstant = new Date(currInstantMS);
+        const currInstantIso = currInstant.toUTCString();
+        
+        const currDateSlice = currInstantIso.slice(0, -15);
+        const currDate = new Date(currDateSlice);
+        const currDateMS = currDate.getTime() -  (6 * 60 * 60 * 1000);
 
-    const query = taskLegQuery;
+        const from = currDateMS;
+        const to = currDateMS;
+        
+        // const query = taskLegQuery;
+
+        let taskLegResponse;
+        
+        try {
+            taskLegResponse = await webexQuery(from, to, taskLegQuery);
+            
+        } catch (error) {
+            res.status(500);
+            res.json({result: error.message});
+        }
+        
+
+        let agentSessionResponse;
+
+        try {
+            agentSessionResponse = await webexQuery(from, to, agentSessionQuery);
+
+        } catch (error) {
+            res.status(500);
+            res.json({result: error.message});
+        }
 
 
-    const response = await fetch('/api/webex', {
-    // const response = await fetch('/api/webex/v1/search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            query,
-            variables: { from, to }
-            // variables: { startTime, endTime}
+
+        
+
+
+       
+
+
+
+
+
+
+        
+        res.json({
+            averageHandleTime: {
+                duration: '',
+                connectedDuratoin: '',
+                wrapupDuration: ''
+            },
+            totalCount: '',
+            connectedCount: '',
+            connectedDuration: '',
+            fastestCall: '',
+            slowestCall: '',
+            recentCall: {
+                duration: '',
+                connectedDuration: '',
+                wrapupDuration: '',
+            },
         })
-    });
-
-    if (!response.ok) {
-        console.error('Failed to fetch call logs:', response.statusText);
-        return {data: 'error'};
-    }
-
-    const queryData = await response.json();
-    console.log(JSON.stringify(queryData, null, 2));
     
 
-    console.log(queryData)
 
-    // queryData.agentSession.agentSessions[0].channelInfo[0]
-
-    // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0]);
-    // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0].channelInfo[0]);
     
-    // const channelInfo = queryData.data.agentSession.agentSessions[0].channelInfo[0] as ChannelInfoResponse;
-    // return queryData
-    // console.log('Call Logs:', channelInfo);
-    // return channelInfo;
-}
+})
