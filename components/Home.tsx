@@ -135,7 +135,41 @@ import { getAgentSession, getTaskLegs } from '../loaders/dashboardLoaders'
 
 export async function loader() {
     const channelInfo = await getAgentSession();
-    await getTaskLegs();
+    const taskLegs = await getTaskLegs();
+
+
+    const recentCall = taskLegs[0]
+
+    const ahtDuration = (channelInfo.connectedDuration + channelInfo.wrapupDuration) / channelInfo.connectedCount;
+    const ahtConnected = channelInfo.connectedDuration
+    const ahtWrapup = channelInfo.wrapupDuration
+    
+    const fastestCall = taskLegs.reduce((min, current) => (current.connectedCount + current.wrapupDuration) < (min.connectedCount + min.wrapupDuration) ? current : min)
+    const slowerstCall = taskLegs.reduce((max, current) => (current.connectedCount + current.wrapupDuration) > (max.connectedCount + max.wrapupDuration) ? current : max)
+
+
+
+
+
+    const data = {
+        averageHandleTime: {
+            duration: ahtDuration,
+            connectedDuration: ahtConnected,
+            wrapupDuration: ahtWrapup
+        },
+        totalCount: taskLegs.length,
+        connectedCount: channelInfo.connectedCount,
+        connectedDuration: channelInfo.connectedDuration,
+        fastestCall: fastestCall.connectedDuration + fastestCall.wrapupDuration,
+        slowestCall: slowerstCall.connectedDuration + slowerstCall.wrapupDuration,
+        recentCall: {
+            duration: recentCall.connectedDuration + recentCall.wrapupDuration,
+            connectedDuration: recentCall.connectedDuration,
+            wrapupDuration: recentCall.wrapupDuration,
+        },
+    }
+
+    console.log(data)
 
     return channelInfo;
     

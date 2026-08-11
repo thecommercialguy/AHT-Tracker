@@ -92,6 +92,26 @@ query AgentSession($from: Long!, $to: Long!) {
 `
 
 export const getAgentSession = async () => {
+    //
+    // const currInstantMS = Date.now();
+    // const currInstant = new Date(currInstantMS);
+    // const currInstantIso = currInstant.toISOString();
+
+    // console.log([currInstantMS, currInstant, currInstantIso])
+    
+
+    // // const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' }); // "2026-08-10"
+    // const currDateSlice = currInstantIso.slice(0, 10);
+    // const currDate = new Date(`${currDateSlice}`);
+
+    // const currDateMS = currDate.getTime() - (6 * 60 * 60 * 1000);
+    // const currDate2 = new Date(currDateMS);
+
+    // console.log([currDateSlice, currDate, currDateMS, currDate2])
+
+    // const to = currInstantMS;
+    // const from = currDateMS;
+    //
     const to = Date.now();
     const from = to - 48 * 60 * 60 * 1000;
     // const endTime = Date.now();
@@ -124,7 +144,7 @@ export const getAgentSession = async () => {
     // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0]);
     console.log('Call Logs:', queryData.data.agentSession.agentSessions[0].channelInfo[0]);
     
-    const channelInfo = queryData.data.agentSession.agentSessions[0].channelInfo[0] as ChannelInfoResponse;
+    const channelInfo = queryData.data.agentSession.agentSessions[1].channelInfo[0] as ChannelInfoResponse;
     // return queryData
     console.log('Call Logs:', channelInfo);
     return channelInfo;
@@ -159,8 +179,14 @@ export const getTaskLegs = async () => {
     console.log(JSON.stringify(queryData, null, 2));
     
 
-    console.log(queryData)
+   const taskLegData = queryData.data.taskLegDetails.taskLegs;
 
+   const taskLegsSorted = taskLegData.sort((a, b) => b.createdTime - a.createdTime);
+
+   console.log(taskLegsSorted);
+
+
+   return taskLegsSorted
     // queryData.agentSession.agentSessions[0].channelInfo[0]
 
     // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0]);

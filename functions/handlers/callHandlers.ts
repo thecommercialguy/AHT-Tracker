@@ -183,7 +183,7 @@ export const getCallDashboard = onRequest(
             .where('createdTime', '>', from)
             .orderBy('createdTime', 'desc')
             .get();
-            
+
         
         if (currCalls.size == taskLegs.size()) {
             res.status(206);

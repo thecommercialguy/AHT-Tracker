@@ -32,3 +32,21 @@ export interface ChannelInfo {
     wordRatioCount: string | null;
     wrapupDuration: string | null;
 }
+
+export interface DashboardData {
+    averageHandleTime: {
+        duration: number | null,
+        connectedDuration: number | null,
+        wrapupDuration: number | null
+    },
+    totalCount: number | null,
+    connectedCount: number | null,
+    connectedDuration: number | null,
+    fastestCall: number | null,
+    slowestCall: number | null,
+    recentCall: {
+        duration: number | null,
+        connectedDuration: number | null,
+        wrapupDuration: number | null,
+    },
+}
