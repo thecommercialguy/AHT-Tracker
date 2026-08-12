@@ -174,6 +174,8 @@ export const getAgentSession = async () => {
         
     })
     
+    const stratTime = queryData.data.agentSession.agentSessions.reduce((a, b) => a.startTime < b.startTime ? a : b)
+
     console.log(reduced)
 
     
