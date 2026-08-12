@@ -3,7 +3,7 @@ export interface ChannelInfoResponse {
     channelId: string | null;
     channelType: string | null;
     connectedCount: number | null;
-    connectedDuration: number | null;
+    connectedDuration?: number;
     currentState: string | null;
     notRespondedCount: number | null;
     outdialCount: number | null;
@@ -33,6 +33,24 @@ export interface ChannelInfo {
     wrapupDuration: string | null;
 }
 
+export interface TaskLeg {
+    agentPhoneNumber: string;
+    channelId: string | null;
+    channelType: string | null;
+    connectedCount: string | null;
+    connectedDuration: string | null;
+    currentState: string | null;
+    notRespondedCount: string | null;
+    outdialCount: string | null;
+    overallEvalScore: string | null;
+    postCallDuration: string | null;
+    reservationCount: string | null;
+    ronaCount: string | null;
+    totalDuration: string | null;
+    wordRatioCount: string | null;
+    wrapupDuration: string | null;
+}
+
 export interface DashboardData {
     averageHandleTime: {
         duration: number | null,
@@ -43,7 +61,7 @@ export interface DashboardData {
     connectedCount: number | null,
     connectedDuration: number | null,
     fastestCall: number | null,
-    slowestCall: number | null,
+    longestCall: number | null,
     recentCall: {
         duration: number | null,
         connectedDuration: number | null,

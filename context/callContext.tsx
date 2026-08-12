@@ -14,14 +14,14 @@ const CallDataContext = createContext<CallData | null>(null);
 export function CallDataProvider({ children }) {
 
 
-    return (
-        <CallDataContext.Provider value={{ null }}>
+    // return (
+    //     <CallDataContext.Provider value={{ undefined }}>
 
-        </CallDataContext.Provider>
-    )
+    //     </CallDataContext.Provider>
+    // )
 }
 
 
 export function useCallDataContext() {
-    
+
 }

@@ -8,13 +8,14 @@
     transform: translateX(-50%);
     justify-content: flex-start;
     align-items: center;
-    padding-left: 2.75rem;
+    /* padding-left: 2.75rem; */
     background-color: black;
 }
 
 .header a {
     text-decoration: none;
     color: 'white';
+    padding-left: 32px;
 }
 
 .logo-container {

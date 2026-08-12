@@ -1,4 +1,4 @@
-import type { ChannelInfo, ChannelInfoResponse } from '../types/callTypes';
+import type { ChannelInfoResponse } from '../types/callTypes';
 
 
 const taskLegQuery = `
@@ -133,26 +133,60 @@ export const getAgentSession = async () => {
 
     if (!response.ok) {
         console.error('Failed to fetch call logs:', response.statusText);
-        return {data: 'error'};
+        // return {data: 'error'};
     }
 
     const queryData = await response.json();
-    console.log(JSON.stringify(queryData, null, 2));
+    // console.log(JSON.stringify(queryData, null, 2));
 
     // queryData.agentSession.agentSessions[0].channelInfo[0]
 
     // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0]);
-    console.log('Call Logs:', queryData.data.agentSession.agentSessions[0].channelInfo[0]);
+    // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0].channelInfo[0]);
+    const channelInfos = queryData.data.agentSession.agentSessions.flatMap((session) => {
+        
+        if (!session.channelInfo) return [];
+        return session.channelInfo;
+        
+
+    })
+
+    console.log(channelInfos)
     
-    const channelInfo = queryData.data.agentSession.agentSessions[1].channelInfo[0] as ChannelInfoResponse;
+    const reduced = channelInfos.reduce((a, b) => {
+        return {
+            agentPhoneNumber: a.agentPhoneNumber,
+            channelId: a.channelId,
+            channelType: "telephony",
+            connectedCount: a.connectedCount + b.connectedCount,
+            connectedDuration: a.connectedDuration + b.connectedDuration,
+            currentState: a.currentState,
+            notRespondedCount: a.notRespondedCount + b.notRespondedCount,
+            outdialCount: a.outdialCount + b.outdialCount,
+            overallEvalScore: null,
+            postCallDuration: a.postCallDuration + b.postCallDuration,
+            reservationCount: a.reservationCount + b.reservationCount,
+            ronaCount: a.ronaCount + b.ronaCount,
+            totalDuration: a.totalDuration + b.totalDuration,
+            wordRatioCount: 0,
+            wrapupDuration: a.wrapupDuration + b.wrapupDuration
+        }
+        
+    })
+    
+    console.log(reduced)
+
+    
+    const channelInfo = queryData.data.agentSession.agentSessions[0].channelInfo[0] as ChannelInfoResponse;
     // return queryData
     console.log('Call Logs:', channelInfo);
-    return channelInfo;
+    return reduced;
 }
 
 export const getTaskLegs = async () => {
     const to = Date.now();
-    const from = to - 48 * 60 * 60 * 1000;
+    const from = to - 24 * 60 * 60 * 1000;
+    // const from = to - 48 * 60 * 60 * 1000;
     // const endTime = Date.now();
     // const startTime = endTime - 24 * 60 * 60 * 1000;
 
