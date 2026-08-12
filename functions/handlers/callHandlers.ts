@@ -81,7 +81,7 @@ export const getCallDashboard = onRequest(
             return;
         }
 
-        const batch = db.batch();
+        const taskLegBatch = db.batch();
         taskLegResponse.slice(0, taskLegResponse.length - currCalls.size).forEach((item) => {
             const taskLeg =  {
                 callId: item.id,
@@ -92,18 +92,14 @@ export const getCallDashboard = onRequest(
             };
 
             const docRef = callsRef.doc();
-            batch.set(docRef, { ...taskLeg, createdAt: new Date(), updatedAt: new Date()});
+            taskLegBatch.set(docRef, { ...taskLeg, createdAt: new Date(), updatedAt: new Date()});
 
         });
-        await batch.commit();
-        // —createdTime
-        // —wrapupDuration
-        // —isOutdial
-        // —connectedDuration
-        
+        await taskLegBatch.commit();
+       
         const sessionRef = db.collection('users').doc(userId).collection('sessions');
         
-        
+        const currSessions = sessionRef.where('createdAt', '>', from).orderBy('createdAt', 'desc').get();
 
 
 
