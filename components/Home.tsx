@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router";
-import type { ChannelInfo, ChannelInfoResponse } from '../types/callTypes';
+import type { ChannelInfo, ChannelInfoResponse, DashboardData } from '../types/callTypes';
 import { Temporal } from "@js-temporal/polyfill";
 import { useState } from "react";
 import { msToTime } from '../helpers/timeHelpers'
@@ -151,7 +151,7 @@ export async function loader() {
 
 
 
-    const data = {
+    const data: DashboardData = {
         averageHandleTime: {
             duration: ahtDuration,
             connectedDuration: ahtConnected,
