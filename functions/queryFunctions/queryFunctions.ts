@@ -116,6 +116,10 @@ export const taskLegsWebexQuery = async (from: number, to: number) => {
     const taskLegData = queryData.data.taskLegDetails.taskLegs;
     const taskLegsSorted = taskLegData.sort((a, b) => b.createdTime - a.createdTime);
 
+    if (taskLegsSorted.length < 1) {
+        throw Error('No tasklegs')
+    }
+
     return taskLegsSorted;
 
 };
@@ -140,7 +144,51 @@ export const agentSessionWebexQuery = async (from: number, to: number) => {
 
     const queryData = await response.json();
 
-    const channelInfo = queryData.data.agentSession.agentSessions[0].channelInfo[0] as ChannelInfoResponse;
+    const agentSessions = queryData.data.agentSession.agentSessions
+
+    if (agentSessions === null || agentSessions == undefined || agentSessions.lenght < 1) {
+        throw Error("No agent sessions")
+    }
+
+    const channelInfos = agentSessions.flatMap((session) => {
+        
+        if (!session.channelInfo) return [];
+        return session.channelInfo;
+        
+
+    })
+
+    console.log(channelInfos)
+    
+    const reduced = channelInfos.reduce((a, b) => {
+        return {
+            agentPhoneNumber: a.agentPhoneNumber,
+            channelId: a.channelId,
+            channelType: "telephony",
+            connectedCount: a.connectedCount + b.connectedCount,
+            connectedDuration: a.connectedDuration + b.connectedDuration,
+            currentState: a.currentState,
+            notRespondedCount: a.notRespondedCount + b.notRespondedCount,
+            outdialCount: a.outdialCount + b.outdialCount,
+            overallEvalScore: null,
+            postCallDuration: a.postCallDuration + b.postCallDuration,
+            reservationCount: a.reservationCount + b.reservationCount,
+            ronaCount: a.ronaCount + b.ronaCount,
+            totalDuration: a.totalDuration + b.totalDuration,
+            wordRatioCount: 0,
+            wrapupDuration: a.wrapupDuration + b.wrapupDuration
+        }
+        
+    })
+    
+    const startTime = queryData.data.agentSession.agentSessions.reduce((a, b) => a.startTime < b.startTime ? a : b)
+    if (startTime == null || startTime == undefined) {  // May remove this as it kinda doesnt need that after the null check
+        throw new Error('No agent sessions')
+    }
+
+    
+    const channelInfo = {...queryData.data.agentSession.agentSessions[0].channelInfo[0], startTime: startTime} as ChannelInfoResponse;
+
 
     return channelInfo;
 

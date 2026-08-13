@@ -1,4 +1,5 @@
 export interface ChannelInfoResponse {
+    startTime: number
     agentPhoneNumber: string;
     channelId: string | null;
     channelType: string | null;

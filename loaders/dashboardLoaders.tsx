@@ -176,10 +176,10 @@ export const getAgentSession = async () => {
     
     const stratTime = queryData.data.agentSession.agentSessions.reduce((a, b) => a.startTime < b.startTime ? a : b)
 
-    console.log(reduced)
+    console.log(reduced) 
 
     
-    const channelInfo = queryData.data.agentSession.agentSessions[0].channelInfo[0] as ChannelInfoResponse;
+    const channelInfo = {...queryData.data.agentSession.agentSessions[0].channelInfo[0], startTime: startTime} as ChannelInfoResponse;
     // return queryData
     console.log('Call Logs:', channelInfo);
     return reduced;

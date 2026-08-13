@@ -1,8 +1,8 @@
-import { getFirestore } from "firebase-admin/firestore";
+import { getFirestore, FieldValue  } from "firebase-admin/firestore";
 import { onRequest } from "firebase-functions/https";
 import type { ChannelInfoResponse } from '../../types/callTypes';
 import { agentSessionWebexQuery, taskLegsWebexQuery } from "../queryFunctions/queryFunctions";
-import { collection, writeBatch } from "firebase/firestore";
+import { collection, writeBatch, updateDoc } from "firebase/firestore";
 
 
 const db = getFirestore('AHT-Trakcer-0');
@@ -63,24 +63,49 @@ export const getCallDashboard = onRequest(
             return;
         }
 
+        
+
+        // There is an agent session now
+        const sessionRef = db.collection('users').doc(userId).collection('sessions');
+        
+        const currSessions = await sessionRef.where('startTime', '>', from).orderBy('startTime', 'desc').get();
+        if (currSessions.empty) {
+            // create session
+            await sessionRef.doc()create(agentSessionResponse);
+        } else {
+            // update session
+            await currSessions.docs[0].refupdate(agentSessionResponse);
+
+        }
+
+        const currSessionId = currSessions.docs[0].id;
+
+        session
+        
+        await updateDoc(currSessions.docs[0], agentSessionResponse)
+
+
+
         // compare number of calls from response to number of calls from database
         if (!taskLegResponse) {
             res.status(400);
             res.json({result: 'No task legs'});
             return;
         }
-        
+
+
         const callsRef = db.collection('users').doc(userId).collection('calls')
 
         const currCalls = await callsRef.where('createdTime', '>', from).orderBy('createdTime', 'desc').get();
 
-        
         if (currCalls.size == taskLegResponse.length) {
+            // Call collection is up to date
             res.status(206);
-            res.json({result: 'No task legs'});
+            res.json({result: 'Up to date'});
             return;
         }
 
+        // New calls can be added
         const taskLegBatch = db.batch();
         taskLegResponse.slice(0, taskLegResponse.length - currCalls.size).forEach((item) => {
             const taskLeg =  {
@@ -92,14 +117,14 @@ export const getCallDashboard = onRequest(
             };
 
             const docRef = callsRef.doc();
-            taskLegBatch.set(docRef, { ...taskLeg, createdAt: new Date(), updatedAt: new Date()});
+            taskLegBatch.set(docRef, { ...taskLeg, createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp()});
 
         });
         await taskLegBatch.commit();
        
-        const sessionRef = db.collection('users').doc(userId).collection('sessions');
         
-        const currSessions = sessionRef.where('createdAt', '>', from).orderBy('createdAt', 'desc').get();
+
+        
 
 
 
