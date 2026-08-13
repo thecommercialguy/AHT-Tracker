@@ -51,7 +51,7 @@ export async function loader() {
             duration: recentCall.connectedDuration + recentCall.wrapupDuration,
             connectedDuration: recentCall.connectedDuration,
             wrapupDuration: recentCall.wrapupDuration,
-        },
+        }
     }
 
     // console.log(data)

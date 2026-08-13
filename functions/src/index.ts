@@ -3,15 +3,12 @@
  *
  * import {onCall} from "firebase-functions/v2/https";
  * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+*
+* See a full list of supported triggers at https://firebase.google.com/docs/functions
+*/
 
 import {setGlobalOptions} from "firebase-functions";
-import {onRequest} from "firebase-functions/https";
-import * as logger from "firebase-functions/logger";
 import {initializeApp} from "firebase-admin/app";
-import {getFirestore} from "firebase-admin/firestore";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -26,71 +23,14 @@ import {getFirestore} from "firebase-admin/firestore";
 // functions should each use functions.runWith({ maxInstances: 10 }) instead.
 // In the v1 API, each function can only serve one request per container, so
 // this will be the maximum concurrent request count.
-setGlobalOptions({ maxInstances: 10 });
 
 // export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
-
+    //   logger.info("Hello logs!", {structuredData: true});
+    //   response.send("Hello from Firebase!");
+    // });
+    
 
 initializeApp();
-
-export const getCallDashboard = onRequest(
-    {region: "us-central1", timeoutSeconds: 30},
-    async (req, res) => {
-
-        const userId = req.query.text;
-        if (userId == null || userId == undefined) {
-            res.status(400);
-            res.json({result: 'No user id provided'});
-        }
-
-        // Get Current "time"
-        const currInstantMS = Date.now();
-        const currInstant = new Date(currInstantMS);
-        const currInstantIso = currInstant.toUTCString();
-        
-        const currDateSlice = currInstantIso.slice(0, -15);
-        const currDate = new Date(currDateSlice);
-        const currDateMS = currDate.getTime() -  (6 * 60 * 60 * 1000);
-
-        const from = currDateMS;
-        const to = currDateMS;
-        
-        
-
-
-
-
-
-
-
-
-        
-        res.json({
-            averageHandleTime: {
-                duration: '',
-                connectedDuratoin: '',
-                wrapupDuration: ''
-            },
-            totalCount: '',
-            connectedCount: '',
-            connectedDuration: '',
-            fastestCall: '',
-            slowestCall: '',
-            recentCall: {
-                duration: '',
-                connectedDuration: '',
-                wrapupDuration: '',
-            },
-        })
+setGlobalOptions({maxInstances: 10});
     
-
-
-    
-})
-
-
-
-
+export {getUserDashboard} from "./handlers/callHandlers";

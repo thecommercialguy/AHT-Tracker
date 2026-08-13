@@ -113,7 +113,7 @@ export const getAgentSession = async () => {
     // const from = currDateMS;
     //
     const to = Date.now();
-    const from = to - 48 * 60 * 60 * 1000;
+    const from = to - 24 * 60 * 60 * 1000;
     // const endTime = Date.now();
     // const startTime = endTime - 24 * 60 * 60 * 1000;
     const query = agentSessionQuery;
@@ -137,13 +137,11 @@ export const getAgentSession = async () => {
     }
 
     const queryData = await response.json();
-    // console.log(JSON.stringify(queryData, null, 2));
 
-    // queryData.agentSession.agentSessions[0].channelInfo[0]
+    const agentSessions = queryData.data.agentSession.agentSessions
+    console.log(agentSessions) 
 
-    // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0]);
-    // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0].channelInfo[0]);
-    const channelInfos = queryData.data.agentSession.agentSessions.flatMap((session) => {
+    const channelInfos = agentSessions.flatMap((session) => {
         
         if (!session.channelInfo) return [];
         return session.channelInfo;
@@ -174,7 +172,7 @@ export const getAgentSession = async () => {
         
     })
     
-    const stratTime = queryData.data.agentSession.agentSessions.reduce((a, b) => a.startTime < b.startTime ? a : b)
+    const startTime = agentSessions.reduce((a, b) => a.startTime < b.startTime ? a : b)
 
     console.log(reduced) 
 

@@ -1,97 +1,95 @@
-import type { ChannelInfoResponse } from '../../types/callTypes';
+import type {ChannelInfoResponse} from '../types/callTypes';
 
 const taskLegQuery = `
 query TaskLegs($from: Long!, $to: Long!) {
-    # Query to fetch CLR attributes for a specific queue.
-    taskLegDetails(
-        from: $from
-        to: $to
-        # Use Filter arguments to apply filter
-        filter: { 
-            owner: { phoneNumber: { equals: "+14058472700" } }
-        }
-    ) {
-        taskLegs {
-            id
-            createdTime
-            channelType
-            connectedDuration
-            wrapupDuration
-            isOutdial
-            queue {
-                id
-                name
-            }
-            owner {
-                id
-                phoneNumber
-                channelId
-                sessionId
-                signInId
-                name
-            }
-            entryPoint {
-                id
-                name
-            }
-            endedTime
-        }
-    }
+# Query to fetch CLR attributes for a specific queue.
+taskLegDetails(
+from: $from
+to: $to
+# Use Filter arguments to apply filter
+filter: { 
+owner: { phoneNumber: { equals: "+14058472700" } }
 }
-`
+) {
+taskLegs {
+id
+createdTime
+channelType
+connectedDuration
+wrapupDuration
+isOutdial
+queue {
+id
+name
+}
+owner {
+id
+phoneNumber
+channelId
+sessionId
+signInId
+name
+}
+entryPoint {
+id
+name
+}
+endedTime
+}
+}
+}
+`;
 
 const agentSessionQuery = `
 query AgentSession($from: Long!, $to: Long!) {
-  agentSession(from: $from, to: $to 
-    filter: {
-        and : [
-            {
-                channelInfo: {
-                    connectedDuration: {notequals: 0}
-                    connectedCount: {notequals: 0}
-                    channelType: {equals: "telephony"}
-                    agentPhoneNumber: {equals: "+14058472700"}
-                    #currentState: {equals: available}
-                }
-            }
-            {agentId: {equals: "b4c5ed82-ccd0-4a09-9dd9-94535c021b47"}}
-        ]
-    }) {
-    agentSessions {
-      agentSessionId
-      agentId
-      agentName
-      userLoginId
-      siteId
-      siteName
-      startTime
-      channelInfo {
-        channelId
-        channelType
-        connectedDuration
-        postCallDuration
-        connectedCount
-        wrapupDuration
-        notRespondedCount
-        reservationCount
-        totalDuration
-        currentState
-        agentPhoneNumber
-        wordRatioCount
-        ronaCount
-        overallEvalScore
-        outdialCount
-      }
-    }
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-  }
+agentSession(from: $from, to: $to 
+filter: {
+and : [
+{
+channelInfo: {
+connectedDuration: {notequals: 0}
+connectedCount: {notequals: 0}
+channelType: {equals: "telephony"}
+agentPhoneNumber: {equals: "+14058472700"}
+#currentState: {equals: available}
 }
-`
-
-
+}
+{agentId: {equals: "b4c5ed82-ccd0-4a09-9dd9-94535c021b47"}}
+]
+}) {
+agentSessions {
+agentSessionId
+agentId
+agentName
+userLoginId
+siteId
+siteName
+startTime
+channelInfo {
+channelId
+channelType
+connectedDuration
+postCallDuration
+connectedCount
+wrapupDuration
+notRespondedCount
+reservationCount
+totalDuration
+currentState
+agentPhoneNumber
+wordRatioCount
+ronaCount
+overallEvalScore
+outdialCount
+}
+}
+pageInfo {
+hasNextPage
+endCursor
+}
+}
+}
+`;
 
 export const taskLegsWebexQuery = async (from: number, to: number) => {
     const query = taskLegQuery;
@@ -108,20 +106,19 @@ export const taskLegsWebexQuery = async (from: number, to: number) => {
     if (!response.ok) {
         console.error('Failed to fetch call logs:', response.statusText);
         throw Error(response.statusText);
+        
         // return {data: 'error', status: response.status};
     }
 
     const queryData = await response.json();
 
     const taskLegData = queryData.data.taskLegDetails.taskLegs;
-    const taskLegsSorted = taskLegData.sort((a, b) => b.createdTime - a.createdTime);
-
-    if (taskLegsSorted.length < 1) {
-        throw Error('No tasklegs')
-    }
-
+    if (taskLegData === undefined || taskLegData === null || taskLegData.length < 1) throw Error('No tasklegs');
+    
+    const taskLegsSorted = taskLegData.sort((a: any, b: any) => b.createdTime - a.createdTime);
+    if (taskLegsSorted === undefined || taskLegsSorted === null || taskLegsSorted.length < 1) throw Error('No tasklegs');
+    
     return taskLegsSorted;
-
 };
 
 export const agentSessionWebexQuery = async (from: number, to: number) => {
@@ -150,17 +147,14 @@ export const agentSessionWebexQuery = async (from: number, to: number) => {
         throw Error("No agent sessions")
     }
 
-    const channelInfos = agentSessions.flatMap((session) => {
-        
+    const channelInfos = agentSessions.flatMap((session: any) => {
         if (!session.channelInfo) return [];
-        return session.channelInfo;
-        
-
+        return session.channelInfo; 
     })
 
     console.log(channelInfos)
     
-    const reduced = channelInfos.reduce((a, b) => {
+    const reduced = channelInfos.reduce((a: any, b: any) => {
         return {
             agentPhoneNumber: a.agentPhoneNumber,
             channelId: a.channelId,
@@ -181,15 +175,12 @@ export const agentSessionWebexQuery = async (from: number, to: number) => {
         
     })
     
-    const startTime = queryData.data.agentSession.agentSessions.reduce((a, b) => a.startTime < b.startTime ? a : b)
+    const startTime = queryData.data.agentSession.agentSessions.reduce((a: any, b: any) => a.startTime < b.startTime ? a : b)
     if (startTime == null || startTime == undefined) {  // May remove this as it kinda doesnt need that after the null check
         throw new Error('No agent sessions')
     }
 
-    
-    const channelInfo = {...queryData.data.agentSession.agentSessions[0].channelInfo[0], startTime: startTime} as ChannelInfoResponse;
-
+    const channelInfo = {...reduced, startTime: startTime} as ChannelInfoResponse;
 
     return channelInfo;
-
 };
