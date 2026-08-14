@@ -17,12 +17,12 @@ export const getUserDashboard = onRequest(
     async (req, res) => {
         const db = getFirestore("AHT-Trakcer-0");
         //
-        const userId = req.query.text as string | undefined | null;
-        if (userId == null || userId == undefined) {
-            res.status(400);
-            res.json({result: 'No user id provided'});
-            return;
-        }
+        // const userId = req.query.text as string | undefined | null;
+        // if (userId == null || userId == undefined) {
+        //     res.status(400);
+        //     res.json({result: 'No user id provided'});
+        //     return;
+        // }
         //
 
         // const to = Date.now();
@@ -38,7 +38,7 @@ export const getUserDashboard = onRequest(
         const currDateMS = currDate.getTime() -  (6 * 60 * 60 * 1000);
 
         const from = currDateMS;
-        const to = currDateMS;
+        const to = currInstantMS;
         //
         
         // const query = taskLegQuery;

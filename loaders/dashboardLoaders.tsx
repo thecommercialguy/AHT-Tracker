@@ -91,6 +91,33 @@ query AgentSession($from: Long!, $to: Long!) {
 }
 `
 
+export const getUserDashboard = async () => {
+    try {
+        const response = await fetch('https://getuserdashboard-tnype6eiha-uc.a.run.app');
+
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+
+        const data = await response.json();
+        if (!data) {
+            throw Error('Failed to get dashboard')
+        }
+
+        return data
+
+    } catch (error) {
+        let message;
+        if (error isInstance Error) message = error.message;
+        else message = 'Failed to get dashboard';
+
+        console.error(message);
+        throw Error(message);
+        
+    }
+
+}
+
 export const getAgentSession = async () => {
     //
     // const currInstantMS = Date.now();

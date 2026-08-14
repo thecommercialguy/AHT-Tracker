@@ -91,12 +91,17 @@ endCursor
 }
 `;
 
+const API_KEY_WEBEX = process.env.API_KEY_WEBEX;
+
 export const taskLegsWebexQuery = async (from: number, to: number) => {
     const query = taskLegQuery;
-    const response = await fetch('/api/webex', {
+    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
     // const response = await fetch('/api/webex/v1/search', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${API_KEY_WEBEX}` 
+        },
         body: JSON.stringify({ 
             query,
             variables: { from, to }
@@ -123,10 +128,13 @@ export const taskLegsWebexQuery = async (from: number, to: number) => {
 
 export const agentSessionWebexQuery = async (from: number, to: number) => {
     const query = agentSessionQuery;
-    const response = await fetch('/api/webex', {
+    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
     // const response = await fetch('/api/webex/v1/search', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${API_KEY_WEBEX}` 
+        },
         body: JSON.stringify({ 
             query,
             variables: { from, to }

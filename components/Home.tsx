@@ -2,60 +2,12 @@ import { useLoaderData } from "react-router";
 import type { DashboardData } from '../types/callTypes';
 import { useState } from "react";
 import { msToHours } from '../helpers/timeHelpers'
-import { getAgentSession, getTaskLegs } from '../loaders/dashboardLoaders'
+import { getAgentSession, getTaskLegs, getUserDashboard } from '../loaders/dashboardLoaders'
 
 
 export async function loader() {
-    const channelInfo = await getAgentSession();
-    const taskLegs = await getTaskLegs();
-
-
-    const recentCall = taskLegs[0]
-
-    const ahtDuration = Math.floor((channelInfo.connectedDuration + channelInfo.wrapupDuration) / channelInfo.connectedCount);
-    const ahtConnected = channelInfo.connectedDuration
-    const ahtWrapup = channelInfo.wrapupDuration
+    const data = await getUserDashboard()
     
-    const fastestCall = taskLegs.reduce((min, current) => {
-        let a = current.connectedDuration + current.wrapupDuration;
-        let b = min.connectedDuration + min.wrapupDuration;
-        if (a == 0) a = Infinity;
-        if (b == 0) b = Infinity;
-
-        return a < b ? current : min
-    })
-    const longestCall = taskLegs.reduce((max, current) => {
-        let a = current.connectedDuration + current.wrapupDuration;
-        let b = max.connectedDuration + max.wrapupDuration;
-        if (a == 0 || current.isOutdial == true) a = -1;
-        if (b == 0 || max.isOutdial == true) b = -1;
-        return a > b ? current : max;
-    })
-
-
-
-
-
-    const data: DashboardData = {
-        averageHandleTime: {
-            duration: ahtDuration,
-            connectedDuration: ahtConnected,
-            wrapupDuration: ahtWrapup
-        },
-        totalCount: taskLegs.length,
-        connectedCount: channelInfo.connectedCount,
-        connectedDuration: channelInfo.connectedDuration,
-        fastestCall: fastestCall.connectedDuration + fastestCall.wrapupDuration,
-        longestCall: longestCall.connectedDuration + longestCall.wrapupDuration,
-        recentCall: {
-            duration: recentCall.connectedDuration + recentCall.wrapupDuration,
-            connectedDuration: recentCall.connectedDuration,
-            wrapupDuration: recentCall.wrapupDuration,
-        }
-    }
-
-    // console.log(data)
-
     return data;
     
 }
