@@ -108,8 +108,8 @@ export const getUserDashboard = async () => {
 
     } catch (error) {
         let message;
-        if (error isInstance Error) message = error.message;
-        else message = 'Failed to get dashboard';
+        if (error instanceof Error) {message = error.message;}
+        else {message = 'Failed to get dashboard'};
 
         console.error(message);
         throw Error(message);

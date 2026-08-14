@@ -15,15 +15,17 @@ export const getUserDashboard = onRequest(
         timeoutSeconds: 1200,
     },
     async (req, res) => {
-        const db = getFirestore("AHT-Trakcer-0");
+        const db = getFirestore();
         //
         // const userId = req.query.text as string | undefined | null;
         // if (userId == null || userId == undefined) {
         //     res.status(400);
         //     res.json({result: 'No user id provided'});
         //     return;
+
         // }
         //
+        const userId = 'AMCBCD3DdpQOfYpUAWc5';
 
         // const to = Date.now();
         // const from = to - 24 * 60 * 60 * 1000;
@@ -33,13 +35,18 @@ export const getUserDashboard = onRequest(
         const currInstant = new Date(currInstantMS);
         const currInstantIso = currInstant.toUTCString();
         
-        const currDateSlice = currInstantIso.slice(0, -15);
+        const currDateSlice = currInstantIso.slice(0, -12);
         const currDate = new Date(currDateSlice);
-        const currDateMS = currDate.getTime() -  (6 * 60 * 60 * 1000);
+        const currDateMS = currDate.getTime() +  (6 * 60 * 60 * 1000);
+
+        console.log([currInstantIso, currDateSlice, currDate, currDateMS])
 
         const from = currDateMS;
         const to = currInstantMS;
         //
+
+        // const to = Date.now();
+        // const from = to - 24 * 60 * 60 * 1000;
         
         // const query = taskLegQuery;
 
@@ -55,6 +62,7 @@ export const getUserDashboard = onRequest(
             }
             res.status(500);
             res.json({result: errorMessage});
+            return
         }
         
 
@@ -70,6 +78,7 @@ export const getUserDashboard = onRequest(
             }
             res.status(500);
             res.json({result: errorMessage});
+            return
         }
 
         
@@ -96,10 +105,8 @@ export const getUserDashboard = onRequest(
 
         }
 
-
-
         // compare number of calls from response to number of calls from database
-        if (!taskLegResponse) {
+        if (taskLegResponse == null || taskLegResponse == undefined) {
             res.status(400);
             res.json({result: 'No task legs'});
             return;
@@ -111,8 +118,8 @@ export const getUserDashboard = onRequest(
 
         if (currCalls.size == taskLegResponse.length) {
             // Call collection is up to date
-            res.status(206);
-            res.json({result: 'Up to date'});
+            const data = formatDashboardData(agentSessionResponse, taskLegResponse)
+            res.status(200).json(data);
             return;
         }
 
@@ -134,16 +141,26 @@ export const getUserDashboard = onRequest(
         await taskLegBatch.commit();
 
 
-        const recentCall = taskLegResponse[0]
 
-        if (agentSessionResponse === undefined) {
-            return;
-        }
-        // if (agentSessionResponse.connectedDuration === undefined || agentSessionResponse.wrapupDuration == undefined) return 
+        
+        const dashboardData: DashboardData = formatDashboardData(agentSessionResponse, taskLegResponse);
 
-        const connectedDuration = agentSessionResponse.connectedDuration || 0
-        const wrapupDuration = agentSessionResponse.wrapupDuration || 0
-        const connectedCount = agentSessionResponse.connectedCount || -1
+
+        res.status(200)
+        res.json(dashboardData)
+     
+});
+
+
+const formatDashboardData = (agentSessionResponse: any, taskLegResponse: any) => {
+
+        
+        
+        const recentCall = taskLegResponse[0];
+
+        const connectedDuration = agentSessionResponse.connectedDuration || 0;
+        const wrapupDuration = agentSessionResponse.wrapupDuration || 0;
+        const connectedCount = agentSessionResponse.connectedCount || -1;
 
 
         const ahtDuration = Math.floor((connectedDuration + wrapupDuration) / connectedCount);
@@ -168,7 +185,7 @@ export const getUserDashboard = onRequest(
 
 
         
-        const dashboardData: DashboardData = {
+        return {
             averageHandleTime: {
                 duration: ahtDuration,
                 connectedDuration: connectedDuration,
@@ -184,10 +201,7 @@ export const getUserDashboard = onRequest(
                 connectedDuration: recentCall.connectedDuration,
                 wrapupDuration: recentCall.wrapupDuration,
             }
-        }
+        } as DashboardData;
 
-
-        res.status(200)
-        res.json(dashboardData)
-     
-});
+    
+}

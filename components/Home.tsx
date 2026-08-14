@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router";
 import type { DashboardData } from '../types/callTypes';
 import { useState } from "react";
 import { msToHours } from '../helpers/timeHelpers'
-import { getAgentSession, getTaskLegs, getUserDashboard } from '../loaders/dashboardLoaders'
+import { getUserDashboard } from '../loaders/dashboardLoaders'
 
 
 export async function loader() {
