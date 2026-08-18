@@ -43,6 +43,8 @@ export const getUserDashboard = onRequest(
         let currDateMS = currDate.getTime();
         if (currInstantHours < 5) {
             currDateMS -= ((24 * 60 * 60 * 1000) - (currInstantHours * 60 * 60 * 1000));
+        } else {
+            currDateMS += (5 * 60 * 60 * 1000)
         }
         console.log([currDateSlice, currDate, currDateMS])
 
