@@ -7,8 +7,12 @@ taskLegDetails(
 from: $from
 to: $to
 # Use Filter arguments to apply filter
-filter: { 
-owner: { phoneNumber: { equals: "+14058472700" } }
+filter: {
+and : [
+    {isActive: {equals: false}}
+    {owner: { phoneNumber: { equals: "+14058472700" }}}
+]
+
 }
 ) {
 taskLegs {
@@ -19,20 +23,20 @@ connectedDuration
 wrapupDuration
 isOutdial
 queue {
-id
-name
+    id
+    name
 }
 owner {
-id
-phoneNumber
-channelId
-sessionId
-signInId
-name
+    id
+    phoneNumber
+    channelId
+    sessionId
+    signInId
+    name
 }
 entryPoint {
-id
-name
+    id
+    name
 }
 endedTime
 }

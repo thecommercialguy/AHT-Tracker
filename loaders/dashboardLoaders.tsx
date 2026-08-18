@@ -8,8 +8,12 @@ query TaskLegs($from: Long!, $to: Long!) {
         from: $from
         to: $to
         # Use Filter arguments to apply filter
-        filter: { 
-            owner: { phoneNumber: { equals: "+14058472700" } }
+        filter: {
+            and : [
+                {isActive: {equals: false}}
+                {owner: { phoneNumber: { equals: "+14058472700" }}}
+            ]
+
         }
     ) {
         taskLegs {
@@ -257,4 +261,63 @@ export const getTaskLegs = async () => {
     // return queryData
     // console.log('Call Logs:', channelInfo);
     // return channelInfo;
+}
+
+
+export const getDashboardData = async () => {
+
+
+        const taskLegResponse = await getTaskLegs();
+        const agentSessionResponse = await getAgentSession();
+
+        
+        
+        const recentCall = taskLegResponse[0];
+
+        const connectedDuration = agentSessionResponse.connectedDuration || 0;
+        const wrapupDuration = agentSessionResponse.wrapupDuration || 0;
+        const connectedCount = agentSessionResponse.connectedCount || -1;
+
+
+        const ahtDuration = Math.floor((connectedDuration + wrapupDuration) / connectedCount);
+        // const ahtConnected = agentSessionResponse.connectedDuration || 
+        // const ahtWrapup = agentSessionResponse.wrapupDuration
+        
+        const fastestCall = taskLegResponse.reduce((min: any, current: any) => {
+            let a = current.connectedDuration + current.wrapupDuration;
+            let b = min.connectedDuration + min.wrapupDuration;
+            if (a == 0) a = Infinity;
+            if (b == 0) b = Infinity;
+
+            return a < b ? current : min
+        })
+        const longestCall = taskLegResponse.reduce((max: any, current: any) => {
+            let a = current.connectedDuration + current.wrapupDuration;
+            let b = max.connectedDuration + max.wrapupDuration;
+            if (a == 0 || current.isOutdial == true) a = -1;
+            if (b == 0 || max.isOutdial == true) b = -1;
+            return a > b ? current : max;
+        })
+
+
+        
+        return {
+            averageHandleTime: {
+                duration: ahtDuration,
+                connectedDuration: connectedDuration,
+                wrapupDuration: wrapupDuration
+            },
+            totalCount: taskLegResponse.length,
+            connectedCount: connectedCount,
+            connectedDuration: connectedDuration,
+            fastestCall: fastestCall.connectedDuration + fastestCall.wrapupDuration,
+            longestCall: longestCall.connectedDuration + longestCall.wrapupDuration,
+            recentCall: {
+                duration: recentCall.connectedDuration + recentCall.wrapupDuration,
+                connectedDuration: recentCall.connectedDuration,
+                wrapupDuration: recentCall.wrapupDuration,
+            }
+        } as DashboardData;
+
+    
 }

@@ -1,27 +1,41 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData, useRevalidator } from "react-router";
 import type { DashboardData } from '../types/callTypes';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { msToHours } from '../helpers/timeHelpers'
-import { getUserDashboard } from '../loaders/dashboardLoaders'
+import { getUserDashboard, getAgentSession, getTaskLegs, getDashboardData } from '../loaders/dashboardLoaders'
 
 
 export async function loader() {
-    const data = await getUserDashboard()
+    const data = await getUserDashboard();
+    // const data = await getDashboardData();
+
     
     return data;
+    // return data;
     
 }
 
+
+
+const INTERVAL: number = 4*60*1000;
+
 export default function Home() { 
     const data = useLoaderData();  // Difference between destructuring and just using the response
-
-    const [dashboardData, setDashboardData] = useState<DashboardData>(data)
+    const [dashboardData, setDashboardData] = useState<DashboardData>(data);
+    // const [revalidating, setRevalidating] = useState<boolean>(false);
+    const revalidator = useRevalidator(); 
 
     
     console.log(data)
     console.log(dashboardData)
-    // console.log(channelInfo)
-    // console.log(queryData.data)
+    useEffect(() => {
+        if (revalidator.state !== "idle") return;
+        const timeoutId = setTimeout(() => {
+            revalidator.revalidate()
+        }, INTERVAL);
+        
+        return () => clearTimeout(timeoutId)
+    }, [revalidator.state])
 
     return (
         <main className="dashboard-container">
@@ -59,8 +73,9 @@ export default function Home() {
                 </div>
             </div>
             <div>
-
             </div>
         </main>
     ); 
 }
+
+

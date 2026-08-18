@@ -12,19 +12,19 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
-    // server: {
-    //   proxy: {
-    //     // "/v1": {
-    //     "/api/webex": {
-    //       target: "https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4",
-    //       // target: "https://analytics.webexapis.com",
-    //       changeOrigin: true,
-    //       rewrite: (path) => path.replace(/^\/api\/webex/, ""),
-    //       headers: {
-    //         Authorization: `Bearer ${env.API_KEY_WEBEX}`,
-    //       },
-    //     },
-    //   },
-    // },
+    server: {
+      proxy: {
+        // "/v1": {
+        "/api/webex": {
+          target: "https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4",
+          // target: "https://analytics.webexapis.com",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/webex/, ""),
+          headers: {
+            Authorization: `Bearer ${env.API_KEY_WEBEX}`,
+          },
+        },
+      },
+    },
   };
 });
