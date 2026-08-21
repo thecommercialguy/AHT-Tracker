@@ -25,16 +25,28 @@
 }
 
 .logo {
-    width: 50px;
+    width: 40px;
 }
-
-.logo-text {
+h1.logo-text {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.logo-text > span {
     font-size: 28px;
     font-style: italic;
-    padding-top: 5px;
-    padding-left: 6px;
+    /* padding-top: 5px; */
+    padding-left: 0px;
     font-weight: 800;
     color: white;
     text-decoration: none;
+    letter-spacing: 0;
+}
+
+.logo-text > span.logo-text-styled {
+    font-weight: 200;
+    margin-right: 5px;
+    margin-left: 5px;
+    font-size: 28px;
+    letter-spacing: -1.3px;
 }
 

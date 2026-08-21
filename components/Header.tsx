@@ -10,7 +10,10 @@ export default function Header() {
             <Link to='/'>
                 <span className="logo-container">
                     <img className="logo" src={logo}/>
-                    <h1 className="logo-text">AHT Tracker</h1>
+                    <h1 className="logo-text">
+                        <span className={"logo-text-styled"}>AHT</span>
+                        <span>Tracker</span>
+                    </h1>
                 </span>
             </Link>
         </header>

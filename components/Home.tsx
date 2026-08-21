@@ -17,7 +17,7 @@ export async function loader() {
 
 
 
-const INTERVAL: number = 4*1000;
+const INTERVAL: number = 4*60*1000;
 
 export default function Home() { 
     const data = useLoaderData();  // Difference between destructuring and just using the response
@@ -28,15 +28,15 @@ export default function Home() {
     
     console.log(data)
     console.log(dashboardData)
-    // useEffect(() => {
-    //     if (revalidator.state !== "idle") return;
-    //     const timeoutId = setTimeout(() => {
-    //         revalidator.revalidate()
-    //         console.log("effect ran, state:", revalidator.state);
-    //     }, INTERVAL);
+    useEffect(() => {
+        if (revalidator.state !== "idle") return;
+        const timeoutId = setTimeout(() => {
+            revalidator.revalidate()
+            console.log("effect ran, state:", revalidator.state);
+        }, INTERVAL);
         
-    //     return () => clearTimeout(timeoutId)
-    // }, [revalidator.state])
+        return () => clearTimeout(timeoutId)
+    }, [revalidator.state])
 
     return (
         <main className="dashboard-container">
