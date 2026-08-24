@@ -19,7 +19,12 @@
   letter-spacing: 0.18px;
   color-scheme: light dark;
   color: var(--text);
-  background: var(--bg);
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 72%,
+    #FF0000 94%,
+    #FF7B00 100%
+  );
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

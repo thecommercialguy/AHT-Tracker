@@ -20,7 +20,12 @@
 main.dashboard-container {
   display: flex;
   position: relative;
-  width: 760px;
+  width: 53.472222222vw;
+  min-width: 560px;
+  max-width: 760px;
+  /* aspect-ratio: 760 / 590; */
+  /* width: 760px; */
+  /* height: 64.06080347vh; */
   height: 590px;
   background-color: transparent;
   /* background-color: #d9d9d9; */
@@ -110,6 +115,15 @@ main.dashboard-container {
   align-items: center;
   padding-top: 18px;
   border-radius: 10px;
+}
+
+.call-stats-item .call-time-split {
+  position: absolute;
+  width: 144px;
+  height: 7px;
+  border-radius: 10px;
+  background-color: blue;
+  bottom: 21px;
 }
 
 .recent-call-container {

@@ -144,7 +144,7 @@ export const getAgentSession = async () => {
     // const from = currDateMS;
     //
     const to = Date.now();
-    const from = to - 24 * 60 * 60 * 1000;
+    const from = to - 72 * 60 * 60 * 1000;
     // const endTime = Date.now();
     // const startTime = endTime - 24 * 60 * 60 * 1000;
     const query = agentSessionQuery;
@@ -216,7 +216,7 @@ export const getAgentSession = async () => {
 
 export const getTaskLegs = async () => {
     const to = Date.now();
-    const from = to - 24 * 60 * 60 * 1000;
+    const from = to - 72 * 60 * 60 * 1000;
     // const from = to - 48 * 60 * 60 * 1000;
     // const endTime = Date.now();
     // const startTime = endTime - 24 * 60 * 60 * 1000;
