@@ -1,0 +1,28 @@
+main.landing-container {
+    display: flex;
+    /* position: absolute; */
+    /* transform: tra) ; */
+    /* justify-self: center;
+    align-self: center; */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -150%);
+
+    flex-direction: column;
+    align-items: center;
+}
+
+main > .landing-text {
+    color: white;
+    font-weight: 550;
+    font-family: var(--sans);
+    font-stretch: 10000%;
+    font-style: italic;
+    font-size: 80px;
+    letter-spacing: 80*.03px;
+}
+
+.landing-logo {
+    width: 61px;
+}

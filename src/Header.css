@@ -33,6 +33,7 @@ h1.logo-text {
 }
 .logo-text > span {
     font-size: 28px;
+    font-family: var(--sans);
     font-style: italic;
     /* padding-top: 5px; */
     padding-left: 0px;

@@ -16,8 +16,8 @@ export default function Landing() {
 
     return (
         <main className="landing-container">
-            <h1>STAY ON TRACK</h1>
-            <img src={logo}/>
+            <h1 className="landing-text">STAY ON TRACK</h1>
+            <img className="landing-logo"src={logo}/>
             <button className="button login"></button>
             <button className="button sign-up"></button>
         </main>
