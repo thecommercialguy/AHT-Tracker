@@ -1,5 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { AuthProvider } from '../context/authContext.tsx'
+// import '@fontsource-variable/open-sans';
+// import "@fontsource-variable/open-sans/wght.css"; // Specify axis
+// import "@fontsource-variable/open-sans/wght-italic.css"; 
 import './index.css'
 import App from './App.tsx'
 import { BrowserRouter, createBrowserRouter, RouterProvider } from 'react-router'
@@ -15,6 +19,8 @@ const router = createBrowserRouter(routes);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 );

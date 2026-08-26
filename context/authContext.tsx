@@ -1,11 +1,13 @@
-import { useContext, useMemo, useState } from "react";
+import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
+import { auth } from "../src/firebase";
+import { createUserWithEmailAndPassword, UserCredential } from "firebase/auth";
 
 
 
 interface AuthData {
-    user: string;
-    login(data: string): Promise<void>;
+    user: UserCredential | null;
+    signUp(email: string, password: string): Promise<void>;
     logout(): void;
 }
 
@@ -18,66 +20,40 @@ export const useAuth = () => {
     return useContext(AuthContext);
 }
 
-export const AuthProvider = () => {
-    const [user, setUser] = useLocalStorage("user", null);
+// export function signUp() {
+// }
 
-    const navigate = useNavigate();
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [user, setUser] = useState<UserCredential | null>(null);
 
     const value = useMemo(() => {
-        const login = async (data: string) => {
-            setUser(data);
-            navigate("/dashboard");
+        const signUp = async (email: string, password: string) => {
+
+          let response: any;
+
+          try {
+            response = await createUserWithEmailAndPassword(auth, email, password);
+            setUser(user);
+
+          } catch (error: any) {
+            console.error('Unable to create account');
+          }
+  
         };
 
         const logout = () => {
             setUser(null);
-            navigate("/", { replace: true });
         };
 
-        return {user, login, logout};
-    }, [user, navigate, setUser]);
+        return {user, signUp, logout};
+    }, [user, setUser]);
 
     return (
         <AuthContext.Provider value={value}>
-            <Outlet />
+           { children }
         </AuthContext.Provider>
     )
 
     
 }
 
-
-
-
-export const useLocalStorage = <T,>(
-  keyName: string,
-  defaultValue: T
-): [string, (value: T) => void] => {
-  const [storedValue, setStoredValue] = useState(() => {
-    try {
-      const value = window.localStorage.getItem(keyName);
-      if (value) {
-        return JSON.parse(value);
-      } else {
-        window.localStorage.setItem(
-          keyName,
-          JSON.stringify(defaultValue)
-        );
-        return defaultValue;
-      }
-    } catch {
-      return defaultValue;
-    }
-  });
-
-  const setValue = (newValue: T) => {
-    try {
-      window.localStorage.setItem(keyName, JSON.stringify(newValue));
-    } catch (err) {
-      console.log(err);
-    }
-    setStoredValue(newValue);
-  };
-
-  return [storedValue, setValue];
-};

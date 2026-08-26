@@ -7,22 +7,89 @@ main.landing-container {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -150%);
+    transform: translate(-50%, -51%);
 
     flex-direction: column;
     align-items: center;
+    padding: 10px;
+    border: 1px solid red;
 }
 
 main > .landing-text {
     color: white;
-    font-weight: 550;
+    font-weight: bold;
     font-family: var(--sans);
-    font-stretch: 10000%;
+    font-stretch: condensed;
     font-style: italic;
     font-size: 80px;
-    letter-spacing: 80*.03px;
+    letter-spacing: .03em;
+    line-height: .8;
+    margin: 0 0 32px 0;
+    /* margin-bottom: 33px; */
+    
+    
 }
 
 .landing-logo {
     width: 61px;
+    margin-bottom: 37px;
 }
+
+
+.landing-container .button {
+    width: 335px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 40px;
+    border: unset;
+    background-color: transparent;
+
+    font-family: var(--sans);
+    font-stretch: condensed;
+    font-style: italic;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: .03em;
+
+}
+
+.button.login {
+    border: 1px solid white;
+    margin-bottom: 21px;
+}
+
+@property --grad-stop {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 26%;
+}
+
+.button.sign-up {
+  --grad-stop: 26%;
+  background: linear-gradient(to bottom, #FF7B00 var(--grad-stop), #FF0000);
+  transition: --grad-stop 120ms ease;
+}
+
+.button.sign-up:active {
+  --grad-stop: -50%;
+}
+
+/* .button.sign-up {
+    background: linear-gradient(
+        to bottom,
+        #FF7B00 26%,
+        #FF0000
+    );
+    transition: background 120ms ease, filter 120ms ease;
+}
+
+
+.button.sign-up:active {
+    background: linear-gradient(
+        to bottom,
+        #FF7B00 -50%,
+        #FF0000
+    );
+} */

@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { Form, useLoaderData } from "react-router";
 import logo from "../src/assets/Loves_logo.png";
 
 export default function Landing() { 
@@ -18,8 +18,9 @@ export default function Landing() {
         <main className="landing-container">
             <h1 className="landing-text">STAY ON TRACK</h1>
             <img className="landing-logo"src={logo}/>
-            <button className="button login"></button>
-            <button className="button sign-up"></button>
+            <button className="button login">LOGIN</button>
+            <button className="button sign-up">SIGN UP</button>
         </main>
     ); 
 }
+
