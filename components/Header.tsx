@@ -11,7 +11,7 @@ export default function Header() {
                 <span className="logo-container">
                     <img className="logo" src={logo}/>
                     <h1 className="logo-text">
-                        <span className={"logo-text-styled"}>AHT</span>
+                        <span className="logo-text-styled">AHT</span>
                         <span>Tracker</span>
                     </h1>
                 </span>

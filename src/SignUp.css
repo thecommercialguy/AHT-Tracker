@@ -1,18 +1,25 @@
-.sign-up-form {
-    width: 458.533px;
-    height: 322.082px;
+.sign-up-form-container {
+    width: 416px;
+    /* width: 458.533px; */
+    height: max-content;
+    /* height: 322.082px; */
 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
 
-    border: 1px solid red;
+    padding: 10px;
+    padding-bottom: 30px;
+    /* border: 1px solid red; */
+    border-radius: 8px;
+    background: #202227;
 
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -51%)
+    transform: translate(-50%, -48%);
+    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
 }
 
 .form-heading {
@@ -21,8 +28,72 @@
     font-family: var(--sans);
     font-stretch: condensed;
     font-style: italic;
-    font-size: 48px;
+    font-size: 28px;
     letter-spacing: .03em;
-    line-height: .8;
+    line-height: 2;
     margin: 0;
+}
+
+.sign-up-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.sign-up-form input {
+    font-size: 1rem;
+    font-family: var(--sans);
+    letter-spacing: .03em;
+
+    color: white;
+    background: #25272D;
+    caret-color: #FFE600;
+    
+    border-radius: 4px;
+    padding-left: 8px;
+    padding-right: unset;
+
+    width: 369px;
+    height: 38px;
+    border: none;
+    margin-bottom: 20px;
+
+}
+
+.sign-up-form input::placeholder {
+    color: #3C3F49;
+   
+}
+
+.sign-up-form input:focus {
+    outline: 1px solid white; 
+    outline-offset: 1px;
+}
+
+.sign-up-form button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 369px;
+    height: 48px;
+
+
+    
+    
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(to bottom, #FF7B00 var(--grad-stop), #FF0000);
+    margin: 0;
+    margin-top: 4px;
+
+    color: white;
+    font-weight: bold;
+    font-family: var(--sans);
+    font-stretch: condensed;
+    font-style: italic;
+    font-size: 28px;
+    letter-spacing: .03em;
+    line-height: 2;
 }

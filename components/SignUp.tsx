@@ -1,16 +1,57 @@
-import { Form } from "react-router";
+import { Form, useFetcher, useNavigate, useNavigation, type ActionFunctionArgs } from "react-router";
+
+export async function signUpAction({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const method = request.method.toUpperCase();
+
+    console.log(formData.get('firstName'))
+
+
+
+}
 
 export function signUpLoader() {
 
 }
 
 export default function SignUp() {
+    const fetcher = useFetcher<typeof signUpAction>();
+    const disabled = false;
+    // const disabled = fetcher.state === 'submitting' || fetcher.state === 'loading';
+    
 
     return (
-        <Form className="sign-up-form">
-            <h1 className="form-heading">Sign Up Form</h1>
-            {/* <input></input> */}
-        </Form>
+        <div className="sign-up-form-container">
+            <h1 className="form-heading">Start Tracking</h1>
+            <fetcher.Form className="sign-up-form" method="post">
+                <div>
+                    <input type="text" id="firstName" name="firstName" placeholder="first name"></input>
+                </div>
+                <div>
+                    <input type="text" id="lastName" name="lastName" placeholder="last name"></input>
+                </div>
+                <div>
+                    <input type="tel" id="agentPhoneNumber" name="agentPhoneNumber" placeholder="agent phone number"></input>
+                </div>
+                <div>
+                    <input type="text" id="webexId" name="webexId" placeholder="webex id"></input>
+                </div>
+                <div>
+                    <input type="email" id="email" name="email" placeholder="email"></input>
+                </div>
+                <div>
+                    <input type="email" id="emailVerified" name="emailVerified" placeholder="verify email"></input>
+                </div>
+                <div>
+                    <input type="password" id="password" name="password" placeholder="password"></input>
+                </div>
+                <div>
+                    <input type="password" id="passwordVerified" name="passwordVerified" placeholder="verify password"></input>
+                </div>
+                <button type="submit" disabled={disabled}>Sign Up</button>
+            </fetcher.Form>
+
+        </div>
     )
 }
 
