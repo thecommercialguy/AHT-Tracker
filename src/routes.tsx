@@ -2,7 +2,8 @@ import type { RouteObject } from "react-router";
 import Layout from "./App";
 import Home, { loader } from "../components/Home";
 import Login, { loginLoader } from "../components/Login";
-import SignUp, { signUpAction, signUpLoader } from "../components/SignUp";
+import { signUpAction } from "../actions/actions.ts";
+import SignUp, { signUpLoader } from "../components/SignUp";
 import Landing from "../components/Landing"
 
 function About() { return <h1>About</h1>; }

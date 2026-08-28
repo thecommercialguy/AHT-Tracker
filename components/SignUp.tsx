@@ -1,17 +1,8 @@
 import { Form, useFetcher, useNavigate, useNavigation, type ActionFunctionArgs } from "react-router";
-
-export async function signUpAction({ request }: ActionFunctionArgs) {
-    const formData = await request.formData();
-    const method = request.method.toUpperCase();
-
-    console.log(formData.get('firstName'))
-
-
-
-}
+import { signUpAction } from "../actions/actions.ts";
 
 export function signUpLoader() {
-
+    
 }
 
 export default function SignUp() {
