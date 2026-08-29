@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { auth } from "../src/firebase";
-import { createUserWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { createUserWithEmailAndPassword, type UserCredential } from "firebase/auth";
 
 
 

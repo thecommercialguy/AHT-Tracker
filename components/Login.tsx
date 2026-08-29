@@ -1,14 +1,6 @@
 import { Form, useFetcher, useNavigate, useNavigation, type ActionFunctionArgs } from "react-router";
 
-export async function loginAction({ request }: ActionFunctionArgs) {
-    const formData = await request.formData();
-    const method = request.method.toUpperCase();
 
-    console.log(formData.get('firstName'))
-
-
-
-}
 
 export function loginLoader() {
 
@@ -35,5 +27,7 @@ export default function Login() {
 
         </div>
     )
-}
+} 
+
+
 

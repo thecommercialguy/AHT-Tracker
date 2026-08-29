@@ -2,7 +2,7 @@ import type { RouteObject } from "react-router";
 import Layout from "./App";
 import Home, { loader } from "../components/Home";
 import Login, { loginLoader } from "../components/Login";
-import { signUpAction } from "../actions/actions.ts";
+import { loginAction, signUpAction } from "../actions/actions.ts";
 import SignUp, { signUpLoader } from "../components/SignUp";
 import Landing from "../components/Landing"
 
@@ -16,7 +16,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, Component: Home, loader: loader },
       { path: "landing", Component: Landing },
-      { path: "login", Component: Login, loader: loginLoader},
+      { path: "login", Component: Login, loader: loginLoader, action: loginAction},
       { path: "signup", Component: SignUp, loader: signUpLoader, action: signUpAction},
       { path: "about", Component: About},
       { path: '*', Component: NotFound },

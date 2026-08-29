@@ -63,7 +63,8 @@
 }
 
 .sign-up-form input::placeholder {
-    color: #3C3F49;
+    /* color: #3C3F49; */
+    color: var(--placeholder-color, #3C3F49);
    
 }
 
@@ -71,6 +72,16 @@
     outline: 1px solid white; 
     outline-offset: 1px;
 }
+
+.sign-up-form input.input-error {
+    outline: .1px solid red; 
+    outline-offset: 1px;
+}
+.sign-up-form input.input-error:focus {
+    outline: 2px solid red; 
+    outline-offset: 1px;
+}
+
 
 .sign-up-form button {
     display: flex;

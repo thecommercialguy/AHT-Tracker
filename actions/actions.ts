@@ -1,76 +1,92 @@
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { type ActionFunctionArgs } from "react-router";
-export interface SignUpFields {
-    firstName: string | null | undefined;
-    lastName: string | null | undefined;
-    webexId: string | null | undefined;
-    webexPhoneNumber: string | null | undefined;
-    email: string | null | undefined;
-    emailVerified: string | null | undefined;
-    password: string | null | undefined;
-    passwordVerified: string | null | undefined;
-}
+import { auth } from "../src/firebase";
+import { type SignUpFields } from "../types/authTypes.ts";
+
+
 export async function signUpAction({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const method = request.method.toUpperCase();
 
     const signUpFields = {
-        firstName: formData.get('firstName') || null,
-        lastName: formData.get('lastName') || null,
-        webexId: formData.get('webexId') || null,
-        agentPhoneNumber: formData.get('agentPhoneNumber') || null,
+        firstName: formData.get('firstNam'),
+        lastName: formData.get('lastName') ,
+        webexId: formData.get('webexId') ,
+        agentPhoneNumber: formData.get('agentPhoneNumber') ,
         email: formData.get('email') || null,
-        emailVerified: formData.get('emailVerified') || null,
-        password: formData.get('password') | null,
-        passwordVerified: formData.get('passwordVerified') || null
+        emailVerified: formData.get('emailVerified') ,
+        password: formData.get('password'),
+        passwordVerified: formData.get('passwordVerified') 
     } as SignUpFields;
 
-    cosnt { isInvalid, signUpError } = validateSignUpForm(signUpFields);
+    const { isInvalid, signUpError } = validateSignUpForm(signUpFields);
 
-    
-    
+    if (isInvalid){
+        return {error: signUpError};
+    }
 
+    const response = await createUserWithEmailAndPassword(auth, signUpFields.email, signUpFields.password);
 
 
 
 }
 
+export async function loginAction({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const method = request.method.toUpperCase();
+
+    console.log(formData.get('firstName'));
+
+
+    const response = await signInWithEmailAndPassword(auth, email, password)
+
+}
+
+
 const validateSignUpForm = ({
     firstName,
     lastName,
     webexId,
-    webexPhoneNumber,
+    agentPhoneNumber,
     email,
     emailVerified,
     password,
     passwordVerified
-}:SignUpFields) => {
-    isInvalid: boolean = false;
-    const signUpErrorResponse: SignUpError = {
+}:SignUpFields): signUpValidationResponse => {
+    let isInvalid: boolean = false;
+    const signUpError: SignUpError = {
         firstNameError: null,
         lastNameError: null,
         webexIdError: null,
-        webexPhoneNumberError: null,
+        agentPhoneNumberError: null,
         emailError: null,
         passwordError: null
     }
     
     if (!firstName) {
         isInvalid = true;
-        signUpError.firstNameError = 'First name requiered';
+        signUpError.firstNameError = 'first name requiered';
     }
+
     if (!lastName) {
         isInvalid = true;
-        signUpError.lastNameError = 'Last name required';
+        signUpError.lastNameError = 'last name required';
     }
-    if (!webexId && !agentPhoneNumber) {
+
+    // if (!webexId) {
+    //     isInvalid = true;
+    //     signUpError.webexIdError = "both webex id and agent phone number can't be blank";
+    // }
+
+    if (!agentPhoneNumber) {
         isInvalid = true;
-        signUpError.webexIdError = "BOTH webex id and agent phone number can't be blank";
-        signUpError.webexPhoneNumberError = "BOTH webex id and agent phone number can't be blank";
+        signUpError.agentPhoneNumberError = "agent phone number required";
     }
 
     if (!email || !emailVerified) {
         isInvalid = true;
-        signUpError.emailError = "email can't be blank";
+        signUpError.emailError = "email required";
+        // signUpError.emailError = "email can't be blank";
     }
     else if (email !== emailVerified) {
         isInvalid = true;
@@ -79,7 +95,8 @@ const validateSignUpForm = ({
 
     if (!password || !passwordVerified) {
         isInvalid = true;
-        signUpError.passwordError = "password can't be left blank";
+        signUpError.passwordError = "password required";
+        // signUpError.passwordError = "password can't be left blank";
     }
     else if (password.length < 8) {
         isInvalid = true;
@@ -92,13 +109,13 @@ const validateSignUpForm = ({
 
     return {
         isInvalid: isInvalid,
-        signUpError: signUpErrorResponse
-    } as signUpErrorResponse;
+        signUpError: signUpError
+    } as signUpValidationResponse;
 
 
 }
 
-type signUpErrorResponse = {
+type signUpValidationResponse = {
     isInvalid: boolean;
     signUpError: SignUpError;
 }
@@ -107,7 +124,7 @@ type SignUpError = {
     firstNameError: string | null;
     lastNameError: string | null;
     webexIdError: string | null;
-    webexPhoneNumberError: string | null;
+    agentPhoneNumberError: string | null;
     emailError: string | null;
     passwordError: string | null;
 } 
