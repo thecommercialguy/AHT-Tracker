@@ -1,12 +1,18 @@
-import { useLoaderData, useRevalidator } from "react-router";
+import { redirect, useLoaderData, useRevalidator } from "react-router";
 import type { DashboardData } from '../types/callTypes';
 import { CSSProperties, useEffect, useState } from "react";
 import { msToHours } from '../helpers/timeHelpers'
 import { getUserDashboard, getAgentSession, getTaskLegs, getDashboardData } from '../loaders/dashboardLoaders'
+import { auth } from "../src/firebase";
 
 
 export async function loader() {
-    const data = await getUserDashboard();
+    await auth.authStateReady();
+    const user = auth.currentUser;
+    if (!user) return redirect("/login");
+
+    const token = await user.getIdToken();
+    const data = await getUserDashboard(token);
     // const data = await getDashboardData();
     
     return data;    

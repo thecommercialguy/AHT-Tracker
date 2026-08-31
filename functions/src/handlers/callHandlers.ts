@@ -2,9 +2,10 @@ import {getFirestore, FieldValue} from "firebase-admin/firestore";
 import {onRequest} from "firebase-functions/https";
 import type {DashboardData} from "../types/callTypes";
 import {
-    agentSessionWebexQuery, 
-    taskLegsWebexQuery
+    getAgentSessionsByPhoneNumber, 
+    getTaskLegsByPhoneNumber, 
 } from "../queryFunctions/queryFunctions";
+import { getAuth } from "firebase-admin/auth";
 
 
 
@@ -15,7 +16,40 @@ export const getUserDashboard = onRequest(
         timeoutSeconds: 1200,
     },
     async (req, res) => {
+        const header = req.headers.authorization ?? "";
+            if (!header.startsWith("Bearer ")) {
+                res.status(401).json({ error: "Missing token" });
+                return;
+        }
+
+        let uid: string;
+        try {
+            const decoded = await getAuth().verifyIdToken(header.slice(7));
+            uid = decoded.uid;
+        } catch {
+            res.status(401).json({ error: "Invalid token" });
+            return;
+        }
+        
         const db = getFirestore();
+        const userRef = db.collection('users').doc(uid);
+        const userSnap = await userRef.get();
+        if (!userSnap.exists) {
+            res.status(404).json({ error: "User not found" });
+            return;
+        }
+
+        const phoneNumber = userSnap.get("agentPhoneNumber");
+        if (!phoneNumber) {
+            res.status(400).json({ error: "Invalid user" });
+            return;
+        }
+
+
+
+
+
+
         //
         // const userId = req.query.text as string | undefined | null;
         // if (userId == null || userId == undefined) {
@@ -25,7 +59,7 @@ export const getUserDashboard = onRequest(
 
         // }
         //
-        const userId = 'AMCBCD3DdpQOfYpUAWc5';
+        // const userId = 'AMCBCD3DdpQOfYpUAWc5';
 
         // const to = Date.now();
         // const from = to - 24 * 60 * 60 * 1000;
@@ -60,8 +94,8 @@ export const getUserDashboard = onRequest(
         let taskLegResponse;
         
         try {
-            taskLegResponse = await taskLegsWebexQuery(from, to);
-            
+            taskLegResponse = await getTaskLegsByPhoneNumber({from: from, to: to, phoneNumber: phoneNumber});
+
         } catch (error) {
             let errorMessage = 'An unexpected error has occured';
             if (error instanceof Error) {
@@ -76,7 +110,7 @@ export const getUserDashboard = onRequest(
         let agentSessionResponse;
 
         try {
-            agentSessionResponse = await agentSessionWebexQuery(from, to);
+            agentSessionResponse = await getAgentSessionsByPhoneNumber({from: from, to: to, phoneNumber: phoneNumber});
 
         } catch (error) {
             let errorMessage = 'An unexpected error has occured';
@@ -88,10 +122,12 @@ export const getUserDashboard = onRequest(
             return
         }
 
+
+
         
 
         // There is an agent session now
-        const sessionRef = db.collection('users').doc(userId).collection('sessions');
+        const sessionRef = db.collection('users').doc(uid).collection('sessions');
 
         // QueryDocumentSnapshot array
         const currSessions = await sessionRef.where('startTime', '>', from).orderBy('startTime', 'desc').get();
@@ -119,7 +155,7 @@ export const getUserDashboard = onRequest(
             return;
         }
 
-        const callsRef = db.collection('users').doc(userId).collection('calls')
+        const callsRef = db.collection('users').doc(uid).collection('calls')
 
         const currCalls = await callsRef.where('createdTime', '>', from).orderBy('createdTime', 'desc').get();
 

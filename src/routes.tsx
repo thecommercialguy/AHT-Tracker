@@ -14,8 +14,8 @@ export const routes: RouteObject[] = [
     path: '/',
     Component: Layout,
     children: [
-      { index: true, Component: Home, loader: loader },
-      { path: "landing", Component: Landing },
+      { index: true, Component: Landing },
+      { path: "dashboard", Component: Home, loader: loader },
       { path: "login", Component: Login, loader: loginLoader, action: loginAction},
       { path: "signup", Component: SignUp, loader: signUpLoader, action: signUpAction},
       { path: "about", Component: About},

@@ -95,9 +95,11 @@ query AgentSession($from: Long!, $to: Long!) {
 }
 `
 
-export const getUserDashboard = async () => {
+export const getUserDashboard = async (token: string | null) => {
     try {
-        const response = await fetch('https://getuserdashboard-tnype6eiha-uc.a.run.app');
+        const response = await fetch('https://getuserdashboard-tnype6eiha-uc.a.run.app', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
         if (!response.ok) {
             throw Error(response.statusText);

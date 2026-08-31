@@ -44,6 +44,50 @@ endedTime
 }
 `;
 
+const taskLegQueryByPhoneNumber = `
+query TaskLegs($from: Long!, $to: Long!, $phoneNumber: String!) {
+# Query to fetch CLR attributes for a specific queue.
+taskLegDetails(
+from: $from
+to: $to
+# Use Filter arguments to apply filter
+filter: {
+and : [
+    {isActive: {equals: false}}
+    {owner: { phoneNumber: { equals: $phoneNumber }}}
+]
+
+}
+) {
+taskLegs {
+id
+createdTime
+channelType
+connectedDuration
+wrapupDuration
+isOutdial
+queue {
+    id
+    name
+}
+owner {
+    id
+    phoneNumber
+    channelId
+    sessionId
+    signInId
+    name
+}
+entryPoint {
+    id
+    name
+}
+endedTime
+}
+}
+}
+`;
+
 const agentSessionQuery = `
 query AgentSession($from: Long!, $to: Long!) {
 agentSession(from: $from, to: $to 
@@ -109,7 +153,6 @@ agentPhoneNumber: {equals: $phoneNumber}
 #currentState: {equals: available}
 }
 }
-{agentId: {equals: "b4c5ed82-ccd0-4a09-9dd9-94535c021b47"}}
 ]
 }) {
 agentSessions {
@@ -230,6 +273,46 @@ export const taskLegsWebexQuery = async (from: number, to: number) => {
     return taskLegsSorted;
 };
 
+interface GetTaskLegsByPhoneNumberParams {
+    from: number;
+    to: number;
+    phoneNumber: string
+}
+
+export const getTaskLegsByPhoneNumber = async ({from, to, phoneNumber}:GetTaskLegsByPhoneNumberParams) => {
+    const query = taskLegQueryByPhoneNumber;
+    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
+    // const response = await fetch('/api/webex/v1/search', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${API_KEY_WEBEX}` 
+        },
+        body: JSON.stringify({ 
+            query,
+            variables: { from, to, phoneNumber }
+        })
+    });
+
+    if (!response.ok) {
+        console.error('Failed to fetch call logs:', response);
+        console.error('Failed to fetch call logs:', response.body);
+        throw Error(response.statusText);
+        
+        // return {data: 'error', status: response.status};
+    }
+
+    const queryData = await response.json();
+
+    const taskLegData = queryData.data.taskLegDetails.taskLegs;
+    if (taskLegData === undefined || taskLegData === null || taskLegData.length < 1) throw Error('No tasklegs');
+    
+    const taskLegsSorted = taskLegData.sort((a: any, b: any) => b.createdTime - a.createdTime);
+    if (taskLegsSorted === undefined || taskLegsSorted === null || taskLegsSorted.length < 1) throw Error('No tasklegs');
+    
+    return taskLegsSorted;
+};
+
 export const agentSessionWebexQuery = async (from: number, to: number) => {
     const query = agentSessionQuery;
     const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
@@ -298,6 +381,8 @@ export const agentSessionWebexQuery = async (from: number, to: number) => {
 };
 
 
+
+
 interface GetAgentSessionsByPhoneNumberParams {
     from: number;
     to: number;
@@ -320,7 +405,8 @@ export const getAgentSessionsByPhoneNumber = async ({from, to, phoneNumber}: Get
     });
 
     if (!response.ok) {
-        console.error('Failed to fetch call logs:', response.statusText);
+        console.error('Failed to fetch call logs:', response);
+        console.error('Failed to fetch call logs:', response.body);
         throw Error(response.statusText);
         // return {data: 'error', status: response.status};
     }

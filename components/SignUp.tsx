@@ -1,6 +1,11 @@
 import { Form, useFetcher, useNavigate, useNavigation, type ActionFunctionArgs } from "react-router";
 import { signUpAction } from "../actions/actions.ts";
+import { type SignUpFields } from "../types/authTypes.ts";
 import { p } from "motion/react-client";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { type UserCredential } from "firebase/auth";
+import { useEffect } from "react";
+import { useAuth } from "../context/authContext.tsx";
 
 export function signUpLoader() {
     
@@ -8,88 +13,166 @@ export function signUpLoader() {
 
 export default function SignUp() {
     const fetcher = useFetcher<typeof signUpAction>();
+    const navigate = useNavigate();
+    const {
+        register, 
+        handleSubmit, 
+        formState: { errors }
+    } = useForm<SignUpFields>();
+    const onSubmit: SubmitHandler<SignUpFields> = (data) => {
+        fetcher.submit({...data}, {method: "POST", action: '/signup'})
+    }
+    const {user, initializing} = useAuth();
+
     const disabled = false;
+
+    useEffect(() => {
+        if (user) navigate("/landing");
+        
+
+    }, [fetcher.data, user])
+
+
     // const disabled = fetcher.state === 'submitting' || fetcher.state === 'loading';
-    
+    console.log(fetcher?.data)
 
     return (
         <div className="sign-up-form-container">
             <h1 className="form-heading">Start Tracking</h1>
-            <fetcher.Form className="sign-up-form" method="post" noValidate>
+            <form className="sign-up-form" method="POST" noValidate onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                    <FormInput 
+                    <input 
                         type="text" 
                         id="firstName" 
                         name="firstName" 
-                        placeholder="first name"
-                        error={fetcher.data?.error?.firstNameError}
+                        placeholder="first name" 
+                        {...register(
+                            "firstName", 
+                            { 
+                                required: true,
+                                maxLength: 15
+                            }
+                        )} 
                     />
                 </div>
                 <div>
-                    <FormInput 
+                    <input 
                         type="text" 
                         id="lastName" 
                         name="lastName" 
-                        placeholder="last name"
-                        error={fetcher.data?.error?.lastNameError}
+                        placeholder="last name" 
+                        {...register(
+                            "lastName", 
+                            { 
+                                required: true,
+                                maxLength: 15
+                            }
+
+                        )} 
                     />
                 </div>
                 <div>
-                     <FormInput 
-                        type="tel" 
-                        id="agentPhoneNumber" 
-                        name="agentPhoneNumber" 
-                        placeholder="agent phone number"
-                        error={fetcher.data?.error?.agentPhoneNumberError}
-                    />
-                </div>
-                <div>
-                    <FormInput 
+                     <input 
                         type="text" 
                         id="webexId" 
                         name="webexId" 
-                        placeholder="webex id"
-                        error={fetcher.data?.error?.webexIdError}
+                        placeholder="webex id" 
+                        {...register(
+                            "webexId", 
+                            { 
+                                required: false
+                            }
+
+                        )} 
                     />
                 </div>
                 <div>
-                    <FormInput 
-                        type="email" 
+                    <input 
+                        type="tel" 
+                        id="agentPhoneNumber" 
+                        name="agentPhoneNumber" 
+                        placeholder="webex phone number (ex. +15556668888)"
+                        {...register(
+                            "agentPhoneNumber", 
+                            { 
+                                required: true,
+                                pattern: /^\+\d+$/
+                            }
+
+                        )} 
+                    />
+                </div>
+                <div>
+                    <input 
+                        type="text" 
                         id="email" 
                         name="email" 
-                        placeholder="email"
-                        error={fetcher.data?.error?.emailError}
+                        placeholder="email" 
+                        {...register(
+                            "email", 
+                            { 
+                                required: true,
+                                pattern: /^\S+@\S+\.\S+$/
+                            }
+
+                        )} 
                     />
                 </div>
                 <div>
-                    <FormInput 
-                        type="email" 
+                    <input 
+                        type="text" 
                         id="emailVerified" 
                         name="emailVerified" 
-                        placeholder="verify email"
-                        error={fetcher.data?.error?.emailError}
+                        placeholder="verify email" 
+                        {...register(
+                            "emailVerified", 
+                            { 
+                                required: true,
+                                pattern: /^\S+@\S+\.\S+$/,
+                                validate: (v, f) => (
+                                    v === f.email || 'email does not match'
+                                )
+                            }
+
+                        )} 
                     />
                 </div>
                 <div>
-                    <FormInput 
+                    <input 
                         type="password" 
                         id="password" 
                         name="password" 
-                        placeholder="password"
-                        error={fetcher.data?.error?.passwordError}
+                        placeholder="password" 
+                        {...register(
+                            "password", 
+                            { 
+                                required: true,
+                                pattern: /^\S+$/,
+                                minLength: 8
+                            }
+
+                        )} 
                     />
                 </div>
                 <div>
-                    <FormInput 
+                    <input 
                         type="password" 
                         id="passwordVerified" 
                         name="passwordVerified" 
-                        placeholder="verify password"
-                        error={fetcher.data?.error?.passwordError}
+                        placeholder="password verified" 
+                        {...register(
+                            "passwordVerified", 
+                            { 
+                                required: true,
+                                pattern: /^\S+$/,
+                                minLength: 8,
+                            }
+
+                        )} 
                     />
                 </div>
                 <button type="submit" disabled={disabled}>Sign Up</button>
-            </fetcher.Form>
+            </form>
 
         </div>
     )
@@ -119,3 +202,85 @@ export const FormInput = ({type, id, name, placeholder, error}: FormInput) => {
 
 
 }
+
+// return (
+//         <div className="sign-up-form-container">
+//             <h1 className="form-heading">Start Tracking</h1>
+//             <fetcher.Form className="sign-up-form" method="post" noValidate>
+//                 <div>
+//                     <FormInput 
+//                         type="text" 
+//                         id="firstName" 
+//                         name="firstName" 
+//                         placeholder="first name"
+//                         error={fetcher.data?.error?.firstNameError}
+//                     />
+//                 </div>
+//                 <div>
+//                     <FormInput 
+//                         type="text" 
+//                         id="lastName" 
+//                         name="lastName" 
+//                         placeholder="last name"
+//                         error={fetcher.data?.error?.lastNameError}
+//                     />
+//                 </div>
+//                 <div>
+//                      <FormInput 
+//                         type="tel" 
+//                         id="agentPhoneNumber" 
+//                         name="agentPhoneNumber" 
+//                         placeholder="agent phone number"
+//                         error={fetcher.data?.error?.agentPhoneNumberError}
+//                     />
+//                 </div>
+//                 <div>
+//                     <FormInput 
+//                         type="text" 
+//                         id="webexId" 
+//                         name="webexId" 
+//                         placeholder="webex id"
+//                         error={fetcher.data?.error?.webexIdError}
+//                     />
+//                 </div>
+//                 <div>
+//                     <FormInput 
+//                         type="email" 
+//                         id="email" 
+//                         name="email" 
+//                         placeholder="email"
+//                         error={fetcher.data?.error?.emailError}
+//                     />
+//                 </div>
+//                 <div>
+//                     <FormInput 
+//                         type="email" 
+//                         id="emailVerified" 
+//                         name="emailVerified" 
+//                         placeholder="verify email"
+//                         error={fetcher.data?.error?.emailError}
+//                     />
+//                 </div>
+//                 <div>
+//                     <FormInput 
+//                         type="password" 
+//                         id="password" 
+//                         name="password" 
+//                         placeholder="password"
+//                         error={fetcher.data?.error?.passwordError}
+//                     />
+//                 </div>
+//                 <div>
+//                     <FormInput 
+//                         type="password" 
+//                         id="passwordVerified" 
+//                         name="passwordVerified" 
+//                         placeholder="verify password"
+//                         error={fetcher.data?.error?.passwordError}
+//                     />
+//                 </div>
+//                 <button type="submit" disabled={disabled}>Sign Up</button>
+//             </fetcher.Form>
+
+//         </div>
+//     )

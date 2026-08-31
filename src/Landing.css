@@ -12,7 +12,7 @@ main.landing-container {
     flex-direction: column;
     align-items: center;
     padding: 10px;
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 
 main > .landing-text {

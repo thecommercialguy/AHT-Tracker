@@ -1,8 +1,18 @@
-import { Form, useLoaderData } from "react-router";
+import { Form, useLoaderData, useNavigate } from "react-router";
 import logo from "../src/assets/Loves_logo.png";
+import { useAuth } from "../context/authContext";
+import { useEffect } from "react";
 
 export default function Landing() { 
     const data = useLoaderData();  // Difference between destructuring and just using the response
+    const navigate = useNavigate();
+    const {user, initializing} = useAuth();
+
+    useEffect(() => {
+        if (!user) navigate("/login");
+
+    }, [user, initializing])
+    
     
     // useEffect(() => {
     //     if (revalidator.state !== "idle") return;

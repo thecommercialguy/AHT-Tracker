@@ -1,7 +1,9 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { type ActionFunctionArgs } from "react-router";
-import { auth } from "../src/firebase";
-import { type SignUpFields } from "../types/authTypes.ts";
+import { redirect, type ActionFunctionArgs } from "react-router";
+import { auth, db } from "../src/firebase";
+import { type LoginFields, type SignUpFields } from "../types/authTypes.ts";
+import { createUserAuth, loginUserAuth } from "../context/authContext.tsx";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 
 
 export async function signUpAction({ request }: ActionFunctionArgs) {
@@ -9,37 +11,59 @@ export async function signUpAction({ request }: ActionFunctionArgs) {
     const method = request.method.toUpperCase();
 
     const signUpFields = {
-        firstName: formData.get('firstNam'),
-        lastName: formData.get('lastName') ,
-        webexId: formData.get('webexId') ,
-        agentPhoneNumber: formData.get('agentPhoneNumber') ,
-        email: formData.get('email') || null,
-        emailVerified: formData.get('emailVerified') ,
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        webexId: formData.get('webexId'),
+        agentPhoneNumber: formData.get('agentPhoneNumber'),
+        email: formData.get('email'),
+        emailVerified: formData.get('emailVerified'),
         password: formData.get('password'),
         passwordVerified: formData.get('passwordVerified') 
     } as SignUpFields;
 
-    const { isInvalid, signUpError } = validateSignUpForm(signUpFields);
-
-    if (isInvalid){
-        return {error: signUpError};
+    const userCredential = await createUserAuth(signUpFields.email, signUpFields.password);
+    if (userCredential.error != null) {
+        // error will go here
+        console.log('error creating user')
+        return;
     }
 
-    const response = await createUserWithEmailAndPassword(auth, signUpFields.email, signUpFields.password);
+    const uid = userCredential.data.user.uid;
+    // console.log(tempUser)
 
 
+    await setDoc(doc(db, "users", uid), {
+        firstName: signUpFields.firstName,
+        lastName: signUpFields.lastName,
+        email: signUpFields.email,
+        webexId: signUpFields.webexId || null,
+        agentPhoneNumber: signUpFields.agentPhoneNumber
+    });
 
+
+    return redirect('/dashboard')
+
+    
 }
 
 export async function loginAction({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const method = request.method.toUpperCase();
 
-    console.log(formData.get('firstName'));
+    const loginFields = {
+        email: formData.get('email'),
+        password: formData.get('password'),
+    } as LoginFields;
 
 
-    const response = await signInWithEmailAndPassword(auth, email, password)
+    const userCredential = await loginUserAuth(loginFields.email, loginFields.password);
+    if (userCredential.error) {
+        return userCredential
+    }
 
+
+
+    return redirect('/dashboard');
 }
 
 
