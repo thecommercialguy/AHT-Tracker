@@ -36,7 +36,7 @@ main > .landing-text {
 }
 
 
-.landing-container .button {
+.landing-container a.button {
     width: 335px;
     height: 60px;
     display: flex;
@@ -55,7 +55,13 @@ main > .landing-text {
 
 }
 
-.button.login {
+.landing-container a.button, .landing-container a.button:active, .landing-container a.button:hover {
+  text-decoration: none;
+    color: white;
+}
+
+
+a.button.login {
     border: 1px solid white;
     margin-bottom: 21px;
 }
@@ -66,15 +72,29 @@ main > .landing-text {
   initial-value: 26%;
 }
 
-.button.sign-up {
+a.button.sign-up {
   --grad-stop: 26%;
   background: linear-gradient(to bottom, #FF7B00 var(--grad-stop), #FF0000);
   transition: --grad-stop 120ms ease;
 }
 
-.button.sign-up:active {
+a.button.sign-up:active {
   --grad-stop: -50%;
 }
+/* .landing-container a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.landing-container a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+.landing-container a:hover {
+    text-decoration: none;
+    color: inherit;
+} */
 
 /* .button.sign-up {
     background: linear-gradient(

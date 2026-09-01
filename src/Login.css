@@ -23,7 +23,7 @@
     box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
 }
 
-.form-heading {
+.login-form-container .form-heading {
     color: white;
     font-weight: bold;
     font-family: var(--sans);
@@ -70,6 +70,26 @@
 .login-form input:focus {
     outline: 1px solid white; 
     outline-offset: 1px;
+}
+
+.error.sign-in {
+    display: flex;
+    height: 40px;
+    width: 369px;
+    border-radius: 4px;
+    border: 2px solid #25272D;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    margin-bottom: 20px;
+
+}
+
+.error.sign-in span {
+    font-size: 1rem;
+    font-family: var(--sans);
+    letter-spacing: .03em;
+    color: white;
 }
 
 .login-form button {

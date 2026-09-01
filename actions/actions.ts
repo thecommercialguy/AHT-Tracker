@@ -55,8 +55,9 @@ export async function loginAction({ request }: ActionFunctionArgs) {
         password: formData.get('password'),
     } as LoginFields;
 
-
+    console.log('this far')
     const userCredential = await loginUserAuth(loginFields.email, loginFields.password);
+    console.log(userCredential)
     if (userCredential.error) {
         return userCredential
     }

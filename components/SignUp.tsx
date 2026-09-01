@@ -27,7 +27,7 @@ export default function SignUp() {
     const disabled = false;
 
     useEffect(() => {
-        if (user) navigate("/landing");
+        if (user) navigate("/dashboard");
         
 
     }, [fetcher.data, user])
