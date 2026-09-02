@@ -3,16 +3,25 @@
     height: 78px;
     display: flex;
     flex-direction: row;
-    position: relative;
     left: 50%;
     transform: translateX(-50%);
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     /* padding-left: 2.75rem; */
     background-color: black;
 }
 
-.header a {
+.header nav {
+    width: 100vw - 30px;
+
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header nav a {
     text-decoration: none;
     color: 'white';
     padding-left: 32px;
@@ -52,5 +61,7 @@ h1.logo-text {
     letter-spacing: -1.3px;
 }
 
-
+.menu-continaer {
+    
+}
 
