@@ -31,7 +31,6 @@ export default function Home() {
     
     console.log(data)
     console.log(dashboardData)
-    u
     // useEffect(() => {
     //     if (revalidator.state !== "idle") return;
     //     const timeoutId = setTimeout(() => {

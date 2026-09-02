@@ -71,7 +71,7 @@ h1.logo-text {
     flex-direction: column;
     align-items: center;
 
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 
 .menu-container .bar {

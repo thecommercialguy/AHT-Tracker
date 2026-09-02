@@ -2,7 +2,8 @@ import { Link } from 'react-router';
 import logo from '../src/assets/Loves_logo.png';
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { DropdownMenu } from './DropDownMenu';
+import { AuthDropdownMenu, DropdownMenu } from './DropDownMenu';
+import { useAuth } from '../context/authContext';
 
 
 export default function Header() {
@@ -11,6 +12,10 @@ export default function Header() {
 
     const { user, initializing } = useAuth();
 
+
+    const Menu = () => {
+        return user ? <AuthDropdownMenu /> : <DropdownMenu />
+    }
     return (
         <header className="header">
             <nav>
@@ -53,8 +58,7 @@ export default function Header() {
                     </motion.div>
                     {   
                         menuActive && 
-                        user ? <AuthDropDownMenu /> : 
-                        <DropdownMenu />
+                        <Menu />
                     }
                 </motion.div>
             </nav>
