@@ -5,7 +5,22 @@ export function AuthDropdownMenu() {
 
 
     return (
-        <motion.div className="dropdown-menu-container">
+        <motion.div 
+            className="dropdown-menu-container"
+            style={{ transformOrigin: 'top'}}
+            initial={{
+                scale: 0, 
+                opacity: 0
+            }}
+            animate={{
+                scale: 0, 
+                opacity: 0
+            }}
+            exit={{
+                scale: 0, 
+                opacity: 0
+            }}
+        >
             <ul className="dropdown-menu">
                 <li><Link to="/settings">Account Setting</Link></li>
                 <li className="seperator"></li>
@@ -21,7 +36,12 @@ export function DropdownMenu() {
 
 
     return (
-        <motion.div className="dropdown-menu-container">
+        <motion.div 
+            className="dropdown-menu-container"
+            initial={
+
+            }
+        >
             <ul className="dropdown-menu">
                 <li><Link to="/login">Login</Link></li>
                  <li className="seperator"></li>
@@ -32,3 +52,6 @@ export function DropdownMenu() {
 
 
 }
+
+
+
