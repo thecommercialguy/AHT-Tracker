@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import logo from '../src/assets/Loves_logo.png';
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { AuthDropdownMenu, DropdownMenu } from './DropDownMenu';
 import { useAuth } from '../context/authContext';
@@ -56,10 +56,12 @@ export default function Header() {
                         }}
                     >
                     </motion.div>
-                    {   
-                        menuActive && 
-                        <Menu />
-                    }
+                    <AnimatePresence>
+                        {   
+                            menuActive && 
+                            <Menu />
+                        }
+                    </AnimatePresence>
                 </motion.div>
             </nav>
         </header>
