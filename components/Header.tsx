@@ -9,6 +9,7 @@ export default function Header() {
 
     const [menuActive, setMenuActive] = useState<boolean>(false);
 
+    const { user, initializing } = useAuth();
 
     return (
         <header className="header">
@@ -50,7 +51,11 @@ export default function Header() {
                         }}
                     >
                     </motion.div>
-                    {menuActive && <DropdownMenu />}
+                    {   
+                        menuActive && 
+                        user ? <AuthDropDownMenu /> : 
+                        <DropdownMenu />
+                    }
                 </motion.div>
             </nav>
         </header>
