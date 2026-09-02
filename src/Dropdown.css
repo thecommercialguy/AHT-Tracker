@@ -7,22 +7,36 @@
     align-items: center;
     
     position: absolute;
-    top: 82px;
-    right: 30px;
+    top: 63px;
+    right: -23px;
     
     overflow: clip;
+
+
+    /* border: 1px solid red; */
+    border-radius: 10px;
+    background-color: black;
     
 }
 
 .dropdown-menu {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     
     list-style: none;
+    
+    padding: 0;
+    margin: 0;
+
 }
 
 .dropdown-menu li {
+    height: 55px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,8 +54,8 @@
 }
 
 .dropdown-menu li.seperator {
-    height: .333px;
+    height: .8px;
     width: 210px;
 
-    background-color: #FFFFFF;
+    background-color: #25272D;
 }

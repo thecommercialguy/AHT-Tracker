@@ -5,6 +5,7 @@
     flex-direction: row;
     left: 50%;
     transform: translateX(-50%);
+    position: fixed;
     justify-content: center;
     align-items: center;
     /* padding-left: 2.75rem; */
@@ -12,7 +13,8 @@
 }
 
 .header nav {
-    width: 100vw - 30px;
+    width: 100%;
+    padding-inline: 30px;
 
     display: flex;
     position: relative;
@@ -24,7 +26,6 @@
 .header nav a {
     text-decoration: none;
     color: 'white';
-    padding-left: 32px;
 }
 
 .logo-container {
@@ -61,7 +62,36 @@ h1.logo-text {
     letter-spacing: -1.3px;
 }
 
-.menu-continaer {
+.menu-container {
+    width: 40px;
+    height: 40px;
     
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+
+    border: 1px solid red;
+}
+
+.menu-container .bar {
+    width: 34px;
+    height: 4px;
+    border-radius: 100px;
+    margin-bottom: 5px;
+
+    background: white;
+    display: flex;
+    position: absolute;
+}
+
+.menu-container .bar.top {
+    top: 8px;
+}
+.menu-container .bar.middle {
+    top: 18px;
+}
+.menu-container .bar.bottom {
+    top: 28px;
 }
 

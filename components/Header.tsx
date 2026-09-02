@@ -1,8 +1,13 @@
-import { Link } from 'react-router'
-import logo from '../src/assets/Loves_logo.png'
+import { Link } from 'react-router';
+import logo from '../src/assets/Loves_logo.png';
+import { motion } from 'motion/react';
+import { useState } from 'react';
+import { DropdownMenu } from './DropDownMenu';
 
 
 export default function Header() {
+
+    const [menuActive, setMenuActive] = useState<boolean>(false);
 
 
     return (
@@ -17,9 +22,36 @@ export default function Header() {
                         </h1>
                     </span>
                 </Link>
-                <div className="menu-container">
-
-                </div>
+                <motion.div 
+                    className="menu-container"
+                    onTap={() => setMenuActive(!menuActive)}
+                >
+                    <motion.div 
+                        className="bar top"
+                        animate={{
+                            rotate: menuActive ? -45 : 0,
+                            y: menuActive ? 10 : 0
+                        }}
+                    >
+                    </motion.div>
+                    <motion.div 
+                        className="bar middle"
+                        animate={{
+                            opacity: menuActive ? 0 : 1,
+                            scale: menuActive ? .01 : 1
+                        }}
+                    >
+                    </motion.div>
+                    <motion.div 
+                        className="bar bottom"
+                        animate={{
+                            rotate: menuActive ? 45 : 0,
+                            y: menuActive ? -10 : 0
+                        }}
+                    >
+                    </motion.div>
+                    {menuActive && <DropdownMenu />}
+                </motion.div>
             </nav>
         </header>
     )

@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 
 
 export function AuthDropdownMenu() {
@@ -23,6 +24,7 @@ export function DropdownMenu() {
         <div className="dropdown-menu-container">
             <ul className="dropdown-menu">
                 <li><Link to="/login">Login</Link></li>
+                 <li className="seperator"></li>
                 <li><Link to="/signup">Sign up</Link></li>
             </ul>
         </div>
