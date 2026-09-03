@@ -20,7 +20,7 @@ export function AuthDropdownMenu() {
         <motion.div
             key="auth"
             className="dropdown-menu-container"
-            style={{ transformOrigin: 'top'}}
+            style={{ transformOrigin: '85% top'}}
             initial={{
                 scale: 0, 
                 opacity: 0
@@ -33,6 +33,7 @@ export function AuthDropdownMenu() {
                 scale: 0, 
                 opacity: 0
             }}
+            transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
         >
             <ul className="dropdown-menu">
                 <li><Link to="/settings">Account Setting</Link></li>
@@ -65,6 +66,7 @@ export function DropdownMenu() {
                 scale: 0, 
                 opacity: 0
             }}
+            transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
         >
             <ul className="dropdown-menu">
                 <li><Link to="/login">Login</Link></li>
