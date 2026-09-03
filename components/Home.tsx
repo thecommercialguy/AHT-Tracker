@@ -13,9 +13,12 @@ export async function loader() {
 
     const token = await user.getIdToken();
     const data = await getUserDashboard(token);
+
     // const data = await getDashboardData();
-    
     return data;    
+
+   
+    
 }
 
 
@@ -24,6 +27,15 @@ export async function loader() {
 
 export default function Home() { 
     const data = useLoaderData();  // Difference between destructuring and just using the response
+
+    if (data?.error) {
+        return (
+            <div>
+                <h1>Error getting loader</h1>
+            </div>
+        )
+    }
+
     const [dashboardData, setDashboardData] = useState<DashboardData>(data);
     // const [revalidating, setRevalidating] = useState<boolean>(false);
     const revalidator = useRevalidator(); 

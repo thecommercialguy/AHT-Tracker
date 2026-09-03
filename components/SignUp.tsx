@@ -39,6 +39,9 @@ export default function SignUp() {
     return (
         <div className="sign-up-form-container">
             <h1 className="form-heading">Start Tracking</h1>
+            {fetcher.data?.error && <div className="error sign-in">
+                <span>Issue signing up.</span>
+            </div>}
             <form className="sign-up-form" method="POST" noValidate onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <input 

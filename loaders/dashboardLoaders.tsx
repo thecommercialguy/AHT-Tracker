@@ -102,12 +102,23 @@ export const getUserDashboard = async (token: string | null) => {
         });
 
         if (!response.ok) {
-            throw Error(response.statusText);
+            if (response.status === 401) {
+                return {
+                    status: 401,
+                    error: 'Unauthorized'
+                };
+            } else {
+                return {
+                    status: 400,
+                    error: 'Unable to get dashbaord data'
+                }
+            }
         }
 
         const data = await response.json();
         if (!data) {
-            throw Error('Failed to get dashboard')
+            throw Error('Failed to get dashboard');
+
         }
 
         return data
@@ -238,6 +249,9 @@ export const getTaskLegs = async () => {
     });
 
     if (!response.ok) {
+        const errorResponse = await response.json();
+        const message = errorResponse?.error?.message?.[0]?.description || null
+        console.log(message);
         console.error('Failed to fetch call logs:', response.statusText);
         return {data: 'error'};
     }
@@ -271,6 +285,10 @@ export const getDashboardData = async () => {
 
         const taskLegResponse = await getTaskLegs();
         const agentSessionResponse = await getAgentSession();
+
+        if (taskLegResponse?.error || agentSessionResponse?.error) {
+            return taskLegResponse
+        }
 
         
         

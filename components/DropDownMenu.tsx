@@ -1,8 +1,20 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { motion } from 'motion/react';
+import { auth } from "../src/firebase";
+import { signOut } from "firebase/auth";
 
 export function AuthDropdownMenu() {
+    const navigate = useNavigate();
 
+    const signOutHandler = async () => {
+        try {
+            await signOut(auth);
+            navigate('/')
+        } catch (error) {
+            console.error('Error signing out')
+        }
+
+    }
 
     return (
         <motion.div
@@ -18,14 +30,14 @@ export function AuthDropdownMenu() {
                 opacity: 1
             }}
             exit={{
-                scale: 1, 
-                opacity: 1
+                scale: 0, 
+                opacity: 0
             }}
         >
             <ul className="dropdown-menu">
                 <li><Link to="/settings">Account Setting</Link></li>
                 <li className="seperator"></li>
-                <li>Sign out</li>
+                <li><button onClick={signOutHandler}>Sign out</button></li>
             </ul>
         </motion.div>
     );
@@ -40,14 +52,14 @@ export function DropdownMenu() {
         <motion.div
             key="anon" 
             className="dropdown-menu-container"
-            style={{ transformOrigin: 'top'}}
+            style={{ transformOrigin: '85% top'}}
             initial={{
                 scale: 0, 
                 opacity: 0
             }}
             animate={{
-                scale: 0, 
-                opacity: 0
+                scale: 1, 
+                opacity: 1
             }}
             exit={{
                 scale: 0, 

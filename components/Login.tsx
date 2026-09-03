@@ -4,6 +4,8 @@ import type { LoginFields, SignUpFields } from "../types/authTypes";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { loginAction } from "../actions/actions";
 import { useEffect } from "react";
+import { motion } from "motion/react";
+import { LoaderCircle } from "lucide-react";
 
 
 
@@ -76,7 +78,24 @@ export default function Login() {
                         )} 
                     />
                 </div>
-                <button type="submit" disabled={disabled}>{fetcher.state !== 'loading' ? 'Login' : 'Submitting...'}</button>
+                <button type="submit" disabled={disabled}>{fetcher.state !== 'loading' ? 'Login' : 
+                    <motion.div
+                        animate={{rotate: 360}}
+                        transition={{
+                            duration: 1,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                        style={{
+                            display: "flex",
+                            alignItems: "center", 
+                            justifyContent: "center",
+                        }}
+                    >
+                        <LoaderCircle size={24} />
+                    </motion.div>
+                }
+                </button>
             </form>
 
         </div>
@@ -85,3 +104,22 @@ export default function Login() {
 
 
 // Want a linear gradient behind that button when submitting
+
+<motion.div
+animate={{rotate: 360}}
+transition={{
+    duration: 1,
+    repeat: Infinity,
+    ease: "linear"
+}}
+style={{
+    display: "flex",
+    alignItems: "center", 
+    justifyContent: "center",
+    position: "absolute",
+    top: 80,
+    left: '49%'
+}}
+>
+<LoaderCircle size={32} />
+</motion.div>

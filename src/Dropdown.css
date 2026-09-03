@@ -59,3 +59,25 @@
 
     background-color: #25272D;
 }
+
+.dropdown-menu li button {
+    /* height: .8px; */
+    width: max-content;
+
+    background-color: transparent;
+    border: none;
+    /* background-color: ; */
+
+
+
+    color: white;
+    font-weight: 600;
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 1rem;
+    letter-spacing: .03em;
+
+
+
+
+}

@@ -1,4 +1,5 @@
 import type {ChannelInfoResponse} from '../types/callTypes';
+import { NotFoundError, throwQueryError } from '../errors/errors';
 
 const taskLegQuery = `
 query TaskLegs($from: Long!, $to: Long!) {
@@ -256,19 +257,21 @@ export const taskLegsWebexQuery = async (from: number, to: number) => {
     });
 
     if (!response.ok) {
-        console.error('Failed to fetch call logs:', response.statusText);
-        throw Error(response.statusText);
-        
-        // return {data: 'error', status: response.status};
+        const errorResponse = await response.json();
+        const message = errorResponse?.error?.message[0]?.description || null;
+
+        console.error('Failed to fetch call logs:', response);
+        console.error('Failed to fetch call logs:', response.body);
+        throwQueryError(response.status, message);
     }
 
     const queryData = await response.json();
 
     const taskLegData = queryData.data.taskLegDetails.taskLegs;
-    if (taskLegData === undefined || taskLegData === null || taskLegData.length < 1) throw Error('No tasklegs');
+    if (taskLegData === undefined || taskLegData === null || taskLegData.length < 1) throw new NotFoundError('No tasklegs found');
     
     const taskLegsSorted = taskLegData.sort((a: any, b: any) => b.createdTime - a.createdTime);
-    if (taskLegsSorted === undefined || taskLegsSorted === null || taskLegsSorted.length < 1) throw Error('No tasklegs');
+    if (taskLegsSorted === undefined || taskLegsSorted === null || taskLegsSorted.length < 1) throw new NotFoundError('No tasklegs found');
     
     return taskLegsSorted;
 };
@@ -295,9 +298,14 @@ export const getTaskLegsByPhoneNumber = async ({from, to, phoneNumber}:GetTaskLe
     });
 
     if (!response.ok) {
+        const errorResponse = await response.json();
+        const message = errorResponse?.error?.message[0]?.description || null;
+
         console.error('Failed to fetch call logs:', response);
         console.error('Failed to fetch call logs:', response.body);
-        throw Error(response.statusText);
+        throwQueryError(response.status, message);
+
+        
         
         // return {data: 'error', status: response.status};
     }
@@ -305,10 +313,10 @@ export const getTaskLegsByPhoneNumber = async ({from, to, phoneNumber}:GetTaskLe
     const queryData = await response.json();
 
     const taskLegData = queryData.data.taskLegDetails.taskLegs;
-    if (taskLegData === undefined || taskLegData === null || taskLegData.length < 1) throw Error('No tasklegs');
+    if (taskLegData === undefined || taskLegData === null || taskLegData.length < 1) throw new NotFoundError('No tasklegs found');
     
     const taskLegsSorted = taskLegData.sort((a: any, b: any) => b.createdTime - a.createdTime);
-    if (taskLegsSorted === undefined || taskLegsSorted === null || taskLegsSorted.length < 1) throw Error('No tasklegs');
+    if (taskLegsSorted === undefined || taskLegsSorted === null || taskLegsSorted.length < 1) throw new NotFoundError('No tasklegs found');
     
     return taskLegsSorted;
 };
@@ -329,25 +337,29 @@ export const agentSessionWebexQuery = async (from: number, to: number) => {
     });
 
     if (!response.ok) {
-        console.error('Failed to fetch call logs:', response.statusText);
-        throw Error(response.statusText);
+        const errorResponse = await response.json();
+        const message = errorResponse?.error?.message[0]?.description || null;
+
+        console.error('Failed to fetch call logs:', response);
+        console.error('Failed to fetch call logs:', response.body);
+        throwQueryError(response.status, message);
         // return {data: 'error', status: response.status};
     }
 
     const queryData = await response.json();
 
-    const agentSessions = queryData.data.agentSession.agentSessions
+    const agentSessions = queryData.data.agentSession.agentSessions;
 
     if (agentSessions === null || agentSessions == undefined || agentSessions.lenght < 1) {
-        throw Error("No agent sessions")
+        throw new NotFoundError("No agent sessions found");
     }
 
     const channelInfos = agentSessions.flatMap((session: any) => {
         if (!session.channelInfo) return [];
         return session.channelInfo; 
-    })
+    });
 
-    console.log(channelInfos)
+    console.log(channelInfos);
     
     const reduced = channelInfos.reduce((a: any, b: any) => {
         return {
@@ -366,13 +378,13 @@ export const agentSessionWebexQuery = async (from: number, to: number) => {
             totalDuration: a.totalDuration + b.totalDuration,
             wordRatioCount: 0,
             wrapupDuration: a.wrapupDuration + b.wrapupDuration
-        }
+        };
         
-    })
+    });
     
-    const startTime = queryData.data.agentSession.agentSessions.reduce((a: any, b: any) => a.startTime < b.startTime ? a : b)
+    const startTime = queryData.data.agentSession.agentSessions.reduce((a: any, b: any) => a.startTime < b.startTime ? a : b);
     if (startTime == null || startTime == undefined) {  // May remove this as it kinda doesnt need that after the null check
-        throw new Error('No agent sessions')
+        throw new NotFoundError("No agent sessions found");
     }
 
     const channelInfo = {...reduced, startTime: startTime} as ChannelInfoResponse;
@@ -405,19 +417,22 @@ export const getAgentSessionsByPhoneNumber = async ({from, to, phoneNumber}: Get
     });
 
     if (!response.ok) {
-        
+        const errorResponse = await response.json();
+        const message = errorResponse?.error?.message[0]?.description || null;
+
         console.error('Failed to fetch call logs:', response);
         console.error('Failed to fetch call logs:', response.body);
-        throw Error(response.statusText);
+        
+        throwQueryError(response.status, message);
         // return {data: 'error', status: response.status};
     }
 
     const queryData = await response.json();
 
-    const agentSessions = queryData.data.agentSession.agentSessions
+    const agentSessions = queryData.data.agentSession.agentSessions;
 
     if (agentSessions === null || agentSessions == undefined || agentSessions.lenght < 1) {
-        throw Error("No agent sessions")
+        throw new NotFoundError("No agent sessions found");
     }
 
     const channelInfos = agentSessions.flatMap((session: any) => {
@@ -444,13 +459,13 @@ export const getAgentSessionsByPhoneNumber = async ({from, to, phoneNumber}: Get
             totalDuration: a.totalDuration + b.totalDuration,
             wordRatioCount: 0,
             wrapupDuration: a.wrapupDuration + b.wrapupDuration
-        }
+        };
         
-    })
+    });
     
-    const startTime = queryData.data.agentSession.agentSessions.reduce((a: any, b: any) => a.startTime < b.startTime ? a : b)
+    const startTime = queryData.data.agentSession.agentSessions.reduce((a: any, b: any) => a.startTime < b.startTime ? a : b);
     if (startTime == null || startTime == undefined) {  // May remove this as it kinda doesnt need that after the null check
-        throw new Error('No agent sessions')
+        throw new NotFoundError("No agent sessions found");
     }
 
     const channelInfo = {...reduced, startTime: startTime} as ChannelInfoResponse;
@@ -483,16 +498,19 @@ export const getAgentSessionsByWebexId = async ({from, to, webexId}: GetAgentSes
     });
 
     if (!response.ok) {
+        const errorResponse = await response.json();
+        const message = errorResponse?.error?.message[0]?.description || null;
+        
         console.error('Failed to fetch call logs:', response.statusText);
-        throw Error(response.statusText);
+        throwQueryError(response.status, message);
     }
 
     const queryData = await response.json();
 
-    const agentSessions = queryData.data.agentSession.agentSessions
+    const agentSessions = queryData.data.agentSession.agentSessions;
 
     if (agentSessions === null || agentSessions == undefined || agentSessions.lenght < 1) {
-        throw Error("No agent sessions")
+        throw new NotFoundError("No agent sessions found");
     }
 
     const channelInfos = agentSessions.flatMap((session: any) => {
@@ -500,7 +518,7 @@ export const getAgentSessionsByWebexId = async ({from, to, webexId}: GetAgentSes
         return session.channelInfo; 
     })
 
-    console.log(channelInfos)
+    console.log(channelInfos);
     
     const reduced = channelInfos.reduce((a: any, b: any) => {
         return {
@@ -519,13 +537,13 @@ export const getAgentSessionsByWebexId = async ({from, to, webexId}: GetAgentSes
             totalDuration: a.totalDuration + b.totalDuration,
             wordRatioCount: 0,
             wrapupDuration: a.wrapupDuration + b.wrapupDuration
-        }
+        };
         
-    })
+    });
     
     const startTime = queryData.data.agentSession.agentSessions.reduce((a: any, b: any) => a.startTime < b.startTime ? a : b)
     if (startTime == null || startTime == undefined) {  // May remove this as it kinda doesnt need that after the null check
-        throw new Error('No agent sessions')
+        throw new NotFoundError("No agent sessions found");
     }
 
     const channelInfo = {...reduced, startTime: startTime} as ChannelInfoResponse;

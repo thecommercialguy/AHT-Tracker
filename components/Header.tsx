@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import logo from '../src/assets/Loves_logo.png';
 import { AnimatePresence, motion } from 'motion/react';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { AuthDropdownMenu, DropdownMenu } from './DropDownMenu';
 import { useAuth } from '../context/authContext';
 
@@ -14,8 +14,10 @@ export default function Header() {
 
 
     const Menu = () => {
+        
         return user ? <AuthDropdownMenu /> : <DropdownMenu />
     }
+    console.log(menuActive)
     return (
         <header className="header">
             <nav>
@@ -28,9 +30,9 @@ export default function Header() {
                         </h1>
                     </span>
                 </Link>
-                <motion.div 
+                <motion.button 
                     className="menu-container"
-                    onTap={() => setMenuActive(!menuActive)}
+                    onTapStart={() => setMenuActive(!menuActive)}
                 >
                     <motion.div 
                         className="bar top"
@@ -62,7 +64,7 @@ export default function Header() {
                             <Menu />
                         }
                     </AnimatePresence>
-                </motion.div>
+                </motion.button>
             </nav>
         </header>
     )

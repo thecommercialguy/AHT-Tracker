@@ -25,7 +25,7 @@ export async function signUpAction({ request }: ActionFunctionArgs) {
     if (userCredential.error != null) {
         // error will go here
         console.log('error creating user')
-        return;
+        return userCredential;
     }
 
     const uid = userCredential.data.user.uid;

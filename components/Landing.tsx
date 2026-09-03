@@ -4,14 +4,13 @@ import { useAuth } from "../context/authContext";
 import { useEffect } from "react";
 
 export default function Landing() { 
-    const data = useLoaderData();  // Difference between destructuring and just using the response
     const navigate = useNavigate();
-    const {user, initializing} = useAuth();
+    // const {user, initializing} = useAuth();
 
-    useEffect(() => {
-        if (user) navigate("/dashboard");
+    // useEffect(() => {
+    //     if (user) navigate("/dashboard");
 
-    }, [user, initializing])
+    // }, [user, initializing])
     
     
     // useEffect(() => {
