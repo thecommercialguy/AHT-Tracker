@@ -58,13 +58,13 @@ export default function Header() {
                         }}
                     >
                     </motion.div>
-                    <AnimatePresence>
-                        {   
-                            menuActive && 
-                            <Menu />
-                        }
-                    </AnimatePresence>
                 </motion.button>
+                <AnimatePresence>
+                    {   
+                        menuActive && 
+                        <Menu />
+                    }
+                </AnimatePresence>
             </nav>
         </header>
     )
