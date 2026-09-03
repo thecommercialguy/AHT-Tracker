@@ -405,6 +405,7 @@ export const getAgentSessionsByPhoneNumber = async ({from, to, phoneNumber}: Get
     });
 
     if (!response.ok) {
+        
         console.error('Failed to fetch call logs:', response);
         console.error('Failed to fetch call logs:', response.body);
         throw Error(response.statusText);

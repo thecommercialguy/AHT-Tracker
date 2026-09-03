@@ -5,11 +5,12 @@
     flex-direction: row;
     left: 50%;
     transform: translateX(-50%);
-    position: fixed;
+    position: relative;
     justify-content: center;
     align-items: center;
     /* padding-left: 2.75rem; */
     background-color: black;
+    z-index: 9999;
 }
 
 .header nav {
