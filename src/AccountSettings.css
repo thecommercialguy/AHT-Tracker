@@ -1,0 +1,40 @@
+.account-settings {
+    width: 632px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding: 16px;
+    margin-top: 64px;
+    border-radius: 8px;
+
+
+    background-color: #202227;
+}
+
+.account-settings-header {
+    color: white;
+    font-weight: bold;
+    font-family: var(--sans);
+    font-stretch: condensed;
+    font-style: italic;
+    font-size: 28px;
+    letter-spacing: .03em;
+    line-height: 2;
+    margin: 0;
+    height: 32px;
+    margin-bottom: 16px;
+}
+
+.account-settings-form {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    padding: 0;
+    margin: 0;
+}

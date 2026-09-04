@@ -9,9 +9,9 @@ export function AuthDropdownMenu() {
     const signOutHandler = async () => {
         try {
             await signOut(auth);
-            navigate('/')
+            navigate('/');
         } catch (error) {
-            console.error('Error signing out')
+            console.error('Error signing out');
         }
 
     }
