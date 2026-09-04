@@ -42,7 +42,43 @@
     align-items: center;
 }
 
-.sign-up-form input {
+.sign-up-form .input-container {
+    width: 369px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+
+    margin-bottom: 20px;
+}
+
+.sign-up-form .input-container.error {
+    width: 369px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+
+    margin-bottom: 10px;
+}
+
+.sign-up-form .input-container p {
+    display: inline-flex;
+    align-self: flex-start;
+
+    font-size: .75rem;
+    font-family: var(--sans);
+    letter-spacing: .03em;
+
+    color: #EB0304;
+
+}
+
+.sign-up-form .input-container input {
     font-size: 1rem;
     font-family: var(--sans);
     letter-spacing: .03em;
@@ -58,26 +94,28 @@
     width: 369px;
     height: 38px;
     border: none;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 
 }
 
-.sign-up-form input::placeholder {
+.sign-up-form .input-container input::placeholder {
     /* color: #3C3F49; */
     color: var(--placeholder-color, #3C3F49);
    
 }
 
-.sign-up-form input:focus {
+.sign-up-form .input-container input:focus {
     outline: 1px solid white; 
     outline-offset: 1px;
 }
 
-.sign-up-form input.input-error {
+.sign-up-form .input-container input.input-error {
     outline: .1px solid red; 
     outline-offset: 1px;
+    margin-bottom: 4px;
 }
-.sign-up-form input.input-error:focus {
+
+.sign-up-form .input-container input.input-error:focus {
     outline: 2px solid red; 
     outline-offset: 1px;
 }

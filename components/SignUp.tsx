@@ -43,43 +43,54 @@ export default function SignUp() {
                 <span>Issue signing up.</span>
             </div>}
             <form className="sign-up-form" method="POST" noValidate onSubmit={handleSubmit(onSubmit)}>
-                <div>
+                <div className={`input-container${error?.firstName ? ' error' : ''}`}>
                     <input 
                         type="text" 
                         id="firstName" 
                         name="firstName" 
-                        placeholder="first name" 
+                        placeholder="first name"
+                        className={error?.firstName ? 'input-error' : ''} 
                         {...register(
                             "firstName", 
                             { 
-                                required: true,
-                                maxLength: 15
+                                required: "first name required",
+                                maxLength: {
+                                    value: 15,
+                                    message: "name too long"
+                                }
                             }
                         )} 
                     />
+                    {errors.firstName && <p>error.firstName?.message</p>}
                 </div>
-                <div>
+                <div className={`input-container${error?.lastName ? ' error' : ''}`}>
                     <input 
                         type="text" 
                         id="lastName" 
                         name="lastName" 
-                        placeholder="last name" 
+                        placeholder="last name"
+                        className={error?.lastName ? 'input-error' : ''} 
                         {...register(
                             "lastName", 
                             { 
-                                required: true,
-                                maxLength: 15
+                                required: "last name required",
+                                maxLength: {
+                                    value: 15,
+                                    message: "name too long"
+                                }
                             }
 
                         )} 
                     />
+                    {errors.lastName && <p>error.lastName?.message</p>}
                 </div>
-                <div>
+                <div className={`input-container${error?.webexId ? 'error' : ''}`}>
                      <input 
                         type="text" 
                         id="webexId" 
                         name="webexId" 
-                        placeholder="webex id" 
+                        placeholder="webex id"
+                        className={error?.webexId ? 'input-error' : ''} 
                         {...register(
                             "webexId", 
                             { 
@@ -88,50 +99,65 @@ export default function SignUp() {
 
                         )} 
                     />
+                    {errors.webexId && <p>error.webexId?.message</p>}
                 </div>
-                <div>
+                <div className={`input-container${error?.agentPhoneNumber ? 'error' : ''}`}>
                     <input 
                         type="tel" 
                         id="agentPhoneNumber" 
                         name="agentPhoneNumber" 
                         placeholder="webex phone number (ex. +15556668888)"
+                        className={error?.agentPhoneNumber ? 'input-error' : ''}
                         {...register(
                             "agentPhoneNumber", 
                             { 
-                                required: true,
-                                pattern: /^\+\d+$/
+                                required: "webex phone number required",
+                                pattern: {
+                                    value: /^\+\d+$/,
+                                    message: "webex phone number invalid"
+                                }
                             }
 
                         )} 
                     />
+                    {errors.agentPhoneNumber && <p>error.agentPhoneNumber?.message</p>}
                 </div>
-                <div>
+                <div className={`input-container${error?.email ? 'error' : ''}`}>
                     <input 
                         type="text" 
                         id="email" 
                         name="email" 
-                        placeholder="email" 
+                        placeholder="email"
+                        className={error?.email ? 'input-error' : ''} 
                         {...register(
                             "email", 
                             { 
-                                required: true,
-                                pattern: /^\S+@\S+\.\S+$/
+                                required: "email required",
+                                pattern: {
+                                    value: /^\S+@\S+\.\S+$/,
+                                    message: "email invalid"
+                                }
                             }
 
                         )} 
                     />
+                    {errors.email && <p>error.email?.message</p>}
                 </div>
-                <div>
+                <div className={`input-container${error?.emailVerified ? 'error' : ''}`}>
                     <input 
                         type="text" 
                         id="emailVerified" 
                         name="emailVerified" 
-                        placeholder="verify email" 
+                        placeholder="verify email"
+                        className={error?.emailVerified ? 'input-error' : ''} 
                         {...register(
                             "emailVerified", 
                             { 
-                                required: true,
-                                pattern: /^\S+@\S+\.\S+$/,
+                                required: "must verify email",
+                                pattern: {
+                                    value: /^\S+@\S+\.\S+$/,
+                                    message: "email invalid"
+                                },
                                 validate: (v, f) => (
                                     v === f.email || 'email does not match'
                                 )
@@ -139,40 +165,60 @@ export default function SignUp() {
 
                         )} 
                     />
+                    {errors.emailVerified && <p>error.emailVerified?.message</p>}
                 </div>
-                <div>
+                <div className={`input-container${error?.password ? 'error' : ''}`}>
                     <input 
                         type="password" 
                         id="password" 
                         name="password" 
-                        placeholder="password" 
+                        placeholder="password"
+                        className={error?.password ? 'input-error' : ''} 
                         {...register(
                             "password", 
                             { 
-                                required: true,
-                                pattern: /^\S+$/,
-                                minLength: 8
+                                required: "password required",
+                                pattern: {
+                                    value: /^\S+$/,
+                                    message: "password invlaid"
+                                },
+                                minLength: {
+                                    value: 8,
+                                    message: "password too short"
+                                }
                             }
 
                         )} 
                     />
+                    {errors.password && <p>error.password?.message</p>}
                 </div>
-                <div>
+                <div className={`input-container${error?.passwordVerified ? 'error' : ''}`}>
                     <input 
                         type="password" 
                         id="passwordVerified" 
                         name="passwordVerified" 
-                        placeholder="password verified" 
+                        placeholder="password verified"
+                        className={error?.passwordVerified ? 'input-error' : ''} 
                         {...register(
                             "passwordVerified", 
                             { 
-                                required: true,
-                                pattern: /^\S+$/,
-                                minLength: 8,
+                                required: "must verify password",
+                                pattern: {
+                                    value: /^\S+$/,
+                                    message: "password invlaid"
+                                },
+                                minLength: {
+                                    value: 8,
+                                    message: "password too short"
+                                },
+                                validate: (v, f) => (
+                                    v === f.password || 'password does not match'
+                                )
                             }
 
                         )} 
                     />
+                    {errors.passwordVerified && <p>error.passwordVerified?.message</p>}
                 </div>
                 <button type="submit" disabled={disabled}>Sign Up</button>
             </form>
