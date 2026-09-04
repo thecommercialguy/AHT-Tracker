@@ -44,13 +44,18 @@ export default function Login() {
                 <span>Login information incorrect.</span>
             </div>}
             <form className="login-form" method="POST" noValidate onSubmit={handleSubmit(onSubmit)}>
-                <div>
+                <div
+                    className={
+                        errors?.email ? "input-container error" 
+                        : "input-container"
+                    }   
+                >
                     <input
-                        className={fetcher.data?.error && ""} 
                         type="text" 
                         id="email" 
                         name="email" 
                         placeholder="email" 
+                        className={errors?.email ? 'input-error' : ''}
                         {...register(
                             "email", 
                             { 
@@ -61,13 +66,18 @@ export default function Login() {
                         )} 
                     />
                 </div>
-                <div>
+                <div
+                    className={
+                        errors?.password ? "input-container error" 
+                        : "input-container"
+                    }   
+                >
                     <input
-                        className={fetcher.data?.error && ""} 
                         type="password" 
                         id="password" 
                         name="password" 
                         placeholder="password" 
+                        className={errors?.password ? 'input-error' : ''}
                         {...register(
                             "password", 
                             { 

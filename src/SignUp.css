@@ -14,7 +14,8 @@
     padding-bottom: 30px;
     /* border: 1px solid red; */
     border-radius: 8px;
-    background: #202227;
+    background: hsl(223, 10%, 14%);
+    background: hsl(223, 10%, 9%);
 
     position: absolute;
     top: 50%;
@@ -70,11 +71,12 @@
     display: inline-flex;
     align-self: flex-start;
 
-    font-size: .75rem;
+    font-size: .875rem;
     font-family: var(--sans);
     letter-spacing: .03em;
 
     color: #EB0304;
+    margin: 0
 
 }
 
@@ -84,6 +86,7 @@
     letter-spacing: .03em;
 
     color: white;
+    /* background: #33353E; */
     background: #25272D;
     caret-color: #FFE600;
     
@@ -100,11 +103,14 @@
 
 .sign-up-form .input-container input::placeholder {
     /* color: #3C3F49; */
+    /* color: var(--placeholder-color, #1E1F24); */
     color: var(--placeholder-color, #3C3F49);
+    color: var(--placeholder-color, hsl(226, 10%, 31%));
    
 }
 
 .sign-up-form .input-container input:focus {
+    /* outline: 1px solid #202227;  */
     outline: 1px solid white; 
     outline-offset: 1px;
 }

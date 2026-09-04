@@ -7,6 +7,7 @@ import { type UserCredential } from "firebase/auth";
 import { useEffect } from "react";
 import { useAuth } from "../context/authContext.tsx";
 
+
 export function signUpLoader() {
     
 }
@@ -37,19 +38,25 @@ export default function SignUp() {
     console.log(fetcher?.data)
 
     return (
+        
         <div className="sign-up-form-container">
             <h1 className="form-heading">Start Tracking</h1>
             {fetcher.data?.error && <div className="error sign-in">
                 <span>Issue signing up.</span>
             </div>}
             <form className="sign-up-form" method="POST" noValidate onSubmit={handleSubmit(onSubmit)}>
-                <div className={`input-container${error?.firstName ? ' error' : ''}`}>
+                <div 
+                    className={
+                        errors?.firstName ? "input-container error" 
+                        : "input-container"
+                    }
+                >
                     <input 
                         type="text" 
                         id="firstName" 
                         name="firstName" 
                         placeholder="first name"
-                        className={error?.firstName ? 'input-error' : ''} 
+                        className={errors?.firstName ? 'input-error' : ''} 
                         {...register(
                             "firstName", 
                             { 
@@ -61,15 +68,20 @@ export default function SignUp() {
                             }
                         )} 
                     />
-                    {errors.firstName && <p>error.firstName?.message</p>}
+                    {errors.firstName && <p>{errors.firstName?.message}</p>}
                 </div>
-                <div className={`input-container${error?.lastName ? ' error' : ''}`}>
+                <div 
+                    className={
+                        errors?.lastName ? "input-container error" 
+                        : "input-container"
+                    }
+                >
                     <input 
                         type="text" 
                         id="lastName" 
                         name="lastName" 
                         placeholder="last name"
-                        className={error?.lastName ? 'input-error' : ''} 
+                        className={errors?.lastName ? 'input-error' : ''} 
                         {...register(
                             "lastName", 
                             { 
@@ -82,15 +94,20 @@ export default function SignUp() {
 
                         )} 
                     />
-                    {errors.lastName && <p>error.lastName?.message</p>}
+                    {errors.lastName && <p>{errors.lastName?.message}</p>}
                 </div>
-                <div className={`input-container${error?.webexId ? 'error' : ''}`}>
+                <div 
+                    className={
+                        errors?.webexId ? "input-container error" 
+                        : "input-container"
+                    }
+                >
                      <input 
                         type="text" 
                         id="webexId" 
                         name="webexId" 
                         placeholder="webex id"
-                        className={error?.webexId ? 'input-error' : ''} 
+                        className={errors?.webexId ? 'input-error' : ''} 
                         {...register(
                             "webexId", 
                             { 
@@ -99,15 +116,20 @@ export default function SignUp() {
 
                         )} 
                     />
-                    {errors.webexId && <p>error.webexId?.message</p>}
+                    {errors.webexId && <p>{errors.webexId?.message}</p>}
                 </div>
-                <div className={`input-container${error?.agentPhoneNumber ? 'error' : ''}`}>
+                <div 
+                    className={
+                        errors?.agentPhoneNumber ? "input-container error" 
+                        : "input-container"
+                    }
+                >
                     <input 
                         type="tel" 
                         id="agentPhoneNumber" 
                         name="agentPhoneNumber" 
                         placeholder="webex phone number (ex. +15556668888)"
-                        className={error?.agentPhoneNumber ? 'input-error' : ''}
+                        className={errors?.agentPhoneNumber ? 'input-error' : ''}
                         {...register(
                             "agentPhoneNumber", 
                             { 
@@ -120,15 +142,20 @@ export default function SignUp() {
 
                         )} 
                     />
-                    {errors.agentPhoneNumber && <p>error.agentPhoneNumber?.message</p>}
+                    {errors.agentPhoneNumber && <p>{errors.agentPhoneNumber?.message}</p>}
                 </div>
-                <div className={`input-container${error?.email ? 'error' : ''}`}>
+                <div 
+                    className={
+                        errors?.email ? "input-container error" 
+                        : "input-container"
+                    }
+                >
                     <input 
                         type="text" 
                         id="email" 
                         name="email" 
                         placeholder="email"
-                        className={error?.email ? 'input-error' : ''} 
+                        className={errors?.email ? 'input-error' : ''} 
                         {...register(
                             "email", 
                             { 
@@ -141,15 +168,20 @@ export default function SignUp() {
 
                         )} 
                     />
-                    {errors.email && <p>error.email?.message</p>}
+                    {errors.email && <p>{errors.email?.message}</p>}
                 </div>
-                <div className={`input-container${error?.emailVerified ? 'error' : ''}`}>
+                <div 
+                    className={
+                        errors?.emailVerified ? "input-container error" 
+                        : "input-container"
+                    }
+                >
                     <input 
                         type="text" 
                         id="emailVerified" 
                         name="emailVerified" 
                         placeholder="verify email"
-                        className={error?.emailVerified ? 'input-error' : ''} 
+                        className={errors?.emailVerified ? 'input-error' : ''} 
                         {...register(
                             "emailVerified", 
                             { 
@@ -165,15 +197,20 @@ export default function SignUp() {
 
                         )} 
                     />
-                    {errors.emailVerified && <p>error.emailVerified?.message</p>}
+                    {errors.emailVerified && <p>{errors.emailVerified?.message}</p>}
                 </div>
-                <div className={`input-container${error?.password ? 'error' : ''}`}>
+                <div 
+                    className={
+                        errors?.password ? "input-container error" 
+                        : "input-container"
+                    }
+                >
                     <input 
                         type="password" 
                         id="password" 
                         name="password" 
                         placeholder="password"
-                        className={error?.password ? 'input-error' : ''} 
+                        className={errors?.password ? 'input-error' : ''} 
                         {...register(
                             "password", 
                             { 
@@ -190,15 +227,20 @@ export default function SignUp() {
 
                         )} 
                     />
-                    {errors.password && <p>error.password?.message</p>}
+                    {errors.password && <p>{errors.password?.message}</p>}
                 </div>
-                <div className={`input-container${error?.passwordVerified ? 'error' : ''}`}>
+                <div 
+                    className={
+                        errors?.passwordVerified ? "input-container error" 
+                        : "input-container"
+                    }
+                >
                     <input 
                         type="password" 
                         id="passwordVerified" 
                         name="passwordVerified" 
                         placeholder="password verified"
-                        className={error?.passwordVerified ? 'input-error' : ''} 
+                        className={errors?.passwordVerified ? 'input-error' : ''} 
                         {...register(
                             "passwordVerified", 
                             { 
@@ -218,7 +260,7 @@ export default function SignUp() {
 
                         )} 
                     />
-                    {errors.passwordVerified && <p>error.passwordVerified?.message</p>}
+                    {errors.passwordVerified && <p>{errors.passwordVerified?.message}</p>}
                 </div>
                 <button type="submit" disabled={disabled}>Sign Up</button>
             </form>

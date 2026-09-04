@@ -1,7 +1,7 @@
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate, useNavigation } from 'react-router';
 import logo from '../src/assets/Loves_logo.png';
-import { AnimatePresence, motion } from 'motion/react';
-import { useCallback, useMemo, useState } from 'react';
+import { AnimatePresence, m, motion } from 'motion/react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AuthDropdownMenu, DropdownMenu } from './DropDownMenu';
 import { useAuth } from '../context/authContext';
 
@@ -9,9 +9,13 @@ import { useAuth } from '../context/authContext';
 export default function Header() {
 
     const [menuActive, setMenuActive] = useState<boolean>(false);
+    const location = useLocation();
+    
 
     const { user, initializing } = useAuth();
-
+    useEffect(() => {
+        if  (menuActive === true) setMenuActive(false);
+    }, [location.key])
 
     const Menu = () => {
         
