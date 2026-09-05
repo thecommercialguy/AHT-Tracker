@@ -67,6 +67,8 @@ export async function loginAction({ request }: ActionFunctionArgs) {
     return redirect('/dashboard');
 }
 
+export async function accountSettingsAction({ request }: ActionFunctionArgs) {}
+
 
 const validateSignUpForm = ({
     firstName,

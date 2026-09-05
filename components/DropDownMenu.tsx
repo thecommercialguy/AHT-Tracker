@@ -36,7 +36,7 @@ export function AuthDropdownMenu() {
             transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
         >
             <ul className="dropdown-menu">
-                <li><Link to="/settings">Account Setting</Link></li>
+                <li><Link to="/settings">Account Settings</Link></li>
                 <li className="seperator"></li>
                 <li><button onClick={signOutHandler}>Sign out</button></li>
             </ul>

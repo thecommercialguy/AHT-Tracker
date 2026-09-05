@@ -10,6 +10,7 @@ import './Landing.css'
 import './Login.css'
 import './SignUp.css'
 import './Dropdown.css'
+import './AccountSettings.css'
 
 
 
