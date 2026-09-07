@@ -14,12 +14,14 @@ export default function Header() {
 
     const { user, initializing } = useAuth();
     useEffect(() => {
-        if  (menuActive === true) setMenuActive(false);
+        if (menuActive === true) setMenuActive(false);
     }, [location.key])
+
+    const toggleMenu = () => (setMenuActive(!menuActive))
 
     const Menu = () => {
         
-        return user ? <AuthDropdownMenu /> : <DropdownMenu />
+        return user ? <AuthDropdownMenu toggleMenu={toggleMenu} /> : <DropdownMenu toggleMenu={toggleMenu} />
     }
     console.log(menuActive)
     return (

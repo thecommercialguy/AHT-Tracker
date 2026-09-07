@@ -3,7 +3,11 @@ import { motion } from 'motion/react';
 import { auth } from "../src/firebase";
 import { signOut } from "firebase/auth";
 
-export function AuthDropdownMenu() {
+interface DropDownProps {
+    toggleMenu: () => void;
+}
+
+export function AuthDropdownMenu({toggleMenu}: DropDownProps) {
     const navigate = useNavigate();
 
     const signOutHandler = async () => {
@@ -34,6 +38,7 @@ export function AuthDropdownMenu() {
                 opacity: 0
             }}
             transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
+            onClick={toggleMenu}
         >
             <ul className="dropdown-menu">
                 <li><Link to="/dashboard">Dashboard</Link></li>
@@ -48,7 +53,7 @@ export function AuthDropdownMenu() {
 
 }
 
-export function DropdownMenu() {
+export function DropdownMenu({toggleMenu}: DropDownProps) {
 
 
     return (
@@ -69,6 +74,7 @@ export function DropdownMenu() {
                 opacity: 0
             }}
             transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
+            onClick={toggleMenu}
         >
             <ul className="dropdown-menu">
                 <li><Link to="/login">Login</Link></li>
