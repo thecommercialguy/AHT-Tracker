@@ -120,6 +120,7 @@ export const getUserDashboard = onRequest(
     
             // QueryDocumentSnapshot array
             const currSessions = await sessionRef.where('startTime', '>', from).orderBy('startTime', 'desc').get();
+            console.log('Curr sesh', currSessions)
             if (currSessions.empty) {
                 // create session
                 console.log('New one created', agentSessionResponse)
