@@ -122,6 +122,7 @@ export const getUserDashboard = onRequest(
             const currSessions = await sessionRef.where('startTime', '>', from).orderBy('startTime', 'desc').get();
             if (currSessions.empty) {
                 // create session
+                console.log('New one created', agentSessionResponse)
                 await sessionRef.doc().create({
                     ...agentSessionResponse,
                     createdAt: FieldValue.serverTimestamp(),
@@ -130,6 +131,7 @@ export const getUserDashboard = onRequest(
             } else {
                 // update session
                 // DocumentReference — has .update(), .set(), .delete(), .get(
+                console.log('updated', agentSessionResponse)
                 await currSessions.docs[0].ref.update({
                     ...agentSessionResponse,
                     updatedAt: FieldValue.serverTimestamp()

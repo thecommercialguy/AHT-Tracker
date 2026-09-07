@@ -1,13 +1,13 @@
 .dropdown-menu-container {
     width: 226px;
-    height: 110.33px;
+    height: 165.66px;
     
     display: flex;
     justify-content: flex-start;
     align-items: center;
     
     position: absolute;
-    top: 76px;
+    top: 78px;
     right: 8px;
     
     overflow: clip;
@@ -63,7 +63,6 @@
 .dropdown-menu li button {
     /* height: .8px; */
     width: max-content;
-
     background-color: transparent;
     border: none;
     /* background-color: ; */

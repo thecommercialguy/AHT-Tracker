@@ -1,9 +1,9 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail, updatePassword } from "firebase/auth";
 import { redirect, type ActionFunctionArgs } from "react-router";
 import { auth, db } from "../src/firebase";
-import { type LoginFields, type SignUpFields } from "../types/authTypes.ts";
+import { type LoginFields, type SignUpFields, type UserUpdateFields } from "../types/authTypes.ts";
 import { createUserAuth, loginUserAuth } from "../context/authContext.tsx";
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 
 
 export async function signUpAction({ request }: ActionFunctionArgs) {
@@ -67,7 +67,82 @@ export async function loginAction({ request }: ActionFunctionArgs) {
     return redirect('/dashboard');
 }
 
-export async function accountSettingsAction({ request }: ActionFunctionArgs) {}
+export async function accountSettingsAction({ request }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const method = request.method.toUpperCase();
+
+    const userUpdateFields = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        webexId: formData.get('webexId'),
+        agentPhoneNumber: formData.get('agentPhoneNumber'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+    } as UserUpdateFields;
+
+    // const originalUser = formData.get('originalData')
+
+    const user = auth.currentUser;
+    const uid = user.uid;
+
+    console.log(userUpdateFields);
+    let isEmailUpdated = false;
+
+    // update on auth
+    // updating password
+    if (userUpdateFields.password) {
+        try {
+            await updatePassword(user, userUpdateFields.password);
+        } catch (error) {
+            return {
+                data: null,
+                error: {
+                    message: 'Issue updating password'
+                }
+            };
+        }
+    }
+
+    if (userUpdateFields.email.trim() != user.email) {
+        try {
+            await updateEmail(user, userUpdateFields.email.trim());
+            isEmailUpdated = true;
+        } catch (error) {
+            return {
+                data: null,
+                error: {
+                    message: 'Issue updating email'
+                }
+            };
+        }
+    }
+
+    // update on document (firestore)
+    try {
+        const userDocRef = doc(db, "users", uid);
+
+        await updateDoc(userDocRef, {
+            firstName: userUpdateFields.firstName,
+            lastName: userUpdateFields.lastName,
+            email: userUpdateFields.email,
+            webexId: userUpdateFields.webexId || null,
+            agentPhoneNumber: userUpdateFields.agentPhoneNumber,
+            updatedAt: serverTimestamp()
+        })
+
+    } catch (error) {
+        return {
+            data: null,
+            error: {
+                message: isEmailUpdated ? 'Email update error. Re-submit.' : 'Issue updating user'
+            }
+        };
+    }
+
+    return redirect('/settings')
+
+
+}
 
 
 const validateSignUpForm = ({

@@ -38,7 +38,7 @@ export default function SignUp() {
     console.log(fetcher?.data)
 
     return (
-        
+
         <div className="sign-up-form-container">
             <h1 className="form-heading">Start Tracking</h1>
             {fetcher.data?.error && <div className="error sign-in">
@@ -70,7 +70,7 @@ export default function SignUp() {
                     />
                     {errors.firstName && <p>{errors.firstName?.message}</p>}
                 </div>
-                <div 
+                <div
                     className={
                         errors?.lastName ? "input-container error" 
                         : "input-container"

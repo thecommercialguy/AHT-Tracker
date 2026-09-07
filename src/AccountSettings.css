@@ -1,17 +1,25 @@
 .account-settings {
-    width: 632px;
+    /* width: 632px; */
+    width: 600px;
 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    /* align-self: center/; */
+    position: relative;
 
     padding: 16px;
+    padding-bottom: 28px;
     margin-top: 64px;
     border-radius: 8px;
 
+    left: 50%;
+    transform: translateX(-50%);
+
 
     background-color: #202227;
+    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
 }
 
 .account-settings-header {
@@ -22,10 +30,11 @@
     font-style: italic;
     font-size: 28px;
     letter-spacing: .03em;
-    line-height: 2;
+    line-height: 1;
     margin: 0;
     height: 32px;
     margin-bottom: 16px;
+    align-self: flex-start;
 }
 
 .account-settings-form {
@@ -52,13 +61,23 @@
 }
 
 .account-settings-form .input-container label {
-    width: 112px;
+    width: 144px;
     height: 38px;
     border: none;
 
+    display: flex;
+    position: relative;
+    align-self: flex-start;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    /* font-size: 1rem; */
     font-size: 1rem;
     font-family: var(--sans);
-    letter-spacing: .03em;
+    letter-spacing: 1%;
+    line-height: 2;
+    text-align: start;
 
     color: white;
     /* background: #33353E; */
@@ -67,7 +86,8 @@
 
 }
 .account-settings-form .input-container input {
-    font-size: 1.0625rem;
+    font-size: 1rem;
+    /* font-size: 1.0625rem; */
     font-family: var(--sans);
     letter-spacing: .03em;
 
@@ -80,7 +100,7 @@
     padding-left: 8px;
     padding-right: 8px;
 
-    width: 416px;
+    width: 408px;
     height: 38px;
     border: none;
     /* margin-bottom: 20px; */
@@ -109,7 +129,7 @@
     outline-offset: 1px;
 }
 
-.account-settings .submit-containter {
+.account-settings .submit-container {
     width: 100%;
 
     display: flex;
@@ -121,7 +141,7 @@
     margin-top: 32px;
 }
 
-.account-settings-form button {
+.account-settings-form .submit {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -130,9 +150,12 @@
     height: 40px;
 
     border: 1px solid white;
-    border-radius: 30px;
+    border-radius: 4px;
     background: transparent;
     margin: 0;
+
+    /* left: 50%;
+    transform: translateX(50%); */
     
 
     color: white;
@@ -140,12 +163,13 @@
     font-family: var(--sans);
     font-stretch: condensed;
     font-style: italic;
-    font-size: 1.333rem;
+    font-size: 1.125rem;
+    /* font-size: 1.333rem; */
     letter-spacing: .03em;
     line-height: 2;
 }
 
-.account-settings-form a {
+.account-settings-form .delete {
     width: 'max-content';
     
     display: flex;
@@ -157,6 +181,8 @@
 
     background: transparent;
 
+    border: none;
+    padding: 2px;
 
     color: white;
     font-weight: 400;
@@ -165,8 +191,79 @@
     font-style: normal;
     text-decoration: underline;
     font-size: .75rem;
-    letter-spacing: -.01em;
+    letter-spacing: -.01rem;
 
 
     /* line-height: 2; */
+}
+
+.backdrop {
+    position: fixed;      /* fixed covers full viewport, ignores page scroll */
+    inset: 0;             /* top:0; right:0; bottom:0; left:0; */
+    display: flex;
+    justify-content: center;
+    padding: 112px;
+    box-sizing: border-box;
+    
+    width: 100vw;
+    height: calc(100vh - 64px - 14px); 
+
+
+    /* position: absolute; */
+    align-items: flex-start;
+
+
+
+    z-index: 9999999;
+    top: -64px;
+    left: 50%;
+    transform: translate(-50%);
+
+    background-color: hsla(223, 10%, 14%, .75);
+    overflow: clip;
+    
+}
+
+.delete-modal {
+    /* width: 632px; */
+    width: 504px;
+    height: 236px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    /* position: absolute; */
+
+    top: -5%;
+
+    padding: 16px;
+    padding-bottom: 28px;
+    /* margin-top: 64px; */
+    border-radius: 8px;
+
+    left: 50%;
+    transform: translate(-50%, 50%);
+
+   
+
+
+    background-color: #202227;
+    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
+    
+}
+
+.delete-modal span {
+    /* width: 632px; */
+    color: white;
+    font-weight: bold;
+    font-family: var(--sans);
+    font-stretch: condensed;
+    font-style: italic;
+    font-size: 28px;
+    letter-spacing: .03em;
+    line-height: 1;
+    margin: 0;
+    height: 32px;
+    margin-bottom: 16px;
 }
