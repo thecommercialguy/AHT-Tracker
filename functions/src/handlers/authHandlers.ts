@@ -38,7 +38,7 @@ export const verifyWebexPhoneNumber = onRequest(
             // let agentSessionResponse;
     
             try {
-                await getAgentSessionsByPhoneNumber({from: from, to: to, phoneNumber: phoneNumber});
+                const isPhoneNumberValid = await verifyAgentPhoneNumber({from: from, to: to, phoneNumber: phoneNumber});
             } catch (error) {
                 errorResponse(error, res);
                 return;
@@ -48,7 +48,8 @@ export const verifyWebexPhoneNumber = onRequest(
            
     
             res.status(200).json({
-                message: 'Success, webexPhoneNumber valid.'
+                message: 'Success.',
+                isValid: isPhoneNumberValid
             });
 
         } catch (error) {
@@ -76,7 +77,7 @@ export const verifyWebexId = onRequest(
             // let agentSessionResponse;
 
             try {
-                await getAgentSessionsByWebexId({from: from, to: to, webexId: webexId});
+                const isWebexIdValid = await verifyWebexId({from: from, to: to, webexId: webexId});
 
             } catch (error) {
                 errorResponse(error, res);
@@ -85,7 +86,8 @@ export const verifyWebexId = onRequest(
 
 
             res.status(200).json({
-                message: 'Success, valid webex id'
+                message: 'Success',
+                isValid: isWebexIdValid
             });
 
         } catch (error) {

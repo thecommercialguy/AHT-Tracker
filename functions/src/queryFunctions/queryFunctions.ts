@@ -239,6 +239,71 @@ endCursor
 }
 `;
 
+const verirfyPhoneNumberQuery = `
+query AgentSession($from: Long!, $to: Long!, $phoneNumber: String!) {
+agentSession(from: $from, to: $to 
+filter: {
+and : [
+{
+channelInfo: {
+connectedDuration: {notequals: 0}
+connectedCount: {notequals: 0}
+channelType: {equals: "telephony"}
+agentPhoneNumber: {equals: $phoneNumber}
+#currentState: {equals: available}
+}
+}
+]
+}) {
+agentSessions {
+agentSessionId
+agentId
+agentName
+userLoginId
+siteId
+siteName
+startTime
+}
+pageInfo {
+hasNextPage
+endCursor
+}
+}
+}
+`
+
+const verirfyWebexIdQuery = `
+query AgentSession($from: Long!, $to: Long!, $agentId: String!) {
+agentSession(from: $from, to: $to 
+filter: {
+and : [
+{
+channelInfo: {
+connectedDuration: {notequals: 0}
+connectedCount: {notequals: 0}
+channelType: {equals: "telephony"}
+}
+}
+{agentId: {equals: $agentId}}
+]
+}) {
+agentSessions {
+agentSessionId
+agentId
+agentName
+userLoginId
+siteId
+siteName
+startTime
+}
+pageInfo {
+hasNextPage
+endCursor
+}
+}
+}
+`;
+
 const API_KEY_WEBEX = process.env.API_KEY_WEBEX;
 
 export const taskLegsWebexQuery = async (from: number, to: number) => {
@@ -350,7 +415,7 @@ export const agentSessionWebexQuery = async (from: number, to: number) => {
 
     const agentSessions = queryData.data.agentSession.agentSessions;
 
-    if (agentSessions === null || agentSessions == undefined || agentSessions.lenght < 1) {
+    if (agentSessions === null || agentSessions == undefined || agentSessions.length < 1) {
         throw new NotFoundError("No agent sessions found");
     }
 
@@ -431,7 +496,7 @@ export const getAgentSessionsByPhoneNumber = async ({from, to, phoneNumber}: Get
 
     const agentSessions = queryData.data.agentSession.agentSessions;
 
-    if (agentSessions === null || agentSessions == undefined || agentSessions.lenght < 1) {
+    if (agentSessions === null || agentSessions == undefined || agentSessions.length < 1) {
         throw new NotFoundError("No agent sessions found");
     }
 
@@ -509,7 +574,7 @@ export const getAgentSessionsByWebexId = async ({from, to, webexId}: GetAgentSes
 
     const agentSessions = queryData.data.agentSession.agentSessions;
 
-    if (agentSessions === null || agentSessions == undefined || agentSessions.lenght < 1) {
+    if (agentSessions === null || agentSessions == undefined || agentSessions.length < 1) {
         throw new NotFoundError("No agent sessions found");
     }
 
@@ -549,4 +614,82 @@ export const getAgentSessionsByWebexId = async ({from, to, webexId}: GetAgentSes
     const channelInfo = {...reduced, startTime: startTime} as ChannelInfoResponse;
 
     return channelInfo;
+};
+
+export const verifyAgentPhoneNumber = async ({from, to, phoneNumber}: GetAgentSessionsByPhoneNumberParams) => {
+    const query = verifyAgentPhoneNumber;
+    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
+    // const response = await fetch('/api/webex/v1/search', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${API_KEY_WEBEX}` 
+        },
+        body: JSON.stringify({ 
+            query,
+            variables: { from, to, phoneNumber }
+        })
+    });
+
+    if (!response.ok) {
+        const errorResponse = await response.json();
+        const message = errorResponse?.error?.message[0]?.description || null;
+
+        console.error('Failed to fetch call logs:', response);
+        console.error('Failed to fetch call logs:', response.body);
+        
+        throwQueryError(response.status, message);
+        // return {data: 'error', status: response.status};
+    }
+
+    const queryData = await response.json();
+
+    const agentSessions = queryData.data.agentSession.agentSessions;
+
+    if (agentSessions === null || agentSessions == undefined) {
+        throw new NotFoundError("No agent sessions found");
+    }
+
+    return agentSessions.length > 0;
+};
+
+export const verifyWebexId = async ({from, to, webexId}: GetAgentSessionsByWebexIdParams) => {
+    const query = verifyWebexId;
+    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
+    // const response = await fetch('/api/webex/v1/search', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${API_KEY_WEBEX}` 
+        },
+        body: JSON.stringify({ 
+            query,
+            variables: {
+                from: from, 
+                to: to, 
+                agentId: webexId 
+            }
+        })
+    });
+
+    if (!response.ok) {
+        const errorResponse = await response.json();
+        const message = errorResponse?.error?.message[0]?.description || null;
+
+        console.error('Failed to fetch call logs:', response);
+        console.error('Failed to fetch call logs:', response.body);
+        
+        throwQueryError(response.status, message);
+        // return {data: 'error', status: response.status};
+    }
+
+    const queryData = await response.json();
+
+    const agentSessions = queryData.data.agentSession.agentSessions;
+
+    if (agentSessions === null || agentSessions == undefined) {
+        throw new NotFoundError("No agent sessions found");
+    }
+
+    return agentSessions.length > 0;
 };
