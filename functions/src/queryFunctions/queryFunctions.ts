@@ -653,7 +653,7 @@ export const verifyAgentPhoneNumber = async ({from, to, phoneNumber}: GetAgentSe
     return agentSessions.length > 0;
 };
 
-export const verifyWebexId = async ({from, to, webexId}: GetAgentSessionsByWebexIdParams) => {
+export const verifyWebexIdWebex = async ({from, to, webexId}: GetAgentSessionsByWebexIdParams) => {
     const query = verifyWebexId;
     const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
     // const response = await fetch('/api/webex/v1/search', {

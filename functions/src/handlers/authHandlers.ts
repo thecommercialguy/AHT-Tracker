@@ -1,6 +1,6 @@
 import {onRequest} from "firebase-functions/https";
 // import type { Response } from 'express';
-import { getAgentSessionsByPhoneNumber, getAgentSessionsByWebexId } from "../queryFunctions/queryFunctions";
+import { getAgentSessionsByPhoneNumber, getAgentSessionsByWebexId, verifyAgentPhoneNumber, verifyWebexIdWebex } from "../queryFunctions/queryFunctions";
 import { BadRequestError, errorResponse } from "../errors/errors";
 
 export const verifyWebexPhoneNumber = onRequest(
@@ -77,7 +77,7 @@ export const verifyWebexId = onRequest(
             // let agentSessionResponse;
 
             try {
-                const isWebexIdValid = await verifyWebexId({from: from, to: to, webexId: webexId});
+                const isWebexIdValid = await verifyWebexIdWebex({from: from, to: to, webexId: webexId});
 
             } catch (error) {
                 errorResponse(error, res);

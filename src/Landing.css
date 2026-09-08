@@ -36,7 +36,7 @@ main > .landing-text {
 }
 
 
-.landing-container a.button {
+.landing-container a.button,  .landing-container button.button{
     width: 335px;
     height: 60px;
     display: flex;
@@ -64,6 +64,25 @@ main > .landing-text {
 a.button.login {
     border: 1px solid white;
     margin-bottom: 21px;
+}
+
+.landing-container button.button.sign-up {
+    width: 335px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 40px;
+    border: unset;
+    background-color: transparent;
+
+    font-family: var(--sans);
+    font-stretch: condensed;
+    font-style: italic;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: .03em;
+
 }
 
 @property --grad-stop {
