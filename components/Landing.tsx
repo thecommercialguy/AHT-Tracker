@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 export default function Landing() { 
     const navigate = useNavigate();
-    // const {user, initializing} = useAuth();
+    const {user, initializing} = useAuth();
 
     // useEffect(() => {
     //     if (user) navigate("/dashboard");
@@ -27,8 +27,14 @@ export default function Landing() {
         <main className="landing-container">
             <h1 className="landing-text">STAY ON TRACK</h1>
             <img className="landing-logo"src={logo}/>
-            <Link className="button login" to={'/login'}>LOGIN</Link>
-            <Link className="button sign-up" to={'/signup'}>SIGN UP</Link>
+            {
+                user ? <Link className="button sign-up" to={'/dashboard'}>VIEW DASHBOARD</Link> : 
+            
+            <div>
+                <Link className="button login" to={'/login'}>LOGIN</Link>
+                <Link className="button sign-up" to={'/signup'}>SIGN UP</Link>
+            </div>
+            }
         </main>
     ); 
 }

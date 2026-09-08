@@ -1,6 +1,27 @@
 .dropdown-menu-container {
     width: 226px;
+    height: 110.33px;
+    
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    
+    position: absolute;
+    top: 78px;
+    right: 8px;
+    
+    overflow: clip;
+
+
+    /* border: 1px solid red; */
+    border-radius: 10px;
+    background-color: black;
+    
+}
+.dropdown-menu-container-auth {
+    width: 226px;
     height: 165.66px;
+    height: 155.66px;
     
     display: flex;
     justify-content: flex-start;

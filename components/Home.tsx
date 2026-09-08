@@ -21,7 +21,7 @@ export async function loader() {
     
 }
 
-
+// button animations
 
 // const INTERVAL: number = 4*60*1000;
 
@@ -30,9 +30,42 @@ export default function Home() {
 
     if (data?.error) {
         return (
-            <div>
-                <h1>Error getting loader</h1>
+            <main className="dashboard-container">
+            <div className="dashboard-header">
+                <h2 className="dashboard-header-text">API key expired :/, contact william.walter1@loves.com</h2>
+                
             </div>
+            <div className="call-stats-container">
+                <div className="call-stats-item recent-call-container">
+                    <div className="call-stats-label">Most Recent Call Time</div>
+                    <div className="call-stats-value"></div>
+        
+                </div>
+                <div className="call-stats-item total-connected-container">
+                    <div className="call-stats-label">Total Connected Time</div>
+                    <div className="call-stats-value"></div>
+                </div>
+                <div className="call-stats-item last-five-average-container">
+                    <div className="call-stats-label">Total Connected Calls</div>
+                    <div className="call-stats-value"></div>
+                </div>
+                <div className="call-stats-item fastest-call-container">
+                    <div className="call-stats-label">Fastest Call Time</div>
+                    <div className="call-stats-value"></div>
+                </div>
+                <div className="call-stats-item longest-call-container">
+                    <div className="call-stats-label">Longest Call Time</div>
+                    <div className="call-stats-value"></div>
+                </div>
+                <div className="call-stats-item average-time-container">
+                    <div className="call-stats-label">Average Handle Time</div>
+                    <div className="call-stats-value"></div>
+  
+                </div>
+            </div>
+            <div>
+            </div>
+        </main>
         )
     }
 

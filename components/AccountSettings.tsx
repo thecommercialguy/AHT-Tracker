@@ -1,12 +1,13 @@
 import { Link, redirect, useFetcher, useLoaderData, useNavigate } from "react-router";
 import { auth, db } from "../src/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import type { UserData, UserUpdate, UserUpdateFields } from "../types/authTypes";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
+import type { UserData, UserUpdateFields } from "../types/authTypes";
 import type { accountSettingsAction } from "../actions/actions";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { getAuth, deleteUser } from "firebase/auth";
+import { useAuth } from "../context/authContext";
 
 
 export async function AccountSettingLoader() {
@@ -33,6 +34,7 @@ export default function AccountSettings() {
     const data = useLoaderData();
     // console.log(data)
     const fetcher = useFetcher<typeof accountSettingsAction>();
+    const { user, initializing } = useAuth();
     const [isModalActive, setIsModalActive] = useState<boolean>(false);
     const navigate = useNavigate();
     const {
@@ -91,18 +93,28 @@ export default function AccountSettings() {
     }, [isModalActive]);
     // fetcher.submit({...formData, originalData: {...data}}, {method: "POST", action: '/settings'})
 
-    const deleteAccount = () => {
+    const deleteHandler = async () => {
+        // firebase user deletion logic
         try {
-            // firebase user deletion logic
-            const userDocRef = doc(db, "users", uid);
+            const userDocRef = doc(db, "users", user.uid);
             await deleteDoc(userDocRef)
+
+        } catch (error) {
+            
+            return;
+        // firebase auth deletion logic
+        }
+        try {
             await deleteUser(user);
             // account deleted
-            // redirect home
-        } catch {
+            navigate("home");
+        } catch (error) {
 
+            return;
         }
     }
+
+    // snackbar context
 
     
     
@@ -237,8 +249,8 @@ export default function AccountSettings() {
                 {   
                     isModalActive &&
                     <motion.div 
-                        onClick={toggleModal}
-                        className="backdrop"
+                        
+                        className="backdrop-container"
                         style={{ transformOrigin: "center"}}
                         initial={{
                             opacity: 0
@@ -250,6 +262,20 @@ export default function AccountSettings() {
                             opacity: 0
                         }}
                     >
+                        <motion.div 
+                            onClick={toggleModal}
+                            className="backdrop"
+                            style={{ transformOrigin: "center"}}
+                            initial={{
+                                opacity: 0
+                            }}
+                            animate={{
+                                opacity: 1
+                            }}
+                            exit={{
+                                opacity: 0
+                            }}
+                        ></motion.div>
                         <motion.div 
                             className="delete-modal"
                             initial={{
@@ -266,7 +292,7 @@ export default function AccountSettings() {
                             <span className="sub">Deletion will be permanent.</span>
                             <div className="options-container">
                                 <button className="options">Yes</button>
-                                <button className="options">No</button>
+                                <button onClick={toggleModal} className="options">No</button>
                             </div>
 
                         </motion.div>

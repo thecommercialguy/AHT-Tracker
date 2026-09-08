@@ -197,12 +197,12 @@
     /* line-height: 2; */
 }
 
-.backdrop {
+.backdrop-container {
     position: fixed;      /* fixed covers full viewport, ignores page scroll */
     inset: 0;             /* top:0; right:0; bottom:0; left:0; */
     display: flex;
     justify-content: center;
-    padding: 112px;
+    /* padding: 112px; */
     box-sizing: border-box;
     
     width: 100vw;
@@ -221,6 +221,36 @@
 
     background-color: hsla(223, 10%, 14%, .75);
     overflow: clip;
+    border: 1px blue solid;
+    
+}
+
+.backdrop {
+    position: fixed;      /* fixed covers full viewport, ignores page scroll */
+    inset: 0;             /* top:0; right:0; bottom:0; left:0; */
+    display: flex;
+    justify-content: center;
+    /* padding: 112px; */
+    box-sizing: border-box;
+    
+    
+    width: 100%;
+    height: 100%; 
+
+
+    /* position: absolute; */
+    align-items: flex-start;
+
+
+
+    z-index: -1;
+
+    /* left: 50%;
+    transform: translate(-50%); */
+
+    background-color: transparent;
+    overflow: clip;
+    border: 1px red solid;
     
 }
 
@@ -239,6 +269,7 @@
 
     padding: 16px;
     padding-bottom: 28px;
+    margin-top: 112px;
     /* margin-top: 64px; */
     border-radius: 8px;
 
@@ -250,6 +281,7 @@
 
     background-color: #202227;
     box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
+    z-index: 2;
     
 }
 
@@ -286,22 +318,37 @@
 
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 32px;
+    
 
     padding-inline: 16px;
 
 }
 
-.delete-modal .options {
+.delete-modal .options-container button.options {
     width: 208px;
     height: 78px;
 
     display: flex;
-    justify-self: center;
+    justify-content: center;
     align-items: center;
+    position: relative;
 
     border: 1px solid white;
     border-radius: 4px;
+    background: transparent;
+
+    color: white;
+    font-weight: bold;
+    font-family: var(--sans);
+    font-stretch: condensed;
+    font-style: italic;
+    font-size: 28px;
+    letter-spacing: .03em;
+    line-height: 1;
+    margin: 0;
+
 
 }
 

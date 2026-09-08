@@ -11,12 +11,23 @@ import './Login.css'
 import './SignUp.css'
 import './Dropdown.css'
 import './AccountSettings.css'
+import './SnackBar.css'
+import { SnackBar, useErrorContext } from "../context/errorContext";
 
 
 
 
 export default function Layout() {
   const navigation = useNavigation();
+
+  const { errorMessage, isActive } = useErrorContext();
+
+  // is active to display snack bar
+  // "isActive" can be toggled from the snackbar
+  // "message" can be set from child
+  // "message" will be displayed by snackbar from context
+  // "isActive" can also be managed from snackbar
+
   return (
     <>
       <Header />
@@ -42,6 +53,9 @@ export default function Layout() {
         } */}
         
       <Outlet />
+      
     </>
   );
 }
+
+

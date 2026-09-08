@@ -23,7 +23,7 @@ export function AuthDropdownMenu({toggleMenu}: DropDownProps) {
     return (
         <motion.div
             key="auth"
-            className="dropdown-menu-container"
+            className="dropdown-menu-container-auth"
             style={{ transformOrigin: '85% top'}}
             initial={{
                 scale: 0, 
