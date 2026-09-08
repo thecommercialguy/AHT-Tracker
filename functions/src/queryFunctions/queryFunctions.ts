@@ -463,7 +463,7 @@ export const getAgentSessionsByPhoneNumber = async ({from, to, phoneNumber}: Get
         
     });
     
-    const startTime = queryData.data.agentSession.agentSessions.reduce((a: any, b: any) => a.startTime < b.startTime ? a : b);
+    const startTime = queryData.data.agentSession.agentSessions.reduce((a: any, b: any) => a.startTime < b.startTime ? a : b).startTime;
     if (startTime == null || startTime == undefined) {  // May remove this as it kinda doesnt need that after the null check
         throw new NotFoundError("No agent sessions found");
     }
