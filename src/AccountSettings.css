@@ -267,3 +267,42 @@
     height: 32px;
     margin-bottom: 16px;
 }
+.delete-modal span.sub {
+    /* width: 632px; */
+    color: white;
+    font-weight: 400;
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 1rem;
+    letter-spacing: .03em;
+    line-height: 1;
+    margin: 0;
+
+    margin-bottom: 32px;
+}
+
+.delete-modal .options-container {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding-inline: 16px;
+
+}
+
+.delete-modal .options {
+    width: 208px;
+    height: 78px;
+
+    display: flex;
+    justify-self: center;
+    align-items: center;
+
+    border: 1px solid white;
+    border-radius: 4px;
+
+}
+
+/* https://firebase.google.com/docs/auth/web/manage-users#re-authenticate_a_user */

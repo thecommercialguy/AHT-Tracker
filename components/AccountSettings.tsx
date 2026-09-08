@@ -6,6 +6,7 @@ import type { accountSettingsAction } from "../actions/actions";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { getAuth, deleteUser } from "firebase/auth";
 
 
 export async function AccountSettingLoader() {
@@ -89,6 +90,19 @@ export default function AccountSettings() {
         };
     }, [isModalActive]);
     // fetcher.submit({...formData, originalData: {...data}}, {method: "POST", action: '/settings'})
+
+    const deleteAccount = () => {
+        try {
+            // firebase user deletion logic
+            const userDocRef = doc(db, "users", uid);
+            await deleteDoc(userDocRef)
+            await deleteUser(user);
+            // account deleted
+            // redirect home
+        } catch {
+
+        }
+    }
 
     
     
@@ -249,6 +263,11 @@ export default function AccountSettings() {
                             }}
                         >
                             <span>Deactivate account?</span>
+                            <span className="sub">Deletion will be permanent.</span>
+                            <div className="options-container">
+                                <button className="options">Yes</button>
+                                <button className="options">No</button>
+                            </div>
 
                         </motion.div>
                     </motion.div>
