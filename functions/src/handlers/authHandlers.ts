@@ -21,7 +21,7 @@ export const verifyWebexPhoneNumber = onRequest(
             const usersRef = db.collection('users');
             const userExists = await usersRef.where('agentPhoneNumber', '==', webexPhoneNumber).get();
 
-            if (userExists) {
+            if (!userExists.empty) {
                 throw new ForbiddenError('webex phone number already in use');
             }
     
@@ -84,7 +84,7 @@ export const verifyWebexId = onRequest(
             const usersRef = db.collection('users');
             const userExists = await usersRef.where('webexId', '==', webexId).get();
 
-            if (userExists) {
+            if (!userExists.empty) {
                 throw new ForbiddenError('webex id already in use');
             }
 

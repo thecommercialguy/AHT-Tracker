@@ -4,6 +4,7 @@ import { CSSProperties, useEffect, useState } from "react";
 import { msToHours } from '../helpers/timeHelpers'
 import { getUserDashboard, getAgentSession, getTaskLegs, getDashboardData } from '../loaders/dashboardLoaders'
 import { auth } from "../src/firebase";
+import { useAuth } from "../context/authContext";
 
 
 export async function loader() {
@@ -76,6 +77,7 @@ export default function Home() {
     
     console.log(data)
     console.log(dashboardData)
+    // const { user, initializing } = useAuth();
     // useEffect(() => {
     //     if (revalidator.state !== "idle") return;
     //     const timeoutId = setTimeout(() => {
@@ -89,7 +91,7 @@ export default function Home() {
     return (
         <main className="dashboard-container">
             <div className="dashboard-header">
-                <h2 className="dashboard-header-text">Welcome back, William Walter</h2>
+                <h2 className="dashboard-header-text">Today's metrics</h2>
                 <div className="call-count-container">
                     <span className="call-count-header">Total Calls</span>
                     <span className="call-count">{dashboardData.totalCount}</span>
