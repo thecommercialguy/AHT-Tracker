@@ -68,4 +68,6 @@ export interface DashboardData {
         connectedDuration: number | null,
         wrapupDuration: number | null,
     },
+    firstName: string | null | undefined,
+    lastName: string | null | undefined
 }
