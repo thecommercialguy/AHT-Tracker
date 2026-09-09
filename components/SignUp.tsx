@@ -111,7 +111,17 @@ export default function SignUp() {
                         {...register(
                             "webexId", 
                             { 
-                                required: false
+                                required: false,
+                                validate: async (v, f) => {
+                                    if (!v) return true;
+
+                                    try {
+                                        const isValid = await validateWebexId(v);
+                                        return isValid || 'webex id not found'
+                                    } catch {
+                                        return 'Issue validating awebex id'
+                                    }
+                                }
                             }
 
                         )} 
@@ -137,7 +147,16 @@ export default function SignUp() {
                                 pattern: {
                                     value: /^\+\d+$/,
                                     message: "webex phone number invalid"
+                                },
+                                validate: async (v, f) => {
+                                    try {
+                                        const isValid = await validateAgentPhoneNumber(v);
+                                        return isValid || 'agent phone number not found'
+                                    } catch {
+                                        return 'Issue validating agenet phone number'
+                                    }
                                 }
+
                             }
 
                         )} 

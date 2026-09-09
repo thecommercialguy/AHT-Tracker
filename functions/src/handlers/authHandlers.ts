@@ -36,9 +36,9 @@ export const verifyWebexPhoneNumber = onRequest(
             const from = to - 14 * 24 * 60 * 60 * 1000;
     
             // let agentSessionResponse;
-    
+            let isPhoneNumberValid;
             try {
-                const isPhoneNumberValid = await verifyAgentPhoneNumber({from: from, to: to, phoneNumber: phoneNumber});
+                isPhoneNumberValid = await verifyAgentPhoneNumber({from: from, to: to, phoneNumber: phoneNumber});
             } catch (error) {
                 errorResponse(error, res);
                 return;
@@ -74,10 +74,10 @@ export const verifyWebexId = onRequest(
             const to = Date.now();
             const from = to - 14 * 24 * 60 * 60 * 1000;
 
-            // let agentSessionResponse;
+            let isWebexIdValid;
 
             try {
-                const isWebexIdValid = await verifyWebexIdWebex({from: from, to: to, webexId: webexId});
+                isWebexIdValid = await verifyWebexIdWebex({from: from, to: to, webexId: webexId});
 
             } catch (error) {
                 errorResponse(error, res);
