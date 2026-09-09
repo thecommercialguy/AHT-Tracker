@@ -13,6 +13,12 @@ export class UnauthorizedError extends Error {
     }
 }
 
+export class ConflictError extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}
+
 export class ForbiddenError extends Error {
     constructor(message: string) {
         super(message);
@@ -36,6 +42,8 @@ export function errorResponse(
         res.status(401).json({ error: err.message });
     } else if (err instanceof ForbiddenError) {
         res.status(403).json({ error: err.message });
+    }  else if (err instanceof ConflictError) {
+        res.status(409).json({ error: err.message });
     }  else if (err instanceof BadRequestError) {
         res.status(404).json({ error: err.message });
     } 

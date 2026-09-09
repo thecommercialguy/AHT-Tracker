@@ -4,6 +4,7 @@ import { useAuth } from "../context/authContext";
 import { useEffect } from "react";
 import { motion } from "motion/react";
 
+const MotionLink = motion.create(Link);
 export default function Landing() { 
     const navigate = useNavigate();
     const {user, initializing} = useAuth();
@@ -30,17 +31,45 @@ export default function Landing() {
             <img className="landing-logo"src={logo}/>
             {
                 user ? 
-                    <motion.button 
+                    <MotionLink 
                         className="button sign-up"
-                        // onTap={{}}
-                    >
-                    <Link to={'/dashboard'}>VIEW DASHBOARD</Link>
-                    </motion.button> : 
+                        whileTap={{
+                            background: 'linear-gradient(to bottom, #FF7B00 -50%, #FF0000)',
+                            scale: .95
+                        }}
+                        transition={{
+                            ease: 'easeIn', 
+                            duration: .15
+                        }}
+                        to={'/dashboard'}>VIEW DASHBOARD</MotionLink>
+                : 
             
-            <div>
-                <Link className="button login" to={'/login'}>LOGIN</Link>
-                <Link className="button sign-up" to={'/signup'}>SIGN UP</Link>
-            </div>
+                <div>
+                    <MotionLink 
+                        className="button login"
+                        whileTap={{
+                            border: '1px solid #FFE600',
+                            color: '#FFE600',
+                            scale: .95
+                        }}
+                        transition={{
+                            ease: 'easeIn', 
+                            duration: .15
+                        }} 
+                        to={'/login'}>LOGIN</MotionLink>
+
+                    <MotionLink 
+                        className="button sign-up"
+                        whileTap={{
+                            background: 'linear-gradient(to bottom, #FF7B00 -50%, #FF0000)',
+                            scale: .95
+                        }}
+                        transition={{
+                            ease: 'easeIn', 
+                            duration: .15
+                        }}
+                        to={'/signup'}>SIGN UP</MotionLink>
+                </div>
             }
         </main>
     ); 

@@ -326,7 +326,7 @@ export const taskLegsWebexQuery = async (from: number, to: number) => {
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        console.error('Failed to fetch call logs:', response.body);
+        // console.error('Failed to fetch call logs:', response.body);
         throwQueryError(response.status, message);
     }
 
@@ -367,7 +367,7 @@ export const getTaskLegsByPhoneNumber = async ({from, to, phoneNumber}:GetTaskLe
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        console.error('Failed to fetch call logs:', response.body);
+        // console.error('Failed to fetch call logs:', response.body);
         throwQueryError(response.status, message);
 
         
@@ -406,7 +406,7 @@ export const agentSessionWebexQuery = async (from: number, to: number) => {
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        console.error('Failed to fetch call logs:', response.body);
+        // console.error('Failed to fetch call logs:', response.);
         throwQueryError(response.status, message);
         // return {data: 'error', status: response.status};
     }
@@ -486,7 +486,7 @@ export const getAgentSessionsByPhoneNumber = async ({from, to, phoneNumber}: Get
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        console.error('Failed to fetch call logs:', response.body);
+        // console.error('Failed to fetch call logs:', response.body);
         
         throwQueryError(response.status, message);
         // return {data: 'error', status: response.status};
@@ -617,7 +617,7 @@ export const getAgentSessionsByWebexId = async ({from, to, webexId}: GetAgentSes
 };
 
 export const verifyAgentPhoneNumber = async ({from, to, phoneNumber}: GetAgentSessionsByPhoneNumberParams) => {
-    const query = verifyAgentPhoneNumber;
+    const query = verirfyPhoneNumberQuery;
     const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
     // const response = await fetch('/api/webex/v1/search', {
         method: 'POST',
@@ -636,7 +636,7 @@ export const verifyAgentPhoneNumber = async ({from, to, phoneNumber}: GetAgentSe
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        console.error('Failed to fetch call logs:', response.body);
+        // console.error('Failed to fetch call logs:', response.body);
         
         throwQueryError(response.status, message);
         // return {data: 'error', status: response.status};
@@ -654,7 +654,7 @@ export const verifyAgentPhoneNumber = async ({from, to, phoneNumber}: GetAgentSe
 };
 
 export const verifyWebexIdWebex = async ({from, to, webexId}: GetAgentSessionsByWebexIdParams) => {
-    const query = verifyWebexId;
+    const query = verirfyWebexIdQuery;
     const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
     // const response = await fetch('/api/webex/v1/search', {
         method: 'POST',
@@ -677,7 +677,7 @@ export const verifyWebexIdWebex = async ({from, to, webexId}: GetAgentSessionsBy
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        console.error('Failed to fetch call logs:', response.body);
+        // console.error('Failed to fetch call logs:', response.body);
         
         throwQueryError(response.status, message);
         // return {data: 'error', status: response.status};

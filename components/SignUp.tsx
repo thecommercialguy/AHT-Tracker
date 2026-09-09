@@ -6,6 +6,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { type UserCredential } from "firebase/auth";
 import { useEffect } from "react";
 import { useAuth } from "../context/authContext.tsx";
+import { validateAgentPhoneNumber, validateWebexId } from "../helpers/formHelpers.ts";
 
 
 export function signUpLoader() {
@@ -114,12 +115,11 @@ export default function SignUp() {
                                 required: false,
                                 validate: async (v, f) => {
                                     if (!v) return true;
-
                                     try {
                                         const isValid = await validateWebexId(v);
                                         return isValid || 'webex id not found'
-                                    } catch {
-                                        return 'Issue validating awebex id'
+                                    } catch (e) {
+                                        return e.message
                                     }
                                 }
                             }
@@ -152,8 +152,8 @@ export default function SignUp() {
                                     try {
                                         const isValid = await validateAgentPhoneNumber(v);
                                         return isValid || 'agent phone number not found'
-                                    } catch {
-                                        return 'Issue validating agenet phone number'
+                                    } catch (e) {
+                                        return e.message
                                     }
                                 }
 

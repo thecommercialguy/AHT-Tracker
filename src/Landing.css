@@ -97,9 +97,9 @@ a.button.sign-up {
   transition: --grad-stop 120ms ease;
 }
 
-a.button.sign-up:active {
+/* a.button.sign-up:active {
   --grad-stop: -50%;
-}
+} */
 /* .landing-container a {
     text-decoration: none;
     color: inherit;

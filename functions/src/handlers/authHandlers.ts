@@ -1,7 +1,8 @@
 import {onRequest} from "firebase-functions/https";
 // import type { Response } from 'express';
-import { getAgentSessionsByPhoneNumber, getAgentSessionsByWebexId, verifyAgentPhoneNumber, verifyWebexIdWebex } from "../queryFunctions/queryFunctions";
-import { BadRequestError, errorResponse } from "../errors/errors";
+import { verifyAgentPhoneNumber, verifyWebexIdWebex } from "../queryFunctions/queryFunctions";
+import { BadRequestError, errorResponse, ForbiddenError } from "../errors/errors";
+import { getFirestore } from "firebase-admin/firestore";
 
 export const verifyWebexPhoneNumber = onRequest(
     {   
@@ -11,21 +12,29 @@ export const verifyWebexPhoneNumber = onRequest(
     },
     async (req, res): Promise<void> => {
         try {
-            const webexPhoneNumber = req.params.webexPhoneNumber as string | null | undefined;
+            const webexPhoneNumber = req.query.agentPhoneNumber as string | null | undefined;
             if (!webexPhoneNumber) {
-                throw new BadRequestError('webexPhoneNumber required');
+                throw new BadRequestError('webex phone number required');
+            }
+
+            const db = getFirestore();
+            const usersRef = db.collection('users');
+            const userExists = await usersRef.where('agentPhoneNumber', '==', webexPhoneNumber).get();
+
+            if (userExists) {
+                throw new ForbiddenError('webex phone number already in use');
             }
     
             const webexPhoneNumberTrimmed = webexPhoneNumber.trim();
             if (webexPhoneNumberTrimmed.length > 12 || webexPhoneNumberTrimmed.length < 10) {
-                throw new BadRequestError('webexPhoneNumber invalid');
+                throw new BadRequestError('webex phone number invalid');
             }
-    
+            
             let phoneNumber;
     
             if (webexPhoneNumber.length === 10) {
                 if (webexPhoneNumber.slice(0,2) == '+1') {
-                    throw new BadRequestError('webexPhoneNumber invalid');
+                    throw new BadRequestError('webex phone number invalid');
                 }
                 phoneNumber = `${+1}${webexPhoneNumber}`;
             } else {
@@ -66,9 +75,17 @@ export const verifyWebexId = onRequest(
     },
     async (req, res) => {
         try {
-            const webexId = req.params.webexId as string | null | undefined;
+            const webexId = req.query.webexId as string | null | undefined;
             if (!webexId) {
                 throw new BadRequestError('webexId required');
+            }
+
+            const db = getFirestore();
+            const usersRef = db.collection('users');
+            const userExists = await usersRef.where('webexId', '==', webexId).get();
+
+            if (userExists) {
+                throw new ForbiddenError('webex id already in use');
             }
 
             const to = Date.now();
