@@ -16,13 +16,15 @@ export const verifyWebexPhoneNumber = onRequest(
             if (!webexPhoneNumber) {
                 throw new BadRequestError('webex phone number required');
             }
+            console.log(webexPhoneNumber)
 
             const db = getFirestore();
             const usersRef = db.collection('users');
             const userExists = await usersRef.where('agentPhoneNumber', '==', webexPhoneNumber).get();
-
+            console.log(userExists)
+            console.log(userExists.empty)
             if (!userExists.empty) {
-                throw new ForbiddenError('webex phone number already in use');
+                throw new ConflictError('webex phone number already in use');
             }
     
             const webexPhoneNumberTrimmed = webexPhoneNumber.trim();

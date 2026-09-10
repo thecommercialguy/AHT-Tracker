@@ -291,7 +291,7 @@ export default function AccountSettings() {
                             <span>Deactivate account?</span>
                             <span className="sub">Deletion will be permanent.</span>
                             <div className="options-container">
-                                <button className="options">Yes</button>
+                                <button onClick={deleteHandler} className="options">Yes</button>
                                 <button onClick={toggleModal} className="options">No</button>
                             </div>
 

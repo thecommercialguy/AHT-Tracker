@@ -1,7 +1,7 @@
 export const validateAgentPhoneNumber = async (agentPhoneNumber: string) => {
     try {
         const response = await fetch(`https://verifywebexphonenumber-tnype6eiha-uc.a.run.app?agentPhoneNumber=${encodeURIComponent(agentPhoneNumber)}`);
-        if (!response.ok) {
+        if (!response.ok) {     
             const { error } = await response.json();
             throw new Error(error)
         }
@@ -15,7 +15,7 @@ export const validateAgentPhoneNumber = async (agentPhoneNumber: string) => {
 
 export const validateWebexId = async (webexId: string) => {
     try {
-        const response = await fetch(`https://verifywebexphonenumber-tnype6eiha-uc.a.run.app?webexId=${encodeURIComponent(webexId)}`);
+        const response = await fetch(`https://verifywebexid-tnype6eiha-uc.a.run.app?webexId=${encodeURIComponent(webexId)}`);
         if (!response.ok) {
             const { error } = await response.json();
             throw new Error(error)

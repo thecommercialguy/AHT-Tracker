@@ -45,7 +45,7 @@ export function errorResponse(
     }  else if (err instanceof ConflictError) {
         res.status(409).json({ error: err.message });
     }  else if (err instanceof BadRequestError) {
-        res.status(404).json({ error: err.message });
+        res.status(400).json({ error: err.message });
     } 
     
     
