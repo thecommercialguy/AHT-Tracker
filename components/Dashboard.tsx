@@ -51,7 +51,6 @@ export default function Dashboard() {
         <Suspense fallback={<DashboardSkeleton />}>
             <Await
                 resolve={data}
-                
             >
                 <DashboardComponent />
             </Await>
@@ -109,7 +108,7 @@ function DashboardComponent() {
                 <div className="call-stats-container">
                     <motion.div 
                         className="call-stats-item recent-call-container"
-                        style={{overflow: 'clip'}}
+           
 
                     >   
                         <div className="call-stats-label">Most Recent Call Time</div>
@@ -154,10 +153,29 @@ function DashboardComponent() {
                 </div>
             </div>
             <div className="call-stats-container">
-                <div className="call-stats-item recent-call-container">
+                {/* <div className="call-stats-item recent-call-container">
                     <div className="call-stats-label">Most Recent Call Time</div>
                     <div className="call-stats-value">{msToHours(dashboardData?.recentCall.duration)}</div>
                     <div className="call-time-split" style={getCallTimeGradient(dashboardData.recentCall.duration, dashboardData.recentCall.connectedDuration)}></div>
+                </div> */}
+                <div 
+                    className="call-stats-item recent-call-container"
+                     style={{overflow: 'clip', }}
+                >   
+                    <motion.div 
+                        style={{
+                            height: '248.867px',
+                            width: '150%',
+                            position: 'absolute',
+                            background: 'linear-gradient(to right, hsla(0, 100%, 50%, .75), hsla(0, 0%, 100%, .75) 50%, hsla(0, 100%, 50%, .75) 100%)',
+                            top: 0, 
+                            zIndex:1
+                        }}
+                        animate={{left: 10}}
+                    />
+                    <div className="call-stats-label" style={{zIndex: 2}}>Most Recent Call Time</div>
+                    <div className="call-stats-value"></div>
+        
                 </div>
                 <div className="call-stats-item total-connected-container">
                     <div className="call-stats-label">Total Connected Time</div>
@@ -196,7 +214,20 @@ function DashboardSkeleton() {
                 
             </div>
             <div className="call-stats-container">
-                <div className="call-stats-item recent-call-container">
+                <div 
+                    className="call-stats-item recent-call-container"
+                     style={{overflow: 'clip'}}
+                >   
+                    <div 
+                        style={{
+                            height: '248.867px',
+                            width: '100%',
+                            position: 'absolute',
+                            background: 'linear-gradient(to right, hsla(0, 100%, 50%, .75), hsla(0, 0%, 100%, .75) 50%, hsla(0, 100%, 50%, .75) 100%)',
+                            top: 0, 
+                            zIndex:-1
+                        }}
+                    />
                     <div className="call-stats-label">Most Recent Call Time</div>
                     <div className="call-stats-value"></div>
         
@@ -230,13 +261,13 @@ function DashboardSkeleton() {
 }
 
 
-// <div 
-//                             style={{
-//                                 height: '248.867px',
-//                                 width: '100%',
-//                                 position: 'absolute',
-//                                 background: 'linear-gradient(to right, hsla(0, 100%, 50%, .75), hsla(0, 0%, 100%, .75) 50%, hsla(0, 100%, 50%, .75) 100%)',
-//                                 top: 0, 
-//                                 zIndex:-1
-//                             }}
-//                         />
+<div 
+    style={{
+        height: '248.867px',
+        width: '100%',
+        position: 'absolute',
+        background: 'linear-gradient(to right, hsla(0, 100%, 50%, .75), hsla(0, 0%, 100%, .75) 50%, hsla(0, 100%, 50%, .75) 100%)',
+        top: 0, 
+        zIndex:-1
+    }}
+/>
