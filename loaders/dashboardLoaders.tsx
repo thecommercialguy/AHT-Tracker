@@ -107,6 +107,11 @@ export const getUserDashboard = async (token: string | null) => {
                     status: 401,
                     error: 'Unauthorized'
                 };
+            } else if (response.status === 404) {
+                return {
+                    status: 404,
+                    error: 'No call data available'
+                }
             } else {
                 return {
                     status: 400,

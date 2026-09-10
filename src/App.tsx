@@ -19,6 +19,7 @@ import { SnackBar, useErrorContext } from "../context/errorContext";
 
 export default function Layout() {
   const navigation = useNavigation();
+  const isLoading = navigation.state == "loading";
 
   const { errorMessage, isActive } = useErrorContext();
 
@@ -52,7 +53,10 @@ export default function Layout() {
           </motion.div> 
         } */}
         
-      <Outlet />
+      {/* <Outlet /> */}
+      {/* <div style={{ opacity: navigation.state === "loading" ? 0.6 : 1 }}>
+      </div> */}
+        <Outlet />
       
     </>
   );

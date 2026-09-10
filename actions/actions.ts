@@ -37,7 +37,9 @@ export async function signUpAction({ request }: ActionFunctionArgs) {
         lastName: signUpFields.lastName,
         email: signUpFields.email,
         webexId: signUpFields.webexId || null,
-        agentPhoneNumber: signUpFields.agentPhoneNumber
+        agentPhoneNumber: signUpFields.agentPhoneNumber,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
     });
 
 

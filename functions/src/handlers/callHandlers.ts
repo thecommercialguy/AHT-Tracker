@@ -34,6 +34,8 @@ export const getUserDashboard = onRequest(
             const db = getFirestore();
             const userRef = db.collection('users').doc(uid);
             const userSnap = await userRef.get();
+            const firstName = userSnap.get('firstName');
+            const lastName = userSnap.get('lastName');
             if (!userSnap.exists) {
                 throw new NotFoundError('User not found');
   
@@ -110,9 +112,6 @@ export const getUserDashboard = onRequest(
                 errorResponse(error, res);
                 return;
             }
-    
-    
-    
             
     
             // There is an agent session now
@@ -152,7 +151,11 @@ export const getUserDashboard = onRequest(
             if (currCalls.size == taskLegResponse.length) {
                 // Call collection is up to date
                 const data = formatDashboardData(agentSessionResponse, taskLegResponse)
-                res.status(200).json(data);
+                res.status(200).json({
+                    ...data,
+                    firstName: firstName,
+                    lastName: lastName
+                });
                 return;
             }
     
@@ -172,15 +175,15 @@ export const getUserDashboard = onRequest(
     
             });
             await taskLegBatch.commit();
-    
-    
-    
-            
+
             const dashboardData: DashboardData = formatDashboardData(agentSessionResponse, taskLegResponse);
     
     
-            res.status(200)
-            res.json(dashboardData)
+            res.status(200).json({
+                ...dashboardData,
+                firstName: firstName,
+                lastName: lastName
+            });
          
 
         } catch (error) {

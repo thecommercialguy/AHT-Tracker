@@ -1,7 +1,7 @@
 import {onRequest} from "firebase-functions/https";
 // import type { Response } from 'express';
 import { verifyAgentPhoneNumber, verifyWebexIdWebex } from "../queryFunctions/queryFunctions";
-import { BadRequestError, errorResponse, ForbiddenError } from "../errors/errors";
+import { BadRequestError, ConflictError, errorResponse, ForbiddenError } from "../errors/errors";
 import { getFirestore } from "firebase-admin/firestore";
 
 export const verifyWebexPhoneNumber = onRequest(
@@ -79,7 +79,7 @@ export const verifyWebexId = onRequest(
         try {
             const webexId = req.query.webexId as string | null | undefined;
             if (!webexId) {
-                throw new BadRequestError('webexId required');
+                throw new ConflictError('webexId required');
             }
 
             const db = getFirestore();

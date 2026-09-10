@@ -8,7 +8,7 @@ import { ErrorContextProvider } from '../context/errorContext.tsx'
 import './index.css'
 import App from './App.tsx'
 import { BrowserRouter, createBrowserRouter, RouterProvider } from 'react-router'
-import Home, { loader } from '../components/Home.tsx'
+import Home, { loader } from '../components/Dashboard.tsx'
 import Layout from './App.tsx'
 import { routes } from './routes.tsx'
 
