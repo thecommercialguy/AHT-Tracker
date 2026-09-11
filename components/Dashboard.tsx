@@ -108,8 +108,6 @@ function DashboardComponent() {
                 <div className="call-stats-container">
                     <motion.div 
                         className="call-stats-item recent-call-container"
-           
-
                     >   
                         <div className="call-stats-label">Most Recent Call Time</div>
                         <div className="call-stats-value"></div>
@@ -158,21 +156,7 @@ function DashboardComponent() {
                     <div className="call-stats-value">{msToHours(dashboardData?.recentCall.duration)}</div>
                     <div className="call-time-split" style={getCallTimeGradient(dashboardData.recentCall.duration, dashboardData.recentCall.connectedDuration)}></div>
                 </div> */}
-                <div 
-                    className="call-stats-item recent-call-container"
-                     style={{overflow: 'clip', }}
-                >   
-                    <motion.div 
-                        style={{
-                            height: '248.867px',
-                            width: '150%',
-                            position: 'absolute',
-                            background: 'linear-gradient(to right, hsla(0, 100%, 50%, .75), hsla(0, 0%, 100%, .75) 50%, hsla(0, 100%, 50%, .75) 100%)',
-                            top: 0, 
-                            zIndex:1
-                        }}
-                        animate={{left: 10}}
-                    />
+                <div className="call-stats-item recent-call-container">   
                     <div className="call-stats-label" style={{zIndex: 2}}>Most Recent Call Time</div>
                     <div className="call-stats-value"></div>
         
@@ -205,6 +189,13 @@ function DashboardComponent() {
     )
 }
 
+const bgvar01 = 'linear-gradient(90deg, hsla(0, 0%, 100%, .75) 0%, hsla(0, 100%, 50%, .75) 100%'
+const bgvar02 = 'linear-gradient(90deg, hsla(0, 100%, 50%, .75) 0%, hsla(0, 0%, 100%, .75) 100%'
+const bgvar00 = 'linear-gradient(90deg, hsla(0, 100%, 50%, .75) 0%, hsla(0, 100%, 50%, .75) 100%' // neutral value
+const bgvar03 = 'linear-gradient(90deg, hsla(0, 100%, 50%, .75) 0%, hsla(0, 0%, 100%, .75) 100%' // potential intermidiate
+const bgvar04 = 'linear-gradient(90deg, hsla(0, 100%, 50%, .75) 0%, hsla(0, 0%, 100%, .75) 100%' // potential intermidiate
+
+
 function DashboardSkeleton() {
 
     return (
@@ -214,45 +205,143 @@ function DashboardSkeleton() {
                 
             </div>
             <div className="call-stats-container">
-                <div 
+                <motion.div 
                     className="call-stats-item recent-call-container"
-                     style={{overflow: 'clip'}}
+                    style={{
+                        overflow: 'clip',
+                        backgroundSize: '100% 100%',
+
+                    }}
+                    // initial={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 0%, hsla(0, 0%, 100%, .85) 5%, hsla(0, 100%, 50%, .75) 110%)'}}
+                    animate={{
+                        backgroundImage: [bgvar01, bgvar02, bgvar00, bgvar00]
+                 
+                    }}
+                    // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
+                    transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        // repeatType:"reverse",
+                        ease: "easeIn"
+                    }}
                 >   
-                    <div 
+                    {/* <div 
                         style={{
                             height: '248.867px',
-                            width: '100%',
+                            width: '500px',
                             position: 'absolute',
                             background: 'linear-gradient(to right, hsla(0, 100%, 50%, .75), hsla(0, 0%, 100%, .75) 50%, hsla(0, 100%, 50%, .75) 100%)',
                             top: 0, 
-                            zIndex:-1
+                            left:0,
+                            zIndex:0
                         }}
-                    />
+                    /> */}
                     <div className="call-stats-label">Most Recent Call Time</div>
                     <div className="call-stats-value"></div>
         
-                </div>
-                <div className="call-stats-item total-connected-container">
+                </motion.div>
+                <motion.div 
+                    className="call-stats-item total-connected-container"
+                    style={{
+                        overflow:"clip",
+                        backgroundSize: "100% 100%"
+                    }}
+                    animate={{
+                        backgroundImage: [bgvar00, bgvar00, bgvar01, bgvar02]
+                 
+                    }}
+                    // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
+                    transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        ease: "easeIn"
+                    }}
+                >
                     <div className="call-stats-label">Total Connected Time</div>
                     <div className="call-stats-value"></div>
-                </div>
-                <div className="call-stats-item last-five-average-container">
+                </motion.div>
+                <motion.div 
+                    className="call-stats-item last-five-average-container"
+                    style={{
+                        overflow:"clip",
+                        backgroundSize: "100% 100%"
+                    }}
+                    animate={{
+                        backgroundImage: [bgvar00, bgvar00, bgvar01, bgvar02]
+                 
+                    }}
+                    // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
+                    transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        ease: "easeIn"
+                    }}
+                >
                     <div className="call-stats-label">Total Connected Calls</div>
                     <div className="call-stats-value"></div>
-                </div>
-                <div className="call-stats-item fastest-call-container">
+                </motion.div>
+                <motion.div 
+                    className="call-stats-item fastest-call-container"
+                    style={{
+                        overflow:"clip",
+                        backgroundSize: "100% 100%"
+                    }}
+                    animate={{
+                        backgroundImage:  [bgvar01, bgvar02, bgvar00, bgvar00]
+                 
+                    }}
+                    // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
+                    transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        ease: "easeIn"
+                    }}
+                >
                     <div className="call-stats-label">Fastest Call Time</div>
                     <div className="call-stats-value"></div>
-                </div>
-                <div className="call-stats-item longest-call-container">
+                </motion.div>
+                <motion.div 
+                    className="call-stats-item longest-call-container"
+                    style={{
+                        overflow:"clip",
+                        backgroundSize: "100% 100%"
+                    }}
+                    animate={{
+                        backgroundImage:  [bgvar01, bgvar02, bgvar00, bgvar00]
+                 
+                    }}
+                    // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
+                    transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        ease: "easeIn"
+                    }}
+                >
                     <div className="call-stats-label">Longest Call Time</div>
                     <div className="call-stats-value"></div>
-                </div>
-                <div className="call-stats-item average-time-container">
+                </motion.div>
+                <motion.div 
+                    className="call-stats-item average-time-container"
+                    style={{
+                        overflow:"clip",
+                        backgroundSize: "100% 100%"
+                    }}
+                    animate={{
+                        backgroundImage: [bgvar00, bgvar00, bgvar01, bgvar02]
+                 
+                    }}
+                    // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
+                    transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        // repeatType:"reverse",
+                        ease: "easeIn"
+                    }}
+                >
                     <div className="call-stats-label">Average Handle Time</div>
                     <div className="call-stats-value"></div>
   
-                </div>
+                </motion.div>
             </div>
             <div>
             </div>
