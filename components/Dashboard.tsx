@@ -158,7 +158,7 @@ function DashboardComponent() {
                 </div> */}
                 <div className="call-stats-item recent-call-container">   
                     <div className="call-stats-label" style={{zIndex: 2}}>Most Recent Call Time</div>
-                    <div className="call-stats-value">{msToHours(dashboardData?.recentCall)}</div>
+                    <div className="call-stats-value">{msToHours(dashboardData?.recentCall.duration)}</div>
                     <div className="call-time-split" style={getCallTimeGradient(dashboardData.recentCall.duration, dashboardData.recentCall.connectedDuration)}></div>
                 </div>
                 <div className="call-stats-item total-connected-container">
