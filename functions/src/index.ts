@@ -34,5 +34,6 @@ initializeApp();
 setGlobalOptions({maxInstances: 10});
     
 export {getUserDashboard} from "./handlers/callHandlers";
+export {getUserCallRecord} from "./handlers/callHandlers";
 export {verifyWebexId} from "./handlers/authHandlers";
 export {verifyWebexPhoneNumber} from "./handlers/authHandlers";

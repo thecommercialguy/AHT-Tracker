@@ -69,3 +69,32 @@ export interface DashboardData {
         wrapupDuration: number | null,
     },
 }
+
+export interface CallStats {
+
+    totalCallCount: number, 
+    totalConnectedDuration: any,
+    averageHandleTime: {
+        duration: number | null,
+        connectedDuration: number | null,
+        wrapupDuration: number | null,
+        connectedCount: number,
+        date: string
+    },
+    fastestCall: {
+        duration: number | null,
+        connectedDuration: number | null,
+        wrapupDuration: number | null,
+        date: string
+    }
+    longestCall: {
+        duration: number | null,
+        connectedDuration: number | null,
+        wrapupDuration: number | null,
+        date: string
+    },
+}
+
+// hover and appear descriptions
+
+// async on get userDashboard

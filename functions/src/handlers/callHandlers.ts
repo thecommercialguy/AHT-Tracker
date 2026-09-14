@@ -1,6 +1,6 @@
-import {getFirestore, FieldValue} from "firebase-admin/firestore";
+import {getFirestore, FieldValue, AggregateField} from "firebase-admin/firestore";
 import {onRequest} from "firebase-functions/https";
-import type {DashboardData} from "../types/callTypes";
+import type {CallStats, DashboardData} from "../types/callTypes";
 import {
     getAgentSessionsByPhoneNumber, 
     getTaskLegsByPhoneNumber, 
@@ -34,13 +34,14 @@ export const getUserDashboard = onRequest(
             const db = getFirestore();
             const userRef = db.collection('users').doc(uid);
             const userSnap = await userRef.get();
-            const firstName = userSnap.get('firstName');
-            const lastName = userSnap.get('lastName');
             if (!userSnap.exists) {
                 throw new NotFoundError('User not found');
   
             }
-    
+
+            const firstName = userSnap.get('firstName');
+            const lastName = userSnap.get('lastName');
+
             const phoneNumber = userSnap.get("agentPhoneNumber");
             if (!phoneNumber) {
                 throw new BadRequestError('No agent phone number')
@@ -191,6 +192,125 @@ export const getUserDashboard = onRequest(
             return;
         }
 });
+
+
+export const getUserCallRecord = onRequest(
+    {   
+        cors: true,
+        region: "us-central1", 
+        timeoutSeconds: 1200,
+    },
+    async (req, res) => {
+        try {
+            const header = req.headers.authorization ?? "";
+            if (!header.startsWith("Bearer ")) {
+                throw new UnauthorizedError("Missing token");
+            }
+    
+            let uid: string;
+            try {
+                const decoded = await getAuth().verifyIdToken(header.slice(7));
+                uid = decoded.uid;
+            } catch {
+                throw new UnauthorizedError("Missing token");
+            }
+            
+            const db = getFirestore();
+            const userRef = db.collection('users').doc(uid);
+            const userSnap = await userRef.get();
+            if (!userSnap.exists) {
+                throw new NotFoundError('User not found');
+            }
+
+            // const firstName = userSnap.get('firstName');
+            // const lastName = userSnap.get('lastName');
+
+            // agentSession snap
+            const sessionsRef = db.collection('users').doc(uid).collection('sessions');
+            const aggregateQuery = sessionsRef.aggregate({
+                totalConnectedTime: AggregateField.sum("connectedTime")
+            });
+            const aggregateSnap = await aggregateQuery.get();
+            const { totalConnectedTime } = aggregateSnap.data();
+
+            if (totalConnectedTime < 1) {
+                throw new UnauthorizedError("Missing token");
+            }
+
+
+
+            // const averageHandleTimeQuery = sessionsRef.select("connectedDuration", "wrapupDuration","connectedCount", "createdAt");
+            const averageHandleTimeSnap = await sessionsRef.get();
+            const averageHandleTimeDocs = averageHandleTimeSnap.docs; // Could technically map over this
+
+            const fastestSession = averageHandleTimeDocs.sort((a: any, b: any) => {
+                const sessionA = a.data();
+                const sessionB = b.data();
+                const averageA = (sessionA.connectedDuration + sessionA.wrapupDuration) / sessionA.connectedCount;
+                const averageB = (sessionB.connectedDuration + sessionB.wrapupDuration) / sessionB.connectedCount;
+
+                return averageA < averageB ? a : b;
+            })[0].data();
+            
+
+            const callsRef = db.collection('users').doc(uid).collection('calls');
+
+            const totalCallsSnap = await callsRef.count().get();
+            const totalCalls =  totalCallsSnap.data().count;
+
+            const longestCallQuery = callsRef.where("outdial", "==", "false").orderBy("connectedDuration", "desc").limit(1);
+            const longestCallSnap = await longestCallQuery.get();
+            const longestCall = longestCallSnap.docs[0].data();
+
+            const fastestCallQuery = callsRef.where("outdial", "==", "false").orderBy("connectedDuration", "asc").limit(1);
+            const fastestCallSnap = await fastestCallQuery.get();
+            const fastestCall = fastestCallSnap.docs[0].data();
+
+            
+
+
+
+
+
+            const callStats = {
+                totalCallCount: totalCalls, 
+                totalConnectedDuration: totalConnectedTime,
+                averageHandleTime: {
+                    duration: fastestSession.connectedDuration + fastestSession.wrapupDuration,
+                    connectedDuration: fastestSession.connectedDuration,
+                    wrapupDuration: fastestSession.wrapupDuration,
+                    connectedCount: fastestSession.connectedCount,
+                    date: fastestSession?.createdTime
+                },
+                fastestCall: {
+                    duration: fastestCall.connectedDuration + fastestCall.wrapupDuration,
+                    connectedDuration: fastestCall.connectedDuration, 
+                    wrapupDuration: fastestCall.wrapupDuration,
+                    date: fastestCall.createdTime
+                }, 
+                longestCall: {
+                    duration: longestCall.connectedDuration + longestCall.wrapupDuration,
+                    connectedDuration: longestCall.connectedDuration, 
+                    wrapupDuration: longestCall.wrapupDuration,
+                    date: longestCall.createdTime
+                }
+        
+            } as CallStats;
+
+            
+            res.status(200).json(callStats);
+
+
+
+
+        } catch(error) {
+            errorResponse(error, res);
+            return;
+        }
+    }
+)
+
+
 
 
 const formatDashboardData = (agentSessionResponse: any, taskLegResponse: any) => {

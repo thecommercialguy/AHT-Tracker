@@ -189,12 +189,13 @@ function DashboardComponent() {
     )
 }
 
-const bgvar01 = 'linear-gradient(90deg, hsla(0, 0%, 100%, .75) 0%, hsla(0, 100%, 50%, .75) 100%'
-const bgvar02 = 'linear-gradient(90deg, hsla(0, 100%, 50%, .75) 0%, hsla(0, 0%, 100%, .75) 100%'
+const bgvar01 = 'linear-gradient(135deg, hsla(0, 0%, 100%, .75) 0%, hsla(0, 100%, 50%, .75) 100%'
+const bgvar02 = 'linear-gradient(135deg, hsla(0, 100%, 50%, .75) 0%, hsla(0, 0%, 100%, .75) 100%'
 const bgvar00 = 'linear-gradient(90deg, hsla(0, 100%, 50%, .75) 0%, hsla(0, 100%, 50%, .75) 100%' // neutral value
 const bgvar03 = 'linear-gradient(90deg, hsla(0, 100%, 50%, .75) 0%, hsla(0, 0%, 100%, .75) 100%' // potential intermidiate
 const bgvar04 = 'linear-gradient(90deg, hsla(0, 100%, 50%, .75) 0%, hsla(0, 0%, 100%, .75) 100%' // potential intermidiate
-
+const bgvar05 = 'linear-gradient(90deg,  hsla(0, 100%, 50%, .75) 25%, hsla(0, 0%, 100%, .75) 75%, hsla(0, 100%, 50%, .75) 100%'
+const SKEL_TRANSITION_DURATION = 1.3;
 
 function DashboardSkeleton() {
 
@@ -202,27 +203,59 @@ function DashboardSkeleton() {
             <main className="dashboard-container">
             <div className="dashboard-header">
                 <h2 className="dashboard-header-text"></h2>
-                
+                <motion.div 
+                    className="call-count-container"
+                    style={{
+                        overflow: 'clip',
+                        backgroundSize: "100vw 100%",
+                        // backgroundSize: '53.472222222vw 590px',
+                        backgroundImage: bgvar05,
+                        backgroundAttachment: 'fixed',
+                        backgroundOrigin: "0% 0%"
+            
+
+                    }}
+                    // initial={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 0%, hsla(0, 0%, 100%, .85) 5%, hsla(0, 100%, 50%, .75) 110%)'}}
+                    animate={{
+                        backgroundPosition: ["0 0", "100vw 0"]
+                 
+                    }}
+                    // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
+                    transition={{
+                        duration: SKEL_TRANSITION_DURATION,
+                        // duration: 2.05,
+                        repeat: Infinity,
+                        // repeatType:"reverse",
+                        ease: "linear"
+                    }}
+                >
+                    <span className="call-count-header">Total Calls</span>
+                </motion.div>
             </div>
             <div className="call-stats-container">
                 <motion.div 
                     className="call-stats-item recent-call-container"
                     style={{
                         overflow: 'clip',
-                        backgroundSize: '100% 100%',
+                        backgroundSize: "100vw 100%",
+                        // backgroundSize: '53.472222222vw 590px',
+                        backgroundImage: bgvar05,
+                        backgroundAttachment: 'fixed',
+                        backgroundOrigin: "0% 0%"
+            
 
                     }}
                     // initial={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 0%, hsla(0, 0%, 100%, .85) 5%, hsla(0, 100%, 50%, .75) 110%)'}}
                     animate={{
-                        backgroundImage: [bgvar01, bgvar02, bgvar00, bgvar00]
+                        backgroundPosition: ["0 0", "100vw 0"]
                  
                     }}
                     // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
                     transition={{
-                        duration: 1.8,
+                        duration: SKEL_TRANSITION_DURATION,
                         repeat: Infinity,
                         // repeatType:"reverse",
-                        ease: "easeIn"
+                        ease: "linear"
                     }}
                 >   
                     {/* <div 
@@ -244,17 +277,22 @@ function DashboardSkeleton() {
                     className="call-stats-item total-connected-container"
                     style={{
                         overflow:"clip",
-                        backgroundSize: "100% 100%"
+                        backgroundSize: "100vw 100%",
+                        backgroundImage: bgvar05,
+                        backgroundAttachment: 'fixed',
+                        // backgroundOrigin: "0% 0%"
+                        // backgroundOrigin: "calc(50vw - ((53.472222222vw)/2)) 207px"
                     }}
                     animate={{
-                        backgroundImage: [bgvar00, bgvar00, bgvar01, bgvar02]
+                        backgroundPosition: ["0 0", "100vw 0"]
                  
                     }}
                     // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
                     transition={{
-                        duration: 1.8,
+                        duration: SKEL_TRANSITION_DURATION,
                         repeat: Infinity,
-                        ease: "easeIn"
+                        // repeatType: reverse
+                        ease: "linear"
                     }}
                 >
                     <div className="call-stats-label">Total Connected Time</div>
@@ -264,17 +302,20 @@ function DashboardSkeleton() {
                     className="call-stats-item last-five-average-container"
                     style={{
                         overflow:"clip",
-                        backgroundSize: "100% 100%"
+                        backgroundSize: "100vw 100%",
+                        backgroundImage: bgvar05,
+                        backgroundAttachment: 'fixed',
+                        backgroundOrigin: "0% 0%"
                     }}
                     animate={{
-                        backgroundImage: [bgvar00, bgvar00, bgvar01, bgvar02]
+                        backgroundPosition: ["0 0", "100vw 0"]
                  
                     }}
                     // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
                     transition={{
-                        duration: 1.8,
+                        duration: SKEL_TRANSITION_DURATION,
                         repeat: Infinity,
-                        ease: "easeIn"
+                        ease: "linear"
                     }}
                 >
                     <div className="call-stats-label">Total Connected Calls</div>
@@ -284,17 +325,20 @@ function DashboardSkeleton() {
                     className="call-stats-item fastest-call-container"
                     style={{
                         overflow:"clip",
-                        backgroundSize: "100% 100%"
+                        backgroundSize: "100vw 100%",
+                        backgroundImage: bgvar05,
+                        backgroundAttachment: 'fixed',
+                        backgroundOrigin: "0% 0%"
                     }}
                     animate={{
-                        backgroundImage:  [bgvar01, bgvar02, bgvar00, bgvar00]
+                        backgroundPosition:  ["0 0", "100vw 0"]
                  
                     }}
                     // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
                     transition={{
-                        duration: 1.8,
+                        duration: SKEL_TRANSITION_DURATION,
                         repeat: Infinity,
-                        ease: "easeIn"
+                        ease: "linear"
                     }}
                 >
                     <div className="call-stats-label">Fastest Call Time</div>
@@ -304,17 +348,20 @@ function DashboardSkeleton() {
                     className="call-stats-item longest-call-container"
                     style={{
                         overflow:"clip",
-                        backgroundSize: "100% 100%"
+                        backgroundSize: "100vw 100%",
+                        backgroundImage: bgvar05,
+                        backgroundAttachment: 'fixed',
+                        backgroundOrigin: "0% 0%"
                     }}
                     animate={{
-                        backgroundImage:  [bgvar01, bgvar02, bgvar00, bgvar00]
+                        backgroundPosition:  ["0 0", "100vw 0"]
                  
                     }}
                     // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
                     transition={{
-                        duration: 1.8,
+                        duration: SKEL_TRANSITION_DURATION,
                         repeat: Infinity,
-                        ease: "easeIn"
+                        ease: "linear"
                     }}
                 >
                     <div className="call-stats-label">Longest Call Time</div>
@@ -324,18 +371,22 @@ function DashboardSkeleton() {
                     className="call-stats-item average-time-container"
                     style={{
                         overflow:"clip",
-                        backgroundSize: "100% 100%"
+                        backgroundSize: "100vw 100%",
+                        backgroundImage: bgvar05,
+                        // backgroundSize: "53.472222222vw 590px",
+                        backgroundAttachment: 'fixed',
+                        backgroundOrigin: "0% 0%"
                     }}
                     animate={{
-                        backgroundImage: [bgvar00, bgvar00, bgvar01, bgvar02]
+                        backgroundPosition: ["0 0", "100vw 0"]
                  
                     }}
                     // animate={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 85%, hsla(0, 0%, 100%, .85) 90%, hsla(0, 100%, 50%, .75) 110%)'}}
                     transition={{
-                        duration: 1.8,
+                        duration: SKEL_TRANSITION_DURATION,
                         repeat: Infinity,
                         // repeatType:"reverse",
-                        ease: "easeIn"
+                        ease: "linear"
                     }}
                 >
                     <div className="call-stats-label">Average Handle Time</div>
