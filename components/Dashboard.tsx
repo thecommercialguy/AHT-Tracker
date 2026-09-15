@@ -75,7 +75,7 @@ const getErrorMessage = (error: any) => {
 }
 
 
-const getCallTimeGradient = (callDuration?: number | null, connectedDuration?: number | null): CSSProperties => {
+export const getCallTimeGradient = (callDuration?: number | null, connectedDuration?: number | null): CSSProperties => {
 
     if (!connectedDuration) return {} as CSSProperties;
     if (!callDuration) return {} as CSSProperties;

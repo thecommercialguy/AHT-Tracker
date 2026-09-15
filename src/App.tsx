@@ -11,6 +11,7 @@ import './Login.css'
 import './SignUp.css'
 import './Dropdown.css'
 import './AccountSettings.css'
+import './CallRecords.css'
 import './SnackBar.css'
 import { SnackBar, useErrorContext } from "../context/errorContext";
 

@@ -5,6 +5,7 @@ import Login, { loginLoader } from "../components/Login";
 import { loginAction, signUpAction, accountSettingsAction } from "../actions/actions.ts";
 import SignUp, { signUpLoader } from "../components/SignUp";
 import AccountSettings, { AccountSettingLoader } from "../components/AccountSettings";
+import CallRecords, { CallRecordsLoader } from "../components/CallRecords";
 import Landing from "../components/Landing"
 
 function About() { return <h1>About</h1>; }
@@ -20,6 +21,7 @@ export const routes: RouteObject[] = [
       { path: "login", Component: Login, loader: loginLoader, action: loginAction},
       { path: "signup", Component: SignUp, loader: signUpLoader, action: signUpAction},
       { path: "settings", Component: AccountSettings, loader: AccountSettingLoader, action: accountSettingsAction},
+      { path: "call-records", Component: CallRecords, loader: CallRecordsLoader},
       { path: "about", Component: About},
       { path: '*', Component: NotFound },
     ]
