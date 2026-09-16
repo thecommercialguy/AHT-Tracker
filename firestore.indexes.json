@@ -1,4 +1,21 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "calls",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isOutdial", "order": "ASCENDING" },
+        { "fieldPath": "connectedDuration", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "calls",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isOutdial", "order": "ASCENDING" },
+        { "fieldPath": "connectedDuration", "order": "ASCENDING" }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

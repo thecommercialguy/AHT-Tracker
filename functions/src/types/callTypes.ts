@@ -75,6 +75,7 @@ export interface CallStats {
     totalCallCount: number, 
     totalConnectedDuration: any,
     averageHandleTime: {
+        ahtDuration: number | null,
         duration: number | null,
         connectedDuration: number | null,
         wrapupDuration: number | null,

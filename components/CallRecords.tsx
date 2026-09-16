@@ -1,13 +1,24 @@
+import { redirect, useLoaderData } from "react-router";
+import { auth } from "../src/firebase";
 import { getCallTimeGradient } from "./Dashboard"
+import { getCallRecords } from "../loaders/callRecordLoaders"
 
-export function CallRecordsLoader() {
-    return
+export async function CallRecordsLoader() {
+    await auth.authStateReady();
+    const user = auth.currentUser;
+    if (!user) return redirect("/login");
+
+    const token = await user.getIdToken();
+    const data = await getCallRecords(token);
+
+    return data
 }
 
 
 export default function CallRecords() {
 
-
+    const data = useLoaderData();
+    console.log(data);
 
 
     return (

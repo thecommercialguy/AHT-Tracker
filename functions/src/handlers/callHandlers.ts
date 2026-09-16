@@ -28,7 +28,7 @@ export const getUserDashboard = onRequest(
                 const decoded = await getAuth().verifyIdToken(header.slice(7));
                 uid = decoded.uid;
             } catch {
-                throw new UnauthorizedError("Missing token");
+                throw new UnauthorizedError("Invalid token");
             }
             
             const db = getFirestore();
@@ -46,26 +46,7 @@ export const getUserDashboard = onRequest(
             if (!phoneNumber) {
                 throw new BadRequestError('No agent phone number')
             }
-    
-    
-    
-    
-    
-    
-            //
-            // const userId = req.query.text as string | undefined | null;
-            // if (userId == null || userId == undefined) {
-            //     res.status(400);
-            //     res.json({result: 'No user id provided'});
-            //     return;
-    
-            // }
-            //
-            // const userId = 'AMCBCD3DdpQOfYpUAWc5';
-    
-            // const to = Date.now();
-            // const from = to - 24 * 60 * 60 * 1000;
-            //
+
             // Get Current "time"
             const currInstantMS = Date.now();
             const currInstant = new Date(currInstantMS);
@@ -86,12 +67,7 @@ export const getUserDashboard = onRequest(
     
             const from = currDateMS;
             const to = currInstantMS;
-            //
-    
-            // const to = Date.now();
-            // const from = to - 24 * 60 * 60 * 1000;
-            
-            // const query = taskLegQuery;
+
     
             let taskLegResponse;
             
@@ -131,7 +107,6 @@ export const getUserDashboard = onRequest(
                 });
             } else {
                 // update session
-                // DocumentReference — has .update(), .set(), .delete(), .get(
                 console.log('updated', agentSessionResponse)
                 await currSessions.docs[0].ref.update({
                     ...agentSessionResponse,
@@ -212,36 +187,35 @@ export const getUserCallRecord = onRequest(
                 const decoded = await getAuth().verifyIdToken(header.slice(7));
                 uid = decoded.uid;
             } catch {
-                throw new UnauthorizedError("Missing token");
+                throw new UnauthorizedError("Invalid token");
             }
             
             const db = getFirestore();
             const userRef = db.collection('users').doc(uid);
             const userSnap = await userRef.get();
             if (!userSnap.exists) {
+                console.log('HERE')
                 throw new NotFoundError('User not found');
             }
 
-            // const firstName = userSnap.get('firstName');
-            // const lastName = userSnap.get('lastName');
-
-            // agentSession snap
             const sessionsRef = db.collection('users').doc(uid).collection('sessions');
             const aggregateQuery = sessionsRef.aggregate({
-                totalConnectedTime: AggregateField.sum("connectedTime")
+                totalConnectedTime: AggregateField.sum("connectedDuration")
             });
             const aggregateSnap = await aggregateQuery.get();
             const { totalConnectedTime } = aggregateSnap.data();
 
             if (totalConnectedTime < 1) {
-                throw new UnauthorizedError("Missing token");
+                console.log("Ohhhh")
+                throw new NotFoundError("User has no call data.");
             }
 
+            console.log("A")
 
-
-            // const averageHandleTimeQuery = sessionsRef.select("connectedDuration", "wrapupDuration","connectedCount", "createdAt");
             const averageHandleTimeSnap = await sessionsRef.get();
-            const averageHandleTimeDocs = averageHandleTimeSnap.docs; // Could technically map over this
+            const averageHandleTimeDocs = averageHandleTimeSnap.docs; 
+
+            console.log("B")
 
             const fastestSession = averageHandleTimeDocs.sort((a: any, b: any) => {
                 const sessionA = a.data();
@@ -252,20 +226,41 @@ export const getUserCallRecord = onRequest(
                 return averageA < averageB ? a : b;
             })[0].data();
             
+            console.log("C", fastestSession)
+
 
             const callsRef = db.collection('users').doc(uid).collection('calls');
+
+            console.log("D")
 
             const totalCallsSnap = await callsRef.count().get();
             const totalCalls =  totalCallsSnap.data().count;
 
-            const longestCallQuery = callsRef.where("outdial", "==", "false").orderBy("connectedDuration", "desc").limit(1);
+            console.log("E", totalCalls)
+            
+            const longestCallQuery = callsRef.where("isOutdial", "==", false).orderBy("connectedDuration", "desc").limit(1);
+            console.log("F", longestCallQuery)
+
             const longestCallSnap = await longestCallQuery.get();
-            const longestCall = longestCallSnap.docs[0].data();
+            console.log("G", longestCallSnap)
+            const longestCall = longestCallSnap.docs[0]?.data() ?? null;
+            console.log("F", longestCallSnap.docs)
+            console.log("F", longestCall)
+            if (!longestCall) {
+                throw new NotFoundError("User has no call data.");
+            }
+            console.log("H", longestCall)
+            
+            console.log("I", longestCall)
 
-            const fastestCallQuery = callsRef.where("outdial", "==", "false").orderBy("connectedDuration", "asc").limit(1);
+            
+            const fastestCallQuery = callsRef.where("isOutdial", "==", false).orderBy("connectedDuration", "asc").limit(1);
             const fastestCallSnap = await fastestCallQuery.get();
-            const fastestCall = fastestCallSnap.docs[0].data();
-
+            const fastestCall = fastestCallSnap.docs[0]?.data() ?? null;
+            if (!fastestCall) {
+                throw new NotFoundError("User has no call data.");
+            }
+            
             
 
 
@@ -276,23 +271,24 @@ export const getUserCallRecord = onRequest(
                 totalCallCount: totalCalls, 
                 totalConnectedDuration: totalConnectedTime,
                 averageHandleTime: {
-                    duration: fastestSession.connectedDuration + fastestSession.wrapupDuration,
+                    ahtDuration: Math.floor((fastestSession.connectedDuration + fastestSession.connectedDuration) / fastestSession.connectedCount),
+                    duration: fastestSession.connectedDuration + fastestSession.connectedDuration,
                     connectedDuration: fastestSession.connectedDuration,
                     wrapupDuration: fastestSession.wrapupDuration,
                     connectedCount: fastestSession.connectedCount,
-                    date: fastestSession?.createdTime
+                    date: fastestSession?.createdAt
                 },
                 fastestCall: {
                     duration: fastestCall.connectedDuration + fastestCall.wrapupDuration,
                     connectedDuration: fastestCall.connectedDuration, 
                     wrapupDuration: fastestCall.wrapupDuration,
-                    date: fastestCall.createdTime
+                    date: fastestCall.createdAt
                 }, 
                 longestCall: {
                     duration: longestCall.connectedDuration + longestCall.wrapupDuration,
                     connectedDuration: longestCall.connectedDuration, 
                     wrapupDuration: longestCall.wrapupDuration,
-                    date: longestCall.createdTime
+                    date: longestCall.createdAt
                 }
         
             } as CallStats;
@@ -304,6 +300,7 @@ export const getUserCallRecord = onRequest(
 
 
         } catch(error) {
+            console.log(error)
             errorResponse(error, res);
             return;
         }
@@ -325,8 +322,6 @@ const formatDashboardData = (agentSessionResponse: any, taskLegResponse: any) =>
 
 
         const ahtDuration = Math.floor((connectedDuration + wrapupDuration) / connectedCount);
-        // const ahtConnected = agentSessionResponse.connectedDuration || 
-        // const ahtWrapup = agentSessionResponse.wrapupDuration
         
         const fastestCall = taskLegResponse.reduce((min: any, current: any) => {
             let a = current.connectedDuration + current.wrapupDuration;

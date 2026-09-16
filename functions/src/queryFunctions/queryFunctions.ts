@@ -305,11 +305,11 @@ endCursor
 `;
 
 const API_KEY_WEBEX = process.env.API_KEY_WEBEX;
+const ORG_ID_WEBEX = process.env.ORG_ID_WEBEX;
 
 export const taskLegsWebexQuery = async (from: number, to: number) => {
     const query = taskLegQuery;
-    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
-    // const response = await fetch('/api/webex/v1/search', {
+    const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
@@ -326,7 +326,6 @@ export const taskLegsWebexQuery = async (from: number, to: number) => {
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        // console.error('Failed to fetch call logs:', response.body);
         throwQueryError(response.status, message);
     }
 
@@ -349,8 +348,7 @@ interface GetTaskLegsByPhoneNumberParams {
 
 export const getTaskLegsByPhoneNumber = async ({from, to, phoneNumber}:GetTaskLegsByPhoneNumberParams) => {
     const query = taskLegQueryByPhoneNumber;
-    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
-    // const response = await fetch('/api/webex/v1/search', {
+    const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
@@ -367,12 +365,7 @@ export const getTaskLegsByPhoneNumber = async ({from, to, phoneNumber}:GetTaskLe
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        // console.error('Failed to fetch call logs:', response.body);
         throwQueryError(response.status, message);
-
-        
-        
-        // return {data: 'error', status: response.status};
     }
 
     const queryData = await response.json();
@@ -388,8 +381,7 @@ export const getTaskLegsByPhoneNumber = async ({from, to, phoneNumber}:GetTaskLe
 
 export const agentSessionWebexQuery = async (from: number, to: number) => {
     const query = agentSessionQuery;
-    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
-    // const response = await fetch('/api/webex/v1/search', {
+    const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
@@ -406,9 +398,7 @@ export const agentSessionWebexQuery = async (from: number, to: number) => {
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        // console.error('Failed to fetch call logs:', response.);
         throwQueryError(response.status, message);
-        // return {data: 'error', status: response.status};
     }
 
     const queryData = await response.json();
@@ -468,8 +458,7 @@ interface GetAgentSessionsByPhoneNumberParams {
 
 export const getAgentSessionsByPhoneNumber = async ({from, to, phoneNumber}: GetAgentSessionsByPhoneNumberParams) => {
     const query = agentSessionQueryPhoneNumber;
-    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
-    // const response = await fetch('/api/webex/v1/search', {
+    const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
@@ -486,10 +475,7 @@ export const getAgentSessionsByPhoneNumber = async ({from, to, phoneNumber}: Get
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        // console.error('Failed to fetch call logs:', response.body);
-        
         throwQueryError(response.status, message);
-        // return {data: 'error', status: response.status};
     }
 
     const queryData = await response.json();
@@ -545,8 +531,7 @@ interface GetAgentSessionsByWebexIdParams {
 }
 export const getAgentSessionsByWebexId = async ({from, to, webexId}: GetAgentSessionsByWebexIdParams) => {
     const query = agentSessionQueryWebexId;
-    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
-    // const response = await fetch('/api/webex/v1/search', {
+    const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
@@ -618,8 +603,7 @@ export const getAgentSessionsByWebexId = async ({from, to, webexId}: GetAgentSes
 
 export const verifyAgentPhoneNumber = async ({from, to, phoneNumber}: GetAgentSessionsByPhoneNumberParams) => {
     const query = verirfyPhoneNumberQuery;
-    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
-    // const response = await fetch('/api/webex/v1/search', {
+    const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
@@ -636,10 +620,7 @@ export const verifyAgentPhoneNumber = async ({from, to, phoneNumber}: GetAgentSe
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        // console.error('Failed to fetch call logs:', response.body);
-        
         throwQueryError(response.status, message);
-        // return {data: 'error', status: response.status};
     }
 
     const queryData = await response.json();
@@ -655,8 +636,7 @@ export const verifyAgentPhoneNumber = async ({from, to, phoneNumber}: GetAgentSe
 
 export const verifyWebexIdWebex = async ({from, to, webexId}: GetAgentSessionsByWebexIdParams) => {
     const query = verirfyWebexIdQuery;
-    const response = await fetch('https://api.wxcc-us1.cisco.com/search?orgId=91d4badc-fd60-4ff9-81c0-b7245b3bdec4', {
-    // const response = await fetch('/api/webex/v1/search', {
+    const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
@@ -677,10 +657,7 @@ export const verifyWebexIdWebex = async ({from, to, webexId}: GetAgentSessionsBy
         const message = errorResponse?.error?.message[0]?.description || null;
 
         console.error('Failed to fetch call logs:', response);
-        // console.error('Failed to fetch call logs:', response.body);
-        
         throwQueryError(response.status, message);
-        // return {data: 'error', status: response.status};
     }
 
     const queryData = await response.json();
