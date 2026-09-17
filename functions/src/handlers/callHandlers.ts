@@ -210,12 +210,9 @@ export const getUserCallRecord = onRequest(
                 throw new NotFoundError("User has no call data.");
             }
 
-            console.log("A")
 
             const averageHandleTimeSnap = await sessionsRef.get();
-            const averageHandleTimeDocs = averageHandleTimeSnap.docs; 
-
-            console.log("B")
+            const averageHandleTimeDocs = averageHandleTimeSnap.docs;
 
             const fastestSession = averageHandleTimeDocs.sort((a: any, b: any) => {
                 const sessionA = a.data();
@@ -223,40 +220,36 @@ export const getUserCallRecord = onRequest(
                 const averageA = (sessionA.connectedDuration + sessionA.wrapupDuration) / sessionA.connectedCount;
                 const averageB = (sessionB.connectedDuration + sessionB.wrapupDuration) / sessionB.connectedCount;
 
-                return averageA < averageB ? a : b;
+                return averageA > averageB ? a : b;
             })[0].data();
             
-            console.log("C", fastestSession)
 
 
             const callsRef = db.collection('users').doc(uid).collection('calls');
-
-            console.log("D")
+             const aggregateQueryFull = callsRef.aggregate({
+                totalConnectedTimeFull: AggregateField.sum("connectedDuration")
+            });
+            const aggregateFullSnap = await aggregateQueryFull.get();
+            const { totalConnectedTimeFull } = aggregateFullSnap.data();
 
             const totalCallsSnap = await callsRef.count().get();
             const totalCalls =  totalCallsSnap.data().count;
-
-            console.log("E", totalCalls)
             
-            const longestCallQuery = callsRef.where("isOutdial", "==", false).orderBy("connectedDuration", "desc").limit(1);
-            console.log("F", longestCallQuery)
-
-            const longestCallSnap = await longestCallQuery.get();
-            console.log("G", longestCallSnap)
-            const longestCall = longestCallSnap.docs[0]?.data() ?? null;
-            console.log("F", longestCallSnap.docs)
-            console.log("F", longestCall)
+            // const longestCallQuery = callsRef.where("isOutdial", "==", false).orderBy("connectedDuration", "desc");
+            const callsOrderedQuery = callsRef
+                    .where("isOutdial", "==", false)
+                    .where("connectedDuration", ">", 0)
+                    .orderBy("connectedDuration", "desc");
+            const callsOrderedSnap = await callsOrderedQuery.get();
+            const longestCall = callsOrderedSnap.docs[0]?.data() ?? null;
             if (!longestCall) {
                 throw new NotFoundError("User has no call data.");
             }
-            console.log("H", longestCall)
-            
-            console.log("I", longestCall)
 
             
-            const fastestCallQuery = callsRef.where("isOutdial", "==", false).orderBy("connectedDuration", "asc").limit(1);
-            const fastestCallSnap = await fastestCallQuery.get();
-            const fastestCall = fastestCallSnap.docs[0]?.data() ?? null;
+            // const fastestCallQuery = callsRef.where("isOutdial", "==", false).orderBy("connectedDuration", "asc").limit(1);
+            // const fastestCallSnap = await fastestCallQuery.get();
+            const fastestCall = callsOrderedSnap.docs.at(-1)?.data() ?? null;
             if (!fastestCall) {
                 throw new NotFoundError("User has no call data.");
             }
@@ -269,9 +262,9 @@ export const getUserCallRecord = onRequest(
 
             const callStats = {
                 totalCallCount: totalCalls, 
-                totalConnectedDuration: totalConnectedTime,
+                totalConnectedDuration: totalConnectedTimeFull,
                 averageHandleTime: {
-                    ahtDuration: Math.floor((fastestSession.connectedDuration + fastestSession.connectedDuration) / fastestSession.connectedCount),
+                    ahtDuration: Math.floor((fastestSession.connectedDuration + fastestSession.wrapupDuration) / fastestSession.connectedCount),
                     duration: fastestSession.connectedDuration + fastestSession.connectedDuration,
                     connectedDuration: fastestSession.connectedDuration,
                     wrapupDuration: fastestSession.wrapupDuration,
@@ -361,3 +354,4 @@ const formatDashboardData = (agentSessionResponse: any, taskLegResponse: any) =>
 
     
 }
+

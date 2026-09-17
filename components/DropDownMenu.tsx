@@ -43,6 +43,8 @@ export function AuthDropdownMenu({toggleMenu}: DropDownProps) {
             <ul className="dropdown-menu">
                 <li><Link to="/dashboard">Dashboard</Link></li>
                 <li className="seperator"></li>
+                <li><Link to="/call-records">Call Record</Link></li>
+                <li className="seperator"></li>
                 <li><Link to="/settings">Account Settings</Link></li>
                 <li className="seperator"></li>
                 <li><button onClick={signOutHandler}>Sign out</button></li>

@@ -29,13 +29,16 @@ export function msToMinutes(time: number | null | undefined) {
 
 }
 
-export function formatDurationStringFromSeconds = (seconds: number) => {
+export const formatDurationStringFromSeconds = (ms: number) => {
 
-    const duration = Temporal.Duration.from({seconds: seconds}).round({
+    const duration = Temporal.Duration.from({milliseconds: ms})
+    .round({
         largestUnit: "years",
         smallestUnit: "minutes",
         relativeTo: Temporal.PlainDate.from("2024-01-01")
     });
+
+
 
     const durationString = duration.toLocaleString().split(',').join(' ');
     
@@ -43,7 +46,7 @@ export function formatDurationStringFromSeconds = (seconds: number) => {
     
 }
 
-export function getDateStringFromSeconds = (seconds: number) => {
+export const getDateStringFromSeconds = (seconds: number) => {
     const dateString = Temporal.Instant.fromEpochMilliseconds(seconds*1000)
         .toLocaleString("en-us", {
             dateStyle: "long",
@@ -51,4 +54,5 @@ export function getDateStringFromSeconds = (seconds: number) => {
         });
 
     return dateString;
+    // return 5;
 }

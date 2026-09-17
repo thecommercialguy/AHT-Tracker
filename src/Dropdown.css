@@ -20,8 +20,9 @@
 }
 .dropdown-menu-container-auth {
     width: 226px;
-    height: 165.66px;
-    height: 155.66px;
+    /* height: 165.66px;
+    height: 155.66px; */
+    height: 220.99px;
     
     display: flex;
     justify-content: flex-start;

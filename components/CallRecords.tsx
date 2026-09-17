@@ -2,7 +2,7 @@ import { redirect, useLoaderData } from "react-router";
 import { auth } from "../src/firebase";
 import { getCallTimeGradient } from "./Dashboard"
 import { getCallRecords } from "../loaders/callRecordLoaders"
-import { msToHours, formatDurationStringFromSeconds, getDateStringFromSeconds } from '../helpers/timeHelpers'
+import { msToHours, formatDurationStringFromSeconds, getDateStringFromSeconds, msToMinutes } from '../helpers/timeHelpers'
 
 export async function CallRecordsLoader() {
     await auth.authStateReady();
@@ -10,6 +10,9 @@ export async function CallRecordsLoader() {
     if (!user) return redirect("/login");
 
     const token = await user.getIdToken();
+    console.log(user.uid)
+
+
     const data = await getCallRecords(token);
 
     return data
@@ -20,7 +23,7 @@ export default function CallRecords() {
 
     const data = useLoaderData();
     console.log(data);
-
+    console.log(new Date(1788757200000).toISOString());
 
     return (
         <div className="call-records">
@@ -31,7 +34,7 @@ export default function CallRecords() {
             <div className="call-records-details fastest-aht">
                 <div className="time">
                     <span className="call-records-label">fastest average handle time</span>
-                    <span className="call-records-value">{msToHours(data?.averageHandleTime.ahtDuration)}</span>
+                    <span className="call-records-value">{msToMinutes(data?.averageHandleTime.ahtDuration)}</span>
                     <div className="call-time-split" style={getCallTimeGradient(data?.averageHandleTime.connectedDuration, data?.averageHandleTime.wrapupDuration)}></div>
 
                 </div>
@@ -49,7 +52,7 @@ export default function CallRecords() {
             </div>
             <div className="call-records-details">
                 <span className="call-records-label">total connected duration</span>
-                <span className="call-records-value">{formatDurationStringFromSeconds(data?.totalConnectedDuration._seconds)}</span>
+                <span className="call-records-value">{formatDurationStringFromSeconds(data?.totalConnectedDuration)}</span>
             </div>
             <div className="call-records-details">
                 <span className="call-records-label">fastest call</span>

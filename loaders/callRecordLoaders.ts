@@ -1,6 +1,7 @@
 import type { CallStats } from "../types/callTypes";
 
 export const getCallRecords = async (token: string) => {
+    
      try {
         const response = await fetch('https://getusercallrecord-tnype6eiha-uc.a.run.app', {
             headers: { Authorization: `Bearer ${token}` }
