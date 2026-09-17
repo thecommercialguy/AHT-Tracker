@@ -28,3 +28,27 @@ export function msToMinutes(time: number | null | undefined) {
     return hhmmss
 
 }
+
+export function formatDurationStringFromSeconds = (seconds: number) => {
+
+    const duration = Temporal.Duration.from({seconds: seconds}).round({
+        largestUnit: "years",
+        smallestUnit: "minutes",
+        relativeTo: Temporal.PlainDate.from("2024-01-01")
+    });
+
+    const durationString = duration.toLocaleString().split(',').join(' ');
+    
+    return durationString;
+    
+}
+
+export function getDateStringFromSeconds = (seconds: number) => {
+    const dateString = Temporal.Instant.fromEpochMilliseconds(seconds*1000)
+        .toLocaleString("en-us", {
+            dateStyle: "long",
+            timeZone: "America/Chicago"
+        });
+
+    return dateString;
+}
