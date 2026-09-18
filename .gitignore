@@ -25,6 +25,6 @@ dist-ssr
 *.sw?
 
 taskLegs.json
-agentSessions.json
+agentSession.json
 taskLegs2.json
-agentSessions2.json
+agentSession2.json
