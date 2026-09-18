@@ -24,14 +24,13 @@ export default function CallRecords() {
 
     const { data } = useLoaderData();
     console.log(data);
-    console.log(new Date(1788757200000).toISOString());
 
     return (
         <Suspense fallback={<CallRecordsSkeleton />}>
             <Await
                 resolve={data}
             >
-                <CallRecordsSkeleton />
+                <CallRecordsComponent />
             </Await>
 
         </Suspense>
