@@ -12,7 +12,6 @@ export async function CallRecordsLoader() {
     if (!user) return redirect("/login");
 
     const token = await user.getIdToken();
-    console.log(user.uid)
 
 
     const data = getCallRecords(token);
@@ -23,7 +22,6 @@ export async function CallRecordsLoader() {
 export default function CallRecords() {
 
     const { data } = useLoaderData();
-    console.log(data);
 
     return (
         <Suspense fallback={<CallRecordsSkeleton />}>
@@ -39,8 +37,6 @@ export default function CallRecords() {
 
 export function CallRecordsComponent() {
     const data = useAsyncValue();
-    console.log(data);
-    console.log(new Date(1788757200000).toISOString());
 
     return (
         <div className="call-records">
@@ -90,10 +86,7 @@ const SKEL_TRANSITION_DURATION = 1.3;
 export function CallRecordsSkeleton() {
     return (
          <div className="call-records">
-
             <h1 className="call-records-header">Call Record</h1>
-
-         
             <div className="call-records-details fastest-aht">
                 <div className="time">
                     <motion.span 
@@ -208,7 +201,7 @@ export function CallRecordsSkeleton() {
                     <motion.span 
                         className="session-details"
                         style={{
-                            width: "224px", 
+                            width: "178px", 
                             height: "18px",
                             overflow: "clip",
                             backgroundAttachment: "fixed",
@@ -406,7 +399,6 @@ export function CallRecordsSkeleton() {
                         }}
                 ></motion.span>
             </div>
-     
         </div>
     )
 }
