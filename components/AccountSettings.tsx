@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { getAuth, deleteUser } from "firebase/auth";
 import { useAuth } from "../context/authContext";
+import { validateAgentPhoneNumber, validateWebexId } from "../helpers/formHelpers";
 
 
 export async function AccountSettingLoader() {
@@ -194,7 +195,16 @@ export default function AccountSettings() {
                         {...register(
                             "webexId", 
                             { 
-                                required: false
+                                required: false,
+                                validate: async (v, f) => {
+                                    if (!v) return true;
+                                    try {
+                                        const isValid = await validateWebexId(v);
+                                        return isValid || 'webex id not found'
+                                    } catch (e) {
+                                        return e.message
+                                    }
+                                }
                             }
 
                         )} 
@@ -214,6 +224,14 @@ export default function AccountSettings() {
                                 pattern: {
                                     value: /^\+\d+$/,
                                     message: "webex phone number invalid"
+                                },
+                                validate: async (v, f) => {
+                                    try {
+                                        const isValid = await validateAgentPhoneNumber(v);
+                                        return isValid || 'agent phone number not found'
+                                    } catch (e) {
+                                        return e.message
+                                    }
                                 }
                             }
 

@@ -107,7 +107,7 @@ export default function SignUp() {
                         type="text" 
                         id="webexId" 
                         name="webexId" 
-                        placeholder="webex id"
+                        placeholder="webex id (not required)"
                         className={errors?.webexId ? 'input-error' : ''} 
                         {...register(
                             "webexId", 
