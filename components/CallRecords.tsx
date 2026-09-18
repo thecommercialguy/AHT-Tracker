@@ -1,8 +1,10 @@
-import { redirect, useLoaderData } from "react-router";
+import { Suspense } from "react";
+import { redirect, useLoaderData, useRevalidator, Await, useAsyncValue } from "react-router";
 import { auth } from "../src/firebase";
 import { getCallTimeGradient } from "./Dashboard"
 import { getCallRecords } from "../loaders/callRecordLoaders"
 import { msToHours, formatDurationStringFromSeconds, getDateStringFromSeconds, msToMinutes } from '../helpers/timeHelpers'
+import { motion } from "motion/react";
 
 export async function CallRecordsLoader() {
     await auth.authStateReady();
@@ -13,15 +15,31 @@ export async function CallRecordsLoader() {
     console.log(user.uid)
 
 
-    const data = await getCallRecords(token);
+    const data = getCallRecords(token);
 
-    return data
+    return { data }
 }
-
 
 export default function CallRecords() {
 
-    const data = useLoaderData();
+    const { data } = useLoaderData();
+    console.log(data);
+    console.log(new Date(1788757200000).toISOString());
+
+    return (
+        <Suspense fallback={<CallRecordsSkeleton />}>
+            <Await
+                resolve={data}
+            >
+                <CallRecordsComponent />
+            </Await>
+
+        </Suspense>
+    )
+}
+
+export default function CallRecordsComponent() {
+    const data = useAsyncValue();
     console.log(data);
     console.log(new Date(1788757200000).toISOString());
 
@@ -41,7 +59,7 @@ export default function CallRecords() {
                 <div className="details">
                     <span className="session-details"><span className="session-details-value">{data?.averageHandleTime.connectedCount}</span> calls</span>
                     <span className="session-details"><span className="session-details-value">{msToHours(data?.averageHandleTime.connectedDuration)}</span> connected duration</span>
-                    <span className="session-details"><span className="session-details-value">{msToHours(data?.averageHandleTime.wrapupDuration)}</span> wrap-up duration</span>
+                    <span className="session-details"><span className="session-details-value">{msToHours(data?.averageHandleTime.wrapupDuration)}</span> wrap up duration</span>
                     <span className="session-details">{getDateStringFromSeconds(data?.averageHandleTime.date._seconds)}</span>
                 </div>
             </div>
@@ -61,6 +79,302 @@ export default function CallRecords() {
             <div className="call-records-details">
                 <span className="call-records-label">longest call</span>
                 <span className="call-records-value">{msToHours(data?.longestCall.duration)}</span>
+            </div>
+     
+        </div>
+    )
+}
+
+const bgvar01 = 'linear-gradient(135deg, hsla(0, 0%, 77%, 0.75) 0%, hsla(0, 0%, 77%, 0.75) 100%'
+const SKEL_TRANSITION_DURATION = 1.3;
+
+export default function CallRecordsSkeleton() {
+    return (
+         <div className="call-records">
+
+            <h1 className="call-records-header">Call Record</h1>
+
+         
+            <div className="call-records-details fastest-aht">
+                <div className="time">
+                    <motion.span 
+                        className="call-records-label"
+                        style={{
+                            width: "248px",
+                            height: "28px",
+                            overflow: "clip",
+                            backgroundAttatchment: "fixed",
+                            backgroundImage: bgvar01,
+                            backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                        }}
+                        animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                    ></span>
+                    <motion.span 
+                        className="call-records-value"
+                        style={{
+                            width: "97px", 
+                            height: "28px",
+                            overflow: "clip",
+                            backgroundAttatchment: "fixed",
+                            backgroundImage: bgvar01,
+                            backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                        }}
+                        animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                    ></span>
+                    <div className="call-time-split" style={getCallTimeGradient(100, 20)}></div>
+
+                </div>
+                <div className="details">
+                    <motion.span 
+                        className="session-details"
+                        style={{
+                            width: "69px", 
+                            height: "28px",
+                            overflow: "clip",
+                            backgroundAttatchment: "fixed",
+                            backgroundImage: bgvar01,
+                            backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                        }}
+                        animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                    ></motion.span>
+                    <motion.span 
+                        className="session-details"
+                        style={{
+                            width: "232px", 
+                            height: "28px",
+                            overflow: "clip",
+                            backgroundAttatchment: "fixed",
+                            backgroundImage: bgvar01,
+                            backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                        }}
+                        animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                    ></motion.span>
+                    <motion.span 
+                        className="session-details"
+                        style={{
+                            width: "224px", 
+                            height: "28px",
+                            overflow: "clip",
+                            backgroundAttatchment: "fixed",
+                            backgroundImage: bgvar01,
+                            backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                        }}
+                        animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                    ></motion.span>
+                    <motion.span 
+                        className="session-details"
+                    ></motion.span>
+                </div>
+            </div>
+            <div className="call-records-details">
+                <motion.span 
+                    className="call-records-label"
+                    style={{
+                        width: "87px", 
+                        height: "28px",
+                        overflow: "clip",
+                        backgroundAttatchment: "fixed",
+                        backgroundImage: bgvar01,
+                        backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                    }}
+                    animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                ></motion.span>
+                <motion.span 
+                    className="call-records-value"
+                    style={{
+                        width: "45px", 
+                        height: "28px",
+                        overflow: "clip",
+                        backgroundAttatchment: "fixed",
+                        backgroundImage: bgvar01,
+                        backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                    }}
+                    animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                ></motion.span>
+
+            </div>
+            <div className="call-records-details">
+                <motion.span 
+                    className="call-records-label"
+                    style={{
+                        width: "222px", 
+                        height: "28px",
+                        overflow: "clip",
+                        backgroundAttatchment: "fixed",
+                        backgroundImage: bgvar01,
+                        backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                    }}
+                    animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                ></motion.span>
+                <motion.span 
+                    className="call-records-value"
+                    style={{
+                        width: "168px", 
+                        height: "28px",
+                        overflow: "clip",
+                        backgroundAttatchment: "fixed",
+                        backgroundImage: bgvar01,
+                        backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                    }}
+                    animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                ></motion.span>
+            </div>
+            <div className="call-records-details">
+                <motion.span 
+                    className="call-records-label"
+                    style={{
+                        width: "97px", 
+                        height: "28px",
+                        overflow: "clip",
+                        backgroundAttatchment: "fixed",
+                        backgroundImage: bgvar01,
+                        backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                    }}
+                    animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                ></motion.span>
+                <motion.span 
+                    className="call-records-value"
+                    style={{
+                        width: "77px", 
+                        height: "28px",
+                        overflow: "clip",
+                        backgroundAttatchment: "fixed",
+                        backgroundImage: bgvar01,
+                        backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                    }}
+                    animate={{
+                        backgroundPosition: ["0 0", "100vw 0"]
+                    }}
+                    transition={{
+                        duration: SKEL_TRANSITION_DURATION,
+                        repeat: Infinity,
+                        ease: "linear"
+                    }}
+                ></motion.span>
+            </div>
+            <div className="call-records-details">
+                <motion.span 
+                    className="call-records-label"
+                    style={{
+                        width: "102px", 
+                        height: "28px",
+                        overflow: "clip",
+                        backgroundAttatchment: "fixed",
+                        backgroundImage: bgvar01,
+                        backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                    }}
+                    animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                    
+                ></motion.span>
+                <motion.span 
+                    className="call-records-value"
+                    style={{
+                        width: "77px", 
+                        height: "28px",
+                        overflow: "clip",
+                        backgroundAttatchment: "fixed",
+                        backgroundImage: bgvar01,
+                        backgroundOrigin: "0% 0%",
+                        backgroundSize: "100vw 100%"
+                    }}
+                    animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                ></motion.span>
             </div>
      
         </div>

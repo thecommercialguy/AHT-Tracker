@@ -211,8 +211,7 @@ function DashboardSkeleton() {
                         // backgroundSize: '53.472222222vw 590px',
                         backgroundImage: bgvar05,
                         backgroundAttachment: 'fixed',
-                        backgroundOrigin: "0% 0%"
-            
+                        backgroundOrigin: "0% 0%",            
 
                     }}
                     // initial={{backgroundImage: 'linear-gradient(to right, hsla(0, 100.00%, 50%, 0.75), hsla(0, 0%, 100%, .85) 0%, hsla(0, 0%, 100%, .85) 5%, hsla(0, 100%, 50%, .75) 110%)'}}
