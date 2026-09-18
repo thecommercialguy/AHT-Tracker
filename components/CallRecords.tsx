@@ -31,14 +31,14 @@ export default function CallRecords() {
             <Await
                 resolve={data}
             >
-                <CallRecordsComponent />
+                <CallRecordsSkeleton />
             </Await>
 
         </Suspense>
     )
 }
 
-export default function CallRecordsComponent() {
+export function CallRecordsComponent() {
     const data = useAsyncValue();
     console.log(data);
     console.log(new Date(1788757200000).toISOString());
@@ -85,10 +85,10 @@ export default function CallRecordsComponent() {
     )
 }
 
-const bgvar01 = 'linear-gradient(135deg, hsla(0, 0%, 77%, 0.75) 0%, hsla(0, 0%, 77%, 0.75) 100%'
+const bgvar01 = 'linear-gradient(90deg, hsla(255, 10%, 50%, 0.35) 25%, hsla(0, 0%, 100%, 0.35) 75%, hsla(255, 10%, 50%, 0.35) 100%'
 const SKEL_TRANSITION_DURATION = 1.3;
 
-export default function CallRecordsSkeleton() {
+export function CallRecordsSkeleton() {
     return (
          <div className="call-records">
 
@@ -101,12 +101,13 @@ export default function CallRecordsSkeleton() {
                         className="call-records-label"
                         style={{
                             width: "248px",
-                            height: "28px",
+                            height: "26px",
                             overflow: "clip",
-                            backgroundAttatchment: "fixed",
+                            backgroundAttachment: "fixed",
                             backgroundImage: bgvar01,
                             backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                            backgroundSize: "100vw 100%",
+                            borderRadius: "4px"
                         }}
                         animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -116,17 +117,18 @@ export default function CallRecordsSkeleton() {
                             repeat: Infinity,
                             ease: "linear"
                         }}
-                    ></span>
+                    ></motion.span>
                     <motion.span 
                         className="call-records-value"
                         style={{
                             width: "97px", 
-                            height: "28px",
+                            height: "26px",
                             overflow: "clip",
-                            backgroundAttatchment: "fixed",
+                            backgroundAttachment: "fixed",
                             backgroundImage: bgvar01,
                             backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                            backgroundSize: "100vw 100%",
+                            borderRadius: "4px"
                         }}
                         animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -136,7 +138,7 @@ export default function CallRecordsSkeleton() {
                             repeat: Infinity,
                             ease: "linear"
                         }}
-                    ></span>
+                    ></motion.span>
                     <div className="call-time-split" style={getCallTimeGradient(100, 20)}></div>
 
                 </div>
@@ -145,12 +147,13 @@ export default function CallRecordsSkeleton() {
                         className="session-details"
                         style={{
                             width: "69px", 
-                            height: "28px",
+                            height: "18px",
                             overflow: "clip",
-                            backgroundAttatchment: "fixed",
+                            backgroundAttachment: "fixed",
                             backgroundImage: bgvar01,
                             backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                            backgroundSize: "100vw 100%",
+                            borderRadius: "4px"
                         }}
                         animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -165,12 +168,13 @@ export default function CallRecordsSkeleton() {
                         className="session-details"
                         style={{
                             width: "232px", 
-                            height: "28px",
+                            height: "18px",
                             overflow: "clip",
-                            backgroundAttatchment: "fixed",
+                            backgroundAttachment: "fixed",
                             backgroundImage: bgvar01,
                             backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                            backgroundSize: "100vw 100%",
+                            borderRadius: "4px"
                         }}
                         animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -185,12 +189,13 @@ export default function CallRecordsSkeleton() {
                         className="session-details"
                         style={{
                             width: "224px", 
-                            height: "28px",
+                            height: "18px",
                             overflow: "clip",
-                            backgroundAttatchment: "fixed",
+                            backgroundAttachment: "fixed",
                             backgroundImage: bgvar01,
                             backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                            backgroundSize: "100vw 100%",
+                            borderRadius: "4px"
                         }}
                         animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -203,6 +208,24 @@ export default function CallRecordsSkeleton() {
                     ></motion.span>
                     <motion.span 
                         className="session-details"
+                        style={{
+                            width: "224px", 
+                            height: "18px",
+                            overflow: "clip",
+                            backgroundAttachment: "fixed",
+                            backgroundImage: bgvar01,
+                            backgroundOrigin: "0% 0%",
+                            backgroundSize: "100vw 100%",
+                            borderRadius: "4px"
+                        }}
+                        animate={{
+                            backgroundPosition: ["0 0", "100vw 0"]
+                        }}
+                        transition={{
+                            duration: SKEL_TRANSITION_DURATION,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
                     ></motion.span>
                 </div>
             </div>
@@ -211,12 +234,13 @@ export default function CallRecordsSkeleton() {
                     className="call-records-label"
                     style={{
                         width: "87px", 
-                        height: "28px",
+                        height: "26px",
                         overflow: "clip",
-                        backgroundAttatchment: "fixed",
+                        backgroundAttachment: "fixed",
                         backgroundImage: bgvar01,
                         backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                        backgroundSize: "100vw 100%",
+                        borderRadius: "4px"
                     }}
                     animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -231,12 +255,13 @@ export default function CallRecordsSkeleton() {
                     className="call-records-value"
                     style={{
                         width: "45px", 
-                        height: "28px",
+                        height: "26px",
                         overflow: "clip",
-                        backgroundAttatchment: "fixed",
+                        backgroundAttachment: "fixed",
                         backgroundImage: bgvar01,
                         backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                        backgroundSize: "100vw 100%",
+                        borderRadius: "4px"
                     }}
                     animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -254,12 +279,13 @@ export default function CallRecordsSkeleton() {
                     className="call-records-label"
                     style={{
                         width: "222px", 
-                        height: "28px",
+                        height: "26px",
                         overflow: "clip",
-                        backgroundAttatchment: "fixed",
+                        backgroundAttachment: "fixed",
                         backgroundImage: bgvar01,
                         backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                        backgroundSize: "100vw 100%",
+                        borderRadius: "4px"
                     }}
                     animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -274,12 +300,13 @@ export default function CallRecordsSkeleton() {
                     className="call-records-value"
                     style={{
                         width: "168px", 
-                        height: "28px",
+                        height: "26px",
                         overflow: "clip",
-                        backgroundAttatchment: "fixed",
+                        backgroundAttachment: "fixed",
                         backgroundImage: bgvar01,
                         backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                        backgroundSize: "100vw 100%",
+                        borderRadius: "4px"
                     }}
                     animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -296,12 +323,13 @@ export default function CallRecordsSkeleton() {
                     className="call-records-label"
                     style={{
                         width: "97px", 
-                        height: "28px",
+                        height: "26px",
                         overflow: "clip",
-                        backgroundAttatchment: "fixed",
+                        backgroundAttachment: "fixed",
                         backgroundImage: bgvar01,
                         backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                        backgroundSize: "100vw 100%",
+                        borderRadius: "4px"
                     }}
                     animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -316,12 +344,13 @@ export default function CallRecordsSkeleton() {
                     className="call-records-value"
                     style={{
                         width: "77px", 
-                        height: "28px",
+                        height: "26px",
                         overflow: "clip",
-                        backgroundAttatchment: "fixed",
+                        backgroundAttachment: "fixed",
                         backgroundImage: bgvar01,
                         backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                        backgroundSize: "100vw 100%",
+                        borderRadius: "4px"
                     }}
                     animate={{
                         backgroundPosition: ["0 0", "100vw 0"]
@@ -338,12 +367,13 @@ export default function CallRecordsSkeleton() {
                     className="call-records-label"
                     style={{
                         width: "102px", 
-                        height: "28px",
+                        height: "26px",
                         overflow: "clip",
-                        backgroundAttatchment: "fixed",
+                        backgroundAttachment: "fixed",
                         backgroundImage: bgvar01,
                         backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                        backgroundSize: "100vw 100%",
+                        borderRadius: "4px"
                     }}
                     animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
@@ -359,12 +389,13 @@ export default function CallRecordsSkeleton() {
                     className="call-records-value"
                     style={{
                         width: "77px", 
-                        height: "28px",
+                        height: "26px",
                         overflow: "clip",
-                        backgroundAttatchment: "fixed",
+                        backgroundAttachment: "fixed",
                         backgroundImage: bgvar01,
                         backgroundOrigin: "0% 0%",
-                        backgroundSize: "100vw 100%"
+                        backgroundSize: "100vw 100%",
+                        borderRadius: "4px"
                     }}
                     animate={{
                             backgroundPosition: ["0 0", "100vw 0"]
