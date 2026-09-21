@@ -34,13 +34,12 @@ export default function Login() {
     }, [fetcher.data, user])
 
     const disabled = fetcher.state === 'submitting' || fetcher.state === 'loading';
-    console.log(fetcher.data?.error)
-    
+    console.log(errors)
 
     return (
         <div className="login-form-container">
             <h1 className="form-heading">Welcome back!</h1>
-            {fetcher.data?.error && <div className="error sign-in">
+            {(errors?.password || errors?.email || fetcher.data?.error) && <div className="error sign-in">
                 <span>Login information incorrect.</span>
             </div>}
             <form className="login-form" method="POST" noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -88,7 +87,21 @@ export default function Login() {
                         )} 
                     />
                 </div>
-                <button type="submit" disabled={disabled}>{fetcher.state !== 'loading' ? 'Login' : 
+                <motion.button 
+                    type="submit" 
+                    disabled={disabled}
+                    whileHover={{
+                        opacity: .8,
+                    }}
+                    whileTap={{
+                        scale: .95
+                    }}
+                    transition={{
+                        scale: { duration: .15, ease: 'easeIn'},
+                        borderRadius: { duration: .15 }
+                    }}
+                >
+                    {fetcher.state !== 'loading' ? 'Login' : 
                     <motion.div
                         animate={{rotate: 360}}
                         transition={{
@@ -105,7 +118,7 @@ export default function Login() {
                         <LoaderCircle size={24} />
                     </motion.div>
                 }
-                </button>
+                </motion.button>
             </form>
 
         </div>

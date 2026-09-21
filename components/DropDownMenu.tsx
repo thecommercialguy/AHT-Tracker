@@ -1,11 +1,18 @@
 import { Link, useNavigate } from "react-router";
-import { motion } from 'motion/react';
+import { motion, type TargetAndTransition } from 'motion/react';
 import { auth } from "../src/firebase";
 import { signOut } from "firebase/auth";
 
 interface DropDownProps {
     toggleMenu: () => void;
 }
+
+const menuWhileHover = {
+    backgroundColor: '#262626'
+} as TargetAndTransition;
+const menuWhileTap = {
+    backgroundColor: '#1A1A1A'
+} as TargetAndTransition;
 
 export function AuthDropdownMenu({toggleMenu}: DropDownProps) {
     const navigate = useNavigate();
@@ -41,13 +48,25 @@ export function AuthDropdownMenu({toggleMenu}: DropDownProps) {
             onClick={toggleMenu}
         >
             <ul className="dropdown-menu">
-                <li><Link to="/dashboard">Dashboard</Link></li>
+                <motion.li
+                    whileHover={menuWhileHover}
+                    whileTap={menuWhileTap}
+                ><Link to="/dashboard">Dashboard</Link></motion.li>
                 <li className="seperator"></li>
-                <li><Link to="/call-records">Call Record</Link></li>
+                <motion.li
+                    whileHover={menuWhileHover}
+                    whileTap={menuWhileTap}
+                ><Link to="/call-records">Call Record</Link></motion.li>
                 <li className="seperator"></li>
-                <li><Link to="/settings">Account Settings</Link></li>
+                <motion.li
+                    whileHover={menuWhileHover}
+                    whileTap={menuWhileTap}
+                ><Link to="/settings">Account Settings</Link></motion.li>
                 <li className="seperator"></li>
-                <li><button onClick={signOutHandler}>Sign out</button></li>
+                <motion.li
+                    whileHover={menuWhileHover}
+                    whileTap={menuWhileTap}
+                ><button onClick={signOutHandler}>Sign out</button></motion.li>
             </ul>
         </motion.div>
     );
@@ -79,9 +98,17 @@ export function DropdownMenu({toggleMenu}: DropDownProps) {
             onClick={toggleMenu}
         >
             <ul className="dropdown-menu">
-                <li><Link to="/login">Login</Link></li>
+                <motion.li
+                    whileHover={{
+                        backgroundColor: '#262626'
+                    }}
+                    whileTap={menuWhileTap}
+                ><Link to="/login">Login</Link></motion.li>
                  <li className="seperator"></li>
-                <li><Link to="/signup">Sign up</Link></li>
+                <motion.li
+                    whileHover={menuWhileHover}
+                    whileTap={menuWhileTap}
+                ><Link to="/signup">Sign up</Link></motion.li>
             </ul>
         </motion.div>
     )

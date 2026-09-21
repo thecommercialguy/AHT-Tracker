@@ -7,6 +7,8 @@ import { type UserCredential } from "firebase/auth";
 import { useEffect } from "react";
 import { useAuth } from "../context/authContext.tsx";
 import { validateAgentPhoneNumber, validateWebexId } from "../helpers/formHelpers.ts";
+import { LoaderCircle } from "lucide-react";
+import { motion } from "motion/react";
 
 
 export function signUpLoader() {
@@ -24,9 +26,9 @@ export default function SignUp() {
     const onSubmit: SubmitHandler<SignUpFields> = (data) => {
         fetcher.submit({...data}, {method: "POST", action: '/signup'})
     }
-    const {user, initializing} = useAuth();
+    const { user, initializing } = useAuth();
 
-    const disabled = false;
+    const disabled = fetcher.state === 'submitting' || fetcher.state === 'loading';
 
     useEffect(() => {
         if (user) navigate("/dashboard");
@@ -281,7 +283,38 @@ export default function SignUp() {
                     />
                     {errors.passwordVerified && <p>{errors.passwordVerified?.message}</p>}
                 </div>
-                <button type="submit" disabled={disabled}>Sign Up</button>
+                <motion.button 
+                    type="submit" 
+                    disabled={disabled}
+                    whileHover={{
+                        background: 'linear-gradient(to bottom, #FF7B00 -50%, #FF0000)',
+                    }}
+                    whileTap={{
+                        scale: .95
+                    }}
+                    transition={{
+                        scale: { duration: .15, ease: 'easeIn'},
+                        borderRadius: { duration: .15 }
+                    }}
+                >
+                    {fetcher.state !== 'loading' ? 'Sign up' : 
+                    <motion.div
+                        animate={{rotate: 360}}
+                        transition={{
+                            duration: 1,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                        style={{
+                            display: "flex",
+                            alignItems: "center", 
+                            justifyContent: "center",
+                        }}
+                    >
+                        <LoaderCircle size={24} />
+                    </motion.div>
+                }
+                </motion.button>
             </form>
 
         </div>

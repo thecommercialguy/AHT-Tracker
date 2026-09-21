@@ -58,10 +58,16 @@
 }
 
 .dropdown-menu li {
-    height: 55px;
+    box-sizing: border-box;
+    height: 51px;
+    width: 222px;
+    border-radius: 8px;
+    /* padding:4px; */
+    margin-block: 2px;
     display: flex;
     justify-content: center;
     align-items: center;
+    /* width: 100%; */
     
 }
 
@@ -77,8 +83,9 @@
 
 .dropdown-menu li.seperator {
     height: .8px;
+    padding: 0;
     width: 210px;
-
+    margin: 0;
     background-color: #25272D;
 }
 

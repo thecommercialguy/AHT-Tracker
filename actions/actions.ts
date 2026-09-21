@@ -23,13 +23,10 @@ export async function signUpAction({ request }: ActionFunctionArgs) {
 
     const userCredential = await createUserAuth(signUpFields.email, signUpFields.password);
     if (userCredential.error != null) {
-        // error will go here
-        console.log('error creating user')
         return userCredential;
     }
 
     const uid = userCredential.data.user.uid;
-    // console.log(tempUser)
 
 
     await setDoc(doc(db, "users", uid), {
@@ -57,7 +54,6 @@ export async function loginAction({ request }: ActionFunctionArgs) {
         password: formData.get('password'),
     } as LoginFields;
 
-    console.log('this far')
     const userCredential = await loginUserAuth(loginFields.email, loginFields.password);
     console.log(userCredential)
     if (userCredential.error) {
@@ -82,16 +78,12 @@ export async function accountSettingsAction({ request }: ActionFunctionArgs) {
         password: formData.get('password'),
     } as UserUpdateFields;
 
-    // const originalUser = formData.get('originalData')
 
     const user = auth.currentUser;
     const uid = user.uid;
 
-    console.log(userUpdateFields);
     let isEmailUpdated = false;
 
-    // update on auth
-    // updating password
     if (userUpdateFields.password) {
         try {
             await updatePassword(user, userUpdateFields.password);
@@ -119,7 +111,6 @@ export async function accountSettingsAction({ request }: ActionFunctionArgs) {
         }
     }
 
-    // update on document (firestore)
     try {
         const userDocRef = doc(db, "users", uid);
 

@@ -146,7 +146,6 @@ export const getAgentSession = async () => {
     // const currInstant = new Date(currInstantMS);
     // const currInstantIso = currInstant.toISOString();
 
-    // console.log([currInstantMS, currInstant, currInstantIso])
     
 
     // // const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' }); // "2026-08-10"
@@ -156,7 +155,6 @@ export const getAgentSession = async () => {
     // const currDateMS = currDate.getTime() - (6 * 60 * 60 * 1000);
     // const currDate2 = new Date(currDateMS);
 
-    // console.log([currDateSlice, currDate, currDateMS, currDate2])
 
     // const to = currInstantMS;
     // const from = currDateMS;
@@ -273,15 +271,6 @@ export const getTaskLegs = async () => {
 
 
    return taskLegsSorted
-    // queryData.agentSession.agentSessions[0].channelInfo[0]
-
-    // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0]);
-    // console.log('Call Logs:', queryData.data.agentSession.agentSessions[0].channelInfo[0]);
-    
-    // const channelInfo = queryData.data.agentSession.agentSessions[0].channelInfo[0] as ChannelInfoResponse;
-    // return queryData
-    // console.log('Call Logs:', channelInfo);
-    // return channelInfo;
 }
 
 

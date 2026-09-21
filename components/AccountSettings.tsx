@@ -14,12 +14,10 @@ import { validateAgentPhoneNumber, validateWebexId } from "../helpers/formHelper
 export async function AccountSettingLoader() {
     await auth.authStateReady();
     const uid = auth.currentUser?.uid;
-    console.log(':::::::::')
     if (!uid) return redirect('/login');
 
     try {
         const snap = await getDoc(doc(db, "users", uid));
-        // console.log(snap.data())
 
         return snap.data() as UserData;
 
@@ -27,13 +25,11 @@ export async function AccountSettingLoader() {
         console.log(error)
     }
 
-    // console.log(snap)
 
 } 
 
 export default function AccountSettings() {
     const data = useLoaderData();
-    // console.log(data)
     const fetcher = useFetcher<typeof accountSettingsAction>();
     const { user, initializing } = useAuth();
     const [isModalActive, setIsModalActive] = useState<boolean>(false);
@@ -69,7 +65,6 @@ export default function AccountSettings() {
             toDiff.email == original.email &&
             !formData.password
         ) {
-            console.log('No submit')
             return;
         }
         
@@ -259,8 +254,32 @@ export default function AccountSettings() {
                     />
                 </div>
                 <div className="submit-container">
-                    <button className="submit" type="submit">Save changes</button>
-                    <button onClick={toggleModal} className="delete">delete account?</button>
+                    <motion.button 
+                    className="submit" 
+                    type="submit"
+                     whileHover={{
+                        opacity: .8,
+                    }}
+                    whileTap={{
+                        scale: .95
+                    }}
+                    transition={{
+                        scale: { duration: .15, ease: 'easeIn'},
+                        borderRadius: { duration: .15 }
+                    }}>Save changes</motion.button>
+                    <motion.button 
+                    onClick={toggleModal} 
+                        whileHover={{
+                    opacity: .8,
+                    }}
+                    whileTap={{
+                        scale: .95
+                    }}
+                    transition={{
+                        scale: { duration: .15, ease: 'easeIn'},
+                        borderRadius: { duration: .15 }
+                    }}
+                    className="delete">delete account?</motion.button>
                 </div>
             </form>
             <AnimatePresence>

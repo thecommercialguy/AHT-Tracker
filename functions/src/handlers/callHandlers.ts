@@ -14,7 +14,7 @@ export const getUserDashboard = onRequest(
     {   
         cors: true,
         region: "us-central1", 
-        timeoutSeconds: 1200,
+        timeoutSeconds: 60,
     },
     async (req, res) => {
         try {
@@ -51,9 +51,7 @@ export const getUserDashboard = onRequest(
             const currInstantMS = Date.now();
             const currInstant = new Date(currInstantMS);
             const currInstantHours = currInstant.getUTCHours();
-            const currInstantIso = currInstant.toUTCString();
-            console.log([currInstantMS, currInstant, currInstantHours, currInstantIso]);
-            
+            const currInstantIso = currInstant.toUTCString();            
             
             const currDateSlice = currInstantIso.slice(0, -12);
             const currDate = new Date(currDateSlice);
@@ -62,15 +60,12 @@ export const getUserDashboard = onRequest(
                 currDateMS -= (19 * 60 * 60 * 1000);
             } else {
                 currDateMS += (5 * 60 * 60 * 1000)
-            }
-            console.log([currDateSlice, currDate, currDateMS])
-    
+            }    
             const from = currDateMS;
             const to = currInstantMS;
 
     
-            let taskLegResponse;
-            
+            let taskLegResponse;   
             try {
                 taskLegResponse = await getTaskLegsByPhoneNumber({from: from, to: to, phoneNumber: phoneNumber});
     
@@ -81,7 +76,6 @@ export const getUserDashboard = onRequest(
             
     
             let agentSessionResponse;
-    
             try {
                 agentSessionResponse = await getAgentSessionsByPhoneNumber({from: from, to: to, phoneNumber: phoneNumber});
     
@@ -123,21 +117,10 @@ export const getUserDashboard = onRequest(
             const callsRef = db.collection('users').doc(uid).collection('calls')
     
             const currCalls = await callsRef.where('createdTime', '>', from).orderBy('createdTime', 'desc').get();
-    
-            if (currCalls.size == taskLegResponse.length) {
-                // Call collection is up to date
-                const data = formatDashboardData(agentSessionResponse, taskLegResponse)
-                res.status(200).json({
-                    ...data,
-                    firstName: firstName,
-                    lastName: lastName
-                });
-                return;
-            }
-    
-            // New calls can be added
+            const ids = currCalls.docs.map(doc => doc.get("callId"));
             const taskLegBatch = db.batch();
-            taskLegResponse.slice(0, taskLegResponse.length - currCalls.size).forEach((item: any) => {
+            taskLegResponse.forEach((item: any) => {
+                if (ids.includes(item.id)) return;
                 const taskLeg =  {
                     callId: item.id,
                     createdTime: item.createdTime,
@@ -146,11 +129,40 @@ export const getUserDashboard = onRequest(
                     isOutdial: item.isOutdial,
                 };
     
-                const docRef = callsRef.doc();
-                taskLegBatch.set(docRef, { ...taskLeg, createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp()});
+                // const docRef = callsRef.doc();
+                taskLegBatch.set(callsRef.doc(item.id), { ...taskLeg, createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp()}, {merge:true});
     
             });
             await taskLegBatch.commit();
+            
+    
+            // if (currCalls.size == taskLegResponse.length) {
+            //     // Call collection is up to date
+            //     const data = formatDashboardData(agentSessionResponse, taskLegResponse)
+            //     res.status(200).json({
+            //         ...data,
+            //         firstName: firstName,
+            //         lastName: lastName
+            //     });
+            //     return;
+            // }
+    
+            // New calls can be added
+            // const taskLegBatch = db.batch();
+            // taskLegResponse.slice(0, taskLegResponse.length - currCalls.size).forEach((item: any) => {
+            //     const taskLeg =  {
+            //         callId: item.id,
+            //         createdTime: item.createdTime,
+            //         connectedDuration: item.connectedDuration,
+            //         wrapupDuration: item.wrapupDuration,
+            //         isOutdial: item.isOutdial,
+            //     };
+    
+            //     const docRef = callsRef.doc();
+            //     taskLegBatch.set(docRef, { ...taskLeg, createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp()});
+    
+            // });
+            // await taskLegBatch.commit();
 
             const dashboardData: DashboardData = formatDashboardData(agentSessionResponse, taskLegResponse);
     
@@ -219,8 +231,12 @@ export const getUserCallRecord = onRequest(
                 const sessionB = b.data();
                 const averageA = (sessionA.connectedDuration + sessionA.wrapupDuration) / sessionA.connectedCount;
                 const averageB = (sessionB.connectedDuration + sessionB.wrapupDuration) / sessionB.connectedCount;
+                console.log(averageA)
+                console.log(averageB)
 
-                return averageA > averageB ? a : b;
+
+                // return averageA > averageB ? a : b;
+                return averageA - averageB
             })[0].data();
             
 
@@ -265,7 +281,7 @@ export const getUserCallRecord = onRequest(
                 totalConnectedDuration: totalConnectedTimeFull,
                 averageHandleTime: {
                     ahtDuration: Math.floor((fastestSession.connectedDuration + fastestSession.wrapupDuration) / fastestSession.connectedCount),
-                    duration: fastestSession.connectedDuration + fastestSession.connectedDuration,
+                    duration: fastestSession.connectedDuration + fastestSession.wrapupDuration,
                     connectedDuration: fastestSession.connectedDuration,
                     wrapupDuration: fastestSession.wrapupDuration,
                     connectedCount: fastestSession.connectedCount,

@@ -1,32 +1,22 @@
-# React + TypeScript + Vite
+# AHT Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+AHT Tracker lets help desk agents track their call data for the day at a glance.
 
-Currently, two official plugins are available:
+The dashboard lets agents see pertinant session metrics inlcuding:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Average Handle Time
+- Most Recent Call Time
+- Connected Duration
+- Connected Count
+- Fastest Call
+- Slowest call 
+- Total Calls
 
-## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+"Call History" gives agents access to historical call statistics. Exposing metrics like fastest average handle time, total inbound calls taken, and more. 
 
-## Expanding the Oxlint configuration
+Call data is sources from the Webex Search API. When a user access thier dashboard a cloud function transforms, stores, and structures their most recent call data to viewed in the dashboard.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+The "raw" data from the Webex Search API is transformed into types objects that are more well suited for an agent's dashboard and Call History.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Firebase auth and firestore are used so agent's can build a log of their calls and see historical data at the click of a button. 

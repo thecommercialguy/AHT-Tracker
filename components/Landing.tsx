@@ -9,21 +9,6 @@ export default function Landing() {
     const navigate = useNavigate();
     const {user, initializing} = useAuth();
 
-    // useEffect(() => {
-    //     if (user) navigate("/dashboard");
-
-    // }, [user, initializing])
-    
-    
-    // useEffect(() => {
-    //     if (revalidator.state !== "idle") return;
-    //     const timeoutId = setTimeout(() => {
-    //         revalidator.revalidate()
-    //         console.log("effect ran, state:", revalidator.state);
-    //     }, INTERVAL);
-        
-    //     return () => clearTimeout(timeoutId)
-    // }, [revalidator.state])
 
     return (
         <main className="landing-container">
@@ -38,6 +23,7 @@ export default function Landing() {
                             scale: .95
                         }}
                         whileHover={{
+                            background: 'linear-gradient(to bottom, #FF7B00 -50%, #FF0000)',
                             scale: 1.05,
                         }}
                         transition={{
@@ -54,11 +40,13 @@ export default function Landing() {
                         whileTap={{
                             border: '1px solid #FFE600',
                             color: '#FFE600',
-                            scale: .95
+                            scale: .97
                         }}
                         whileHover={{
                             // border: ['1px solid ', '1px solid #FF7B00', '1px solid ', '1px solid red'],
-                            scale: 1.05,
+                            border: '1px solid #FFE600',
+                            color: '#FFE600',
+                            scale: 1.03,
                         }}
                         transition={{
                             ease: 'easeIn', 
@@ -72,10 +60,11 @@ export default function Landing() {
                         className="button sign-up"
                         whileTap={{
                             background: 'linear-gradient(to bottom, #FF7B00 -50%, #FF0000)',
-                            scale: .95
+                            scale: .97
                         }}
                         whileHover={{
-                            scale: 1.05,
+                            background: 'linear-gradient(to bottom, #FF7B00 -50%, #FF0000)',
+                            scale: 1.03,
                         }}
                         transition={{
                             ease: 'easeIn', 

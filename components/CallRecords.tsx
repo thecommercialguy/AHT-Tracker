@@ -48,7 +48,7 @@ export function CallRecordsComponent() {
                 <div className="time">
                     <span className="call-records-label">fastest average handle time</span>
                     <span className="call-records-value">{msToMinutes(data?.averageHandleTime.ahtDuration)}</span>
-                    <div className="call-time-split" style={getCallTimeGradient(data?.averageHandleTime.connectedDuration, data?.averageHandleTime.wrapupDuration)}></div>
+                    <div className="call-time-split" style={getCallTimeGradient(data?.averageHandleTime.connectedDuration + data?.averageHandleTime.wrapupDuration, data?.averageHandleTime.connectedDuration)}></div>
 
                 </div>
                 <div className="details">

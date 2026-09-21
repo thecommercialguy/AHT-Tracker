@@ -15,8 +15,6 @@ export async function loader() {
 
     const token = await user.getIdToken();
     const data = getUserDashboard(token);
-console.log(data instanceof Promise, 'akfpppppppp');
-    // const data = await getDashboardData();
     return { data };    
 
    
@@ -80,6 +78,7 @@ export const getCallTimeGradient = (callDuration?: number | null, connectedDurat
     if (!connectedDuration) return {} as CSSProperties;
     if (!callDuration) return {} as CSSProperties;
 
+
     
     const callPercentage = `${(connectedDuration / callDuration)*100}%`
 
@@ -91,8 +90,6 @@ export const getCallTimeGradient = (callDuration?: number | null, connectedDurat
 
 function DashboardComponent() {
     const data = useAsyncValue();
-
-    console.log(data, 'alfkjdslfj')
 
     const [dashboardData, setDashboardData] = useState<DashboardData>(data);
 

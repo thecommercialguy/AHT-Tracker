@@ -23,7 +23,7 @@ export default function Header() {
         
         return user ? <AuthDropdownMenu toggleMenu={toggleMenu} /> : <DropdownMenu toggleMenu={toggleMenu} />
     }
-    console.log(menuActive)
+
     return (
         <header className="header">
             <nav>
