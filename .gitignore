@@ -29,3 +29,4 @@ agentSession.json
 taskLegs2.json
 agentSession2.json
 .firebase/
+originalDashboardQ.ts

@@ -1,50 +1,6 @@
 import type {ChannelInfoResponse} from '../types/callTypes';
 import { NotFoundError, throwQueryError } from '../errors/errors';
 
-const taskLegQuery = `
-query TaskLegs($from: Long!, $to: Long!) {
-# Query to fetch CLR attributes for a specific queue.
-taskLegDetails(
-from: $from
-to: $to
-# Use Filter arguments to apply filter
-filter: {
-and : [
-    {isActive: {equals: false}}
-    {owner: { phoneNumber: { equals: "+14058472700" }}}
-]
-
-}
-) {
-taskLegs {
-id
-createdTime
-channelType
-connectedDuration
-wrapupDuration
-isOutdial
-queue {
-    id
-    name
-}
-owner {
-    id
-    phoneNumber
-    channelId
-    sessionId
-    signInId
-    name
-}
-entryPoint {
-    id
-    name
-}
-endedTime
-}
-}
-}
-`;
-
 const taskLegQueryByPhoneNumber = `
 query TaskLegs($from: Long!, $to: Long!, $phoneNumber: String!) {
 # Query to fetch CLR attributes for a specific queue.
@@ -84,57 +40,6 @@ entryPoint {
     name
 }
 endedTime
-}
-}
-}
-`;
-
-const agentSessionQuery = `
-query AgentSession($from: Long!, $to: Long!) {
-agentSession(from: $from, to: $to 
-filter: {
-and : [
-{
-channelInfo: {
-connectedDuration: {notequals: 0}
-connectedCount: {notequals: 0}
-channelType: {equals: "telephony"}
-agentPhoneNumber: {equals: "+14058472700"}
-#currentState: {equals: available}
-}
-}
-{agentId: {equals: "b4c5ed82-ccd0-4a09-9dd9-94535c021b47"}}
-]
-}) {
-agentSessions {
-agentSessionId
-agentId
-agentName
-userLoginId
-siteId
-siteName
-startTime
-channelInfo {
-channelId
-channelType
-connectedDuration
-postCallDuration
-connectedCount
-wrapupDuration
-notRespondedCount
-reservationCount
-totalDuration
-currentState
-agentPhoneNumber
-wordRatioCount
-ronaCount
-overallEvalScore
-outdialCount
-}
-}
-pageInfo {
-hasNextPage
-endCursor
 }
 }
 }
@@ -307,38 +212,38 @@ endCursor
 const API_KEY_WEBEX = process.env.API_KEY_WEBEX;
 const ORG_ID_WEBEX = process.env.ORG_ID_WEBEX;
 
-export const taskLegsWebexQuery = async (from: number, to: number) => {
-    const query = taskLegQuery;
-    const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${API_KEY_WEBEX}` 
-        },
-        body: JSON.stringify({ 
-            query,
-            variables: { from, to }
-        })
-    });
+// export const taskLegsWebexQuery = async (from: number, to: number) => {
+//     const query = taskLegQuery;
+//     const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
+//         method: 'POST',
+//         headers: { 
+//             'Content-Type': 'application/json',
+//             'Authorization': `Bearer ${API_KEY_WEBEX}` 
+//         },
+//         body: JSON.stringify({ 
+//             query,
+//             variables: { from, to }
+//         })
+//     });
 
-    if (!response.ok) {
-        const errorResponse = await response.json();
-        const message = errorResponse?.error?.message[0]?.description || null;
+//     if (!response.ok) {
+//         const errorResponse = await response.json();
+//         const message = errorResponse?.error?.message[0]?.description || null;
 
-        console.error('Failed to fetch call logs:', response);
-        throwQueryError(response.status, message);
-    }
+//         console.error('Failed to fetch call logs:', response);
+//         throwQueryError(response.status, message);
+//     }
 
-    const queryData = await response.json();
+//     const queryData = await response.json();
 
-    const taskLegData = queryData.data.taskLegDetails.taskLegs;
-    if (taskLegData === undefined || taskLegData === null || taskLegData.length < 1) throw new NotFoundError('No tasklegs found');
+//     const taskLegData = queryData.data.taskLegDetails.taskLegs;
+//     if (taskLegData === undefined || taskLegData === null || taskLegData.length < 1) throw new NotFoundError('No tasklegs found');
     
-    const taskLegsSorted = taskLegData.sort((a: any, b: any) => b.createdTime - a.createdTime);
-    if (taskLegsSorted === undefined || taskLegsSorted === null || taskLegsSorted.length < 1) throw new NotFoundError('No tasklegs found');
+//     const taskLegsSorted = taskLegData.sort((a: any, b: any) => b.createdTime - a.createdTime);
+//     if (taskLegsSorted === undefined || taskLegsSorted === null || taskLegsSorted.length < 1) throw new NotFoundError('No tasklegs found');
     
-    return taskLegsSorted;
-};
+//     return taskLegsSorted;
+// };
 
 interface GetTaskLegsByPhoneNumberParams {
     from: number;
@@ -379,73 +284,73 @@ export const getTaskLegsByPhoneNumber = async ({from, to, phoneNumber}:GetTaskLe
     return taskLegsSorted;
 };
 
-export const agentSessionWebexQuery = async (from: number, to: number) => {
-    const query = agentSessionQuery;
-    const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${API_KEY_WEBEX}` 
-        },
-        body: JSON.stringify({ 
-            query,
-            variables: { from, to }
-        })
-    });
+// export const agentSessionWebexQuery = async (from: number, to: number) => {
+//     const query = agentSessionQuery;
+//     const response = await fetch(`https://api.wxcc-us1.cisco.com/search?orgId=${ORG_ID_WEBEX}`, {
+//         method: 'POST',
+//         headers: { 
+//             'Content-Type': 'application/json',
+//             'Authorization': `Bearer ${API_KEY_WEBEX}` 
+//         },
+//         body: JSON.stringify({ 
+//             query,
+//             variables: { from, to }
+//         })
+//     });
 
-    if (!response.ok) {
-        const errorResponse = await response.json();
-        const message = errorResponse?.error?.message[0]?.description || null;
+//     if (!response.ok) {
+//         const errorResponse = await response.json();
+//         const message = errorResponse?.error?.message[0]?.description || null;
 
-        console.error('Failed to fetch call logs:', response);
-        throwQueryError(response.status, message);
-    }
+//         console.error('Failed to fetch call logs:', response);
+//         throwQueryError(response.status, message);
+//     }
 
-    const queryData = await response.json();
+//     const queryData = await response.json();
 
-    const agentSessions = queryData.data.agentSession.agentSessions;
+//     const agentSessions = queryData.data.agentSession.agentSessions;
 
-    if (agentSessions === null || agentSessions == undefined || agentSessions.length < 1) {
-        throw new NotFoundError("No agent sessions found");
-    }
+//     if (agentSessions === null || agentSessions == undefined || agentSessions.length < 1) {
+//         throw new NotFoundError("No agent sessions found");
+//     }
 
-    const channelInfos = agentSessions.flatMap((session: any) => {
-        if (!session.channelInfo) return [];
-        return session.channelInfo; 
-    });
+//     const channelInfos = agentSessions.flatMap((session: any) => {
+//         if (!session.channelInfo) return [];
+//         return session.channelInfo; 
+//     });
 
-    console.log(channelInfos);
+//     console.log(channelInfos);
     
-    const reduced = channelInfos.reduce((a: any, b: any) => {
-        return {
-            agentPhoneNumber: a.agentPhoneNumber,
-            channelId: a.channelId,
-            channelType: "telephony",
-            connectedCount: a.connectedCount + b.connectedCount,
-            connectedDuration: a.connectedDuration + b.connectedDuration,
-            currentState: a.currentState,
-            notRespondedCount: a.notRespondedCount + b.notRespondedCount,
-            outdialCount: a.outdialCount + b.outdialCount,
-            overallEvalScore: null,
-            postCallDuration: a.postCallDuration + b.postCallDuration,
-            reservationCount: a.reservationCount + b.reservationCount,
-            ronaCount: a.ronaCount + b.ronaCount,
-            totalDuration: a.totalDuration + b.totalDuration,
-            wordRatioCount: 0,
-            wrapupDuration: a.wrapupDuration + b.wrapupDuration
-        };
+//     const reduced = channelInfos.reduce((a: any, b: any) => {
+//         return {
+//             agentPhoneNumber: a.agentPhoneNumber,
+//             channelId: a.channelId,
+//             channelType: "telephony",
+//             connectedCount: a.connectedCount + b.connectedCount,
+//             connectedDuration: a.connectedDuration + b.connectedDuration,
+//             currentState: a.currentState,
+//             notRespondedCount: a.notRespondedCount + b.notRespondedCount,
+//             outdialCount: a.outdialCount + b.outdialCount,
+//             overallEvalScore: null,
+//             postCallDuration: a.postCallDuration + b.postCallDuration,
+//             reservationCount: a.reservationCount + b.reservationCount,
+//             ronaCount: a.ronaCount + b.ronaCount,
+//             totalDuration: a.totalDuration + b.totalDuration,
+//             wordRatioCount: 0,
+//             wrapupDuration: a.wrapupDuration + b.wrapupDuration
+//         };
         
-    });
+//     });
     
-    const startTime = queryData.data.agentSession.agentSessions.reduce((a: any, b: any) => a.startTime < b.startTime ? a : b).startTime;
-    if (startTime == null || startTime == undefined) {  // May remove this as it kinda doesnt need that after the null check
-        throw new NotFoundError("No agent sessions found");
-    }
+//     const startTime = queryData.data.agentSession.agentSessions.reduce((a: any, b: any) => a.startTime < b.startTime ? a : b).startTime;
+//     if (startTime == null || startTime == undefined) {  // May remove this as it kinda doesnt need that after the null check
+//         throw new NotFoundError("No agent sessions found");
+//     }
 
-    const channelInfo = {...reduced, startTime: startTime} as ChannelInfoResponse;
+//     const channelInfo = {...reduced, startTime: startTime} as ChannelInfoResponse;
 
-    return channelInfo;
-};
+//     return channelInfo;
+// };
 
 
 
