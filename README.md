@@ -2,6 +2,8 @@
 
 AHT Tracker lets help desk agents track their call data for the day at a glance.
 
+![Dashboard Screenshot](docs/dashboard-screenshot.png)
+
 The dashboard lets agents see pertinant session metrics inlcuding:
 
 - Average Handle Time
