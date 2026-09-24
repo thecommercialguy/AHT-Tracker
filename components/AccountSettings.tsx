@@ -68,7 +68,8 @@ export default function AccountSettings() {
             return;
         }
         
-        fetcher.submit({...formData}, {method: "POST", action: '/settings'})
+        // fetcher.submit({...formData}, {method: "POST", action: '/settings'})
+        return;
     }
     
     const toggleModal = () => {
@@ -90,6 +91,7 @@ export default function AccountSettings() {
     // fetcher.submit({...formData, originalData: {...data}}, {method: "POST", action: '/settings'})
 
     const deleteHandler = async () => {
+        return
         // firebase user deletion logic
         try {
             const userDocRef = doc(db, "users", user.uid);
@@ -117,7 +119,7 @@ export default function AccountSettings() {
 
     return (
         <div className="account-settings">
-            <h1 className="account-settings-header">Account Settings</h1>
+            <h1 className="account-settings-header">Account Settings<span style={{color: 'red', fontSize: "16px"}}>  * in development *</span></h1>
             {fetcher.data?.error && <div className="error sign-in">
                 <span>{fetcher.data?.error.message}</span>
             </div>}
