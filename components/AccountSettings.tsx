@@ -339,6 +339,65 @@ export default function AccountSettings() {
 
                 }
             </AnimatePresence>
+            <AnimatePresence>
+                {   
+                    isModalActive &&
+                    <motion.div 
+                        
+                        className="backdrop-container"
+                        style={{ transformOrigin: "center"}}
+                        initial={{
+                            opacity: 0
+                        }}
+                        animate={{
+                            opacity: 1
+                        }}
+                        exit={{
+                            opacity: 0
+                        }}
+                    >
+                        <motion.div 
+                            onClick={toggleModal}
+                            className="backdrop"
+                            style={{ transformOrigin: "center"}}
+                            initial={{
+                                opacity: 0
+                            }}
+                            animate={{
+                                opacity: 1
+                            }}
+                            exit={{
+                                opacity: 0
+                            }}
+                        ></motion.div>
+                        <motion.div 
+                            className="verify-modal"
+                            initial={{
+                                scale: 0
+                            }}
+                            animate={{
+                                scale: 1
+                            }}
+                            exit={{
+                                scale: 0
+                            }}
+                        >
+                            <span>Verify changes</span>
+                            <span className="sub">Enter password to verify changes</span>
+                            <input
+                                type="text" 
+                                id="webexId" 
+                                name="webexId"
+                                
+                            />
+                                <button onClick={deleteHandler} className="button">Save changes</button>
+                            
+
+                        </motion.div>
+                    </motion.div>
+
+                }
+            </AnimatePresence>
         </div>
     )
 }
