@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { getAuth, deleteUser } from "firebase/auth";
 import { useAuth } from "../context/authContext";
 import { validateAgentPhoneNumber, validateWebexId } from "../helpers/formHelpers";
+import { X } from "lucide-react";
 
 
 export async function AccountSettingLoader() {
@@ -33,6 +34,8 @@ export default function AccountSettings() {
     const fetcher = useFetcher<typeof accountSettingsAction>();
     const { user, initializing } = useAuth();
     const [isModalActive, setIsModalActive] = useState<boolean>(false);
+    const [isVerifyUpdateModalActive, setIsVerifyUpdateModalActive] = useState<boolean>(false);
+    const [passwordVerified, setPasswordVerified] = useState<string>("");
     const navigate = useNavigate();
     const {
         register, 
@@ -71,9 +74,16 @@ export default function AccountSettings() {
         // fetcher.submit({...formData}, {method: "POST", action: '/settings'})
         return;
     }
+
+    console.log(passwordVerified)
+    console.log(isVerifyUpdateModalActive)
     
     const toggleModal = () => {
         setIsModalActive(!isModalActive)
+    }
+
+    const toggleVerifyUpdateModal = () => {
+        setIsVerifyUpdateModalActive(!isModalActive)
     }
 
 
@@ -258,8 +268,9 @@ export default function AccountSettings() {
                 <div className="submit-container">
                     <motion.button 
                     className="submit" 
-                    type="submit"
-                     whileHover={{
+                    // type=""
+                    onClick={() => toggleVerifyUpdateModal()}
+                    whileHover={{
                         opacity: .8,
                     }}
                     whileTap={{
@@ -284,7 +295,7 @@ export default function AccountSettings() {
                     className="delete">delete account?</motion.button>
                 </div>
             </form>
-            <AnimatePresence>
+            {/* <AnimatePresence>
                 {   
                     isModalActive &&
                     <motion.div 
@@ -338,10 +349,10 @@ export default function AccountSettings() {
                     </motion.div>
 
                 }
-            </AnimatePresence>
+            </AnimatePresence> */}
             <AnimatePresence>
                 {   
-                    isModalActive &&
+                    isVerifyUpdateModalActive &&
                     <motion.div 
                         
                         className="backdrop-container"
@@ -357,7 +368,7 @@ export default function AccountSettings() {
                         }}
                     >
                         <motion.div 
-                            onClick={toggleModal}
+                            onClick={() => setIsVerifyUpdateModalActive(false)}
                             className="backdrop"
                             style={{ transformOrigin: "center"}}
                             initial={{
@@ -381,13 +392,32 @@ export default function AccountSettings() {
                             exit={{
                                 scale: 0
                             }}
-                        >
-                            <span>Verify changes</span>
-                            <span className="sub">Enter password to verify changes</span>
+                        >   
+                            <div className="verify-modal-header">
+                                <span>Verify changes</span>
+                                <span className="sub">Enter password to verify changes</span>
+                                <motion.button
+                                    className="dismiss"
+                                    onClick={() => setIsVerifyUpdateModalActive(false)}
+                                    whileHover={{
+                                        opacity: .65
+                                    }}
+                                    whileTap={{
+                                        scale: .95
+                                    }}
+                                    transition={{
+                                        opacity: { duration: .15, ease: 'easeIn'},
+                                        scale: { duration: .15, ease: 'easeIn'}
+                                    }}
+                                >
+                                    <X color="white"/>
+                                </motion.button>
+                            </div>
                             <input
                                 type="text" 
-                                id="webexId" 
-                                name="webexId"
+                                id="passwordVerified" 
+                                name="passwordVerified"
+                                onChange={(e) => setPasswordVerified(e.target.value)}
                                 
                             />
                                 <button onClick={deleteHandler} className="button">Save changes</button>

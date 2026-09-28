@@ -223,7 +223,8 @@
     left: 50%;
     transform: translate(-50%);
 
-    background-color: hsla(223, 10%, 14%, .75);
+    /* background-color: hsla(223, 10%, 14%, .85); */
+    background-color: hsla(0, 0%, 0%, 0.8);
     overflow: clip;
     border: 1px blue solid;
     
@@ -306,6 +307,15 @@
 
 } */
 
+.verify-modal-header {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+}
+
 
 .verify-modal input {
     font-size: 1rem;
@@ -360,6 +370,23 @@
     line-height: 2;
 }
 
+.verify-modal .dismiss {
+    display: flex;
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    right: 0;
+    width: max-content;
+    height: max-content;
+    padding: 0;
+    margin: 0;
+
+    outline: none;
+    border: none;
+    background-color: transparent;
+
+}
+
 .delete-modal {
     /* width: 632px; */
     width: 504px;
@@ -390,6 +417,8 @@
     z-index: 2;
     
 }
+
+
 
 .delete-modal span,
 .verify-modal span {

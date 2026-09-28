@@ -17,7 +17,7 @@ The dashboard lets agents see pertinant session metrics inlcuding:
 
 "Call History" gives agents access to historical call statistics. Exposing metrics like fastest average handle time, total inbound calls taken, and more. 
 
-Call data is sources from the Webex Search API. When a user access thier dashboard a cloud function transforms, stores, and structures their most recent call data to viewed in the dashboard.
+Call data is sources from the Webex Search API. When a user access thier dashboard a cloud function transforms, stores, and structures their most recent call data to be viewed in the dashboard.
 
 The "raw" data from the Webex Search API is transformed into types objects that are more well suited for an agent's dashboard and Call History.
 
