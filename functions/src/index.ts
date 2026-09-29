@@ -37,3 +37,5 @@ export {getUserDashboard} from "./handlers/callHandlers";
 export {getUserCallRecord} from "./handlers/callHandlers";
 export {verifyWebexId} from "./handlers/authHandlers";
 export {verifyWebexPhoneNumber} from "./handlers/authHandlers";
+export {verifyWebexIdUpdate} from "./handlers/authHandlers";
+export {verifyWebexPhoneNumberUpdate} from "./handlers/authHandlers";

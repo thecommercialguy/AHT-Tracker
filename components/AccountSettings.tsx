@@ -6,9 +6,9 @@ import type { accountSettingsAction } from "../actions/actions";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { getAuth, deleteUser } from "firebase/auth";
+import { getAuth, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { useAuth } from "../context/authContext";
-import { validateAgentPhoneNumber, validateWebexId } from "../helpers/formHelpers";
+import { validateAgentPhoneNumber, validateAgentPhoneNumberUpdate, validateWebexId } from "../helpers/formHelpers";
 import { X } from "lucide-react";
 
 
@@ -36,6 +36,9 @@ export default function AccountSettings() {
     const [isModalActive, setIsModalActive] = useState<boolean>(false);
     const [isVerifyUpdateModalActive, setIsVerifyUpdateModalActive] = useState<boolean>(false);
     const [passwordVerified, setPasswordVerified] = useState<string>("");
+    const [verifyUpdateError, setVerifyUpdateError] = useState<string>("");
+    const [verifyDeleteError, setVerifyDeleteError] = useState<string>("");
+
     const navigate = useNavigate();
     const {
         register, 
@@ -43,7 +46,24 @@ export default function AccountSettings() {
         formState: { errors }
     } = useForm<UserUpdateFields>();
 
-    const onSubmit: SubmitHandler<UserUpdateFields> = (formData) => {
+   const verifyUser = async () => {
+        try {
+            const credential = EmailAuthProvider.credential(user.email, passwordVerified);
+            await reauthenticateWithCredential(user, credential);
+            console.log('ssllsl')
+            return true;
+        } catch (error) {
+            if (error.code === "auth/wrong-password" || error.code === "auth/invalid-credential") {
+                setVerifyUpdateError("Invalid credentials.")
+            } else {
+                console.error(error);
+                setVerifyUpdateError("Something went wrong.")
+            }
+            return false;
+        }
+    }
+
+    const onSubmit: SubmitHandler<UserUpdateFields> = async (formData) => {
         const toDiff = {
             firstName: formData.firstName.trim(),
             lastName: formData.lastName.trim(),
@@ -68,9 +88,15 @@ export default function AccountSettings() {
             toDiff.email == original.email &&
             !formData.password
         ) {
+            console.log('alal')
             return;
         }
         
+        const isVerified  = await verifyUser();
+        console.log('isVer', isVerified)
+        if (!isVerified) return;
+        console.log('Verified')
+
         // fetcher.submit({...formData}, {method: "POST", action: '/settings'})
         return;
     }
@@ -100,6 +126,8 @@ export default function AccountSettings() {
     }, [isModalActive]);
     // fetcher.submit({...formData, originalData: {...data}}, {method: "POST", action: '/settings'})
 
+    
+
     const deleteHandler = async () => {
         return
         // firebase user deletion logic
@@ -121,6 +149,9 @@ export default function AccountSettings() {
             return;
         }
     }
+
+
+
 
     // snackbar context
 
@@ -234,7 +265,8 @@ export default function AccountSettings() {
                                 },
                                 validate: async (v, f) => {
                                     try {
-                                        const isValid = await validateAgentPhoneNumber(v);
+                                        const token = await user.getIdToken();
+                                        const isValid = await validateAgentPhoneNumberUpdate(v, token);
                                         return isValid || 'agent phone number not found'
                                     } catch (e) {
                                         return e.message
@@ -418,9 +450,23 @@ export default function AccountSettings() {
                                 id="passwordVerified" 
                                 name="passwordVerified"
                                 onChange={(e) => setPasswordVerified(e.target.value)}
-                                
+                                autoComplete="current-password"
                             />
-                                <button onClick={deleteHandler} className="button">Save changes</button>
+                            <motion.button 
+                                className="button"
+                                onClick={() => verifyUser()}
+                                whileHover={{
+                                    opacity: .8,
+                                }}
+                                whileTap={{
+                                    scale: .95
+                                }}
+                                transition={{
+                                    scale: { duration: .15, ease: 'easeIn'},
+                                    borderRadius: { duration: .15 }
+                                }}
+                                disabled={!passwordVerified}
+                            >Save changes</motion.button>
                             
 
                         </motion.div>
@@ -431,3 +477,6 @@ export default function AccountSettings() {
         </div>
     )
 }
+
+
+
