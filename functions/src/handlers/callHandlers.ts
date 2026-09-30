@@ -175,6 +175,7 @@ export const getUserDashboard = onRequest(
          
 
         } catch (error) {
+            console.error('DashErr', error)
             errorResponse(error, res);
             return;
         }

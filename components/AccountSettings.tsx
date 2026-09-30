@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { getAuth, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { useAuth } from "../context/authContext";
-import { validateAgentPhoneNumber, validateAgentPhoneNumberUpdate, validateWebexId } from "../helpers/formHelpers";
+import { validateAgentPhoneNumber, validateAgentPhoneNumberUpdate, validateWebexId, validateWebexIdUpdate } from "../helpers/formHelpers";
 import { X } from "lucide-react";
 
 
@@ -35,6 +35,7 @@ export default function AccountSettings() {
     const { user, initializing } = useAuth();
     const [isModalActive, setIsModalActive] = useState<boolean>(false);
     const [isVerifyUpdateModalActive, setIsVerifyUpdateModalActive] = useState<boolean>(false);
+    const [isVerifyDeleteModalActive, setIsVerifyDeleteModalActive] = useState<boolean>(false);
     const [passwordVerified, setPasswordVerified] = useState<string>("");
     const [verifyUpdateError, setVerifyUpdateError] = useState<string>("");
     const [verifyDeleteError, setVerifyDeleteError] = useState<string>("");
@@ -95,7 +96,6 @@ export default function AccountSettings() {
         const isVerified  = await verifyUser();
         console.log('isVer', isVerified)
         if (!isVerified) return;
-        console.log('Verified')
 
         // fetcher.submit({...formData}, {method: "POST", action: '/settings'})
         return;
@@ -110,6 +110,17 @@ export default function AccountSettings() {
 
     const toggleVerifyUpdateModal = () => {
         setIsVerifyUpdateModalActive(!isModalActive)
+    }
+
+    const dismissUpdateModal = () => {
+        setVerifyUpdateError("");
+        setPasswordVerified("");
+        setIsVerifyUpdateModalActive(false);
+    }
+    const dismissDeleteModal = () => {
+        setVerifyUpdateError("");
+        setPasswordVerified("");
+        setIsVerifyDeleteModalActive(false);
     }
 
 
@@ -129,8 +140,9 @@ export default function AccountSettings() {
     
 
     const deleteHandler = async () => {
+        const isVerified = verifyUser();
+        if (!isVerified) return;
         return
-        // firebase user deletion logic
         try {
             const userDocRef = doc(db, "users", user.uid);
             await deleteDoc(userDocRef)
@@ -160,7 +172,7 @@ export default function AccountSettings() {
 
     return (
         <div className="account-settings">
-            <h1 className="account-settings-header">Account Settings<span style={{color: 'red', fontSize: "16px"}}>  * in development *</span></h1>
+            <h1 className="account-settings-header">Account Settings</h1>
             {fetcher.data?.error && <div className="error sign-in">
                 <span>{fetcher.data?.error.message}</span>
             </div>}
@@ -237,7 +249,8 @@ export default function AccountSettings() {
                                 validate: async (v, f) => {
                                     if (!v) return true;
                                     try {
-                                        const isValid = await validateWebexId(v);
+                                        const token = await user.getIdToken();
+                                        const isValid = await validateWebexIdUpdate(v, token);
                                         return isValid || 'webex id not found'
                                     } catch (e) {
                                         return e.message
@@ -300,8 +313,8 @@ export default function AccountSettings() {
                 <div className="submit-container">
                     <motion.button 
                     className="submit" 
-                    // type=""
-                    onClick={() => toggleVerifyUpdateModal()}
+                    type="button"
+                    onClick={() => setIsVerifyUpdateModalActive(true)}
                     whileHover={{
                         opacity: .8,
                     }}
@@ -313,12 +326,17 @@ export default function AccountSettings() {
                         borderRadius: { duration: .15 }
                     }}>Save changes</motion.button>
                     <motion.button 
-                    onClick={toggleModal} 
+                    type="button"
+                    style={{
+                        top: "50%",
+                    }}
+                    onClick={() => setIsVerifyDeleteModalActive(true)} 
                         whileHover={{
                     opacity: .8,
                     }}
                     whileTap={{
-                        scale: .95
+                        scale: .95,
+                        transform: "translateY(-50%)"
                     }}
                     transition={{
                         scale: { duration: .15, ease: 'easeIn'},
@@ -327,9 +345,10 @@ export default function AccountSettings() {
                     className="delete">delete account?</motion.button>
                 </div>
             </form>
-            {/* <AnimatePresence>
+
+            <AnimatePresence>
                 {   
-                    isModalActive &&
+                    isVerifyDeleteModalActive &&
                     <motion.div 
                         
                         className="backdrop-container"
@@ -345,7 +364,7 @@ export default function AccountSettings() {
                         }}
                     >
                         <motion.div 
-                            onClick={toggleModal}
+                            onClick={() => dismissDeleteModal()}
                             className="backdrop"
                             style={{ transformOrigin: "center"}}
                             initial={{
@@ -359,7 +378,7 @@ export default function AccountSettings() {
                             }}
                         ></motion.div>
                         <motion.div 
-                            className="delete-modal"
+                            className="verify-modal"
                             initial={{
                                 scale: 0
                             }}
@@ -369,19 +388,59 @@ export default function AccountSettings() {
                             exit={{
                                 scale: 0
                             }}
-                        >
-                            <span>Deactivate account?</span>
-                            <span className="sub">Deletion will be permanent.</span>
-                            <div className="options-container">
-                                <button onClick={deleteHandler} className="options">Yes</button>
-                                <button onClick={toggleModal} className="options">No</button>
+                        >   
+                            <div className="verify-modal-header">
+                                <span>Delete Account</span>
+                                <span className="sub">Enter password to delete account</span>
+                                <motion.button
+                                    className="dismiss"
+                                    onClick={() => dismissDeleteModal()}
+                                    whileHover={{
+                                        opacity: .65
+                                    }}
+                                    whileTap={{
+                                        scale: .95
+                                    }}
+                                    transition={{
+                                        opacity: { duration: .15, ease: 'easeIn'},
+                                        scale: { duration: .15, ease: 'easeIn'}
+                                    }}
+                                >
+                                    <X color="white"/>
+                                </motion.button>
                             </div>
+                            {verifyUpdateError && <p>{verifyUpdateError}</p>}
+                            <input
+                                type="password" 
+                                id="passwordVerified" 
+                                name="passwordVerified"
+                                onChange={(e) => setPasswordVerified(e.target.value)}
+                                className={verifyUpdateError ? 'input-error' : ''} 
+                                autoComplete="current-password"
+                            />
+                            <motion.button 
+                                type="button"
+                                className="button"
+                                onClick={() => deleteHandler()}
+                                whileHover={{
+                                    opacity: .8,
+                                }}
+                                whileTap={{
+                                    scale: .95
+                                }}
+                                transition={{
+                                    scale: { duration: .15, ease: 'easeIn'},
+                                    borderRadius: { duration: .15 }
+                                }}
+                                disabled={!passwordVerified}
+                            >Save changes</motion.button>
+                            
 
                         </motion.div>
                     </motion.div>
 
                 }
-            </AnimatePresence> */}
+            </AnimatePresence>
             <AnimatePresence>
                 {   
                     isVerifyUpdateModalActive &&
@@ -400,7 +459,7 @@ export default function AccountSettings() {
                         }}
                     >
                         <motion.div 
-                            onClick={() => setIsVerifyUpdateModalActive(false)}
+                            onClick={() => dismissUpdateModal()}
                             className="backdrop"
                             style={{ transformOrigin: "center"}}
                             initial={{
@@ -430,7 +489,7 @@ export default function AccountSettings() {
                                 <span className="sub">Enter password to verify changes</span>
                                 <motion.button
                                     className="dismiss"
-                                    onClick={() => setIsVerifyUpdateModalActive(false)}
+                                    onClick={() => dismissUpdateModal()}
                                     whileHover={{
                                         opacity: .65
                                     }}
@@ -445,16 +504,19 @@ export default function AccountSettings() {
                                     <X color="white"/>
                                 </motion.button>
                             </div>
+                            {verifyUpdateError && <p>{verifyUpdateError}</p>}
                             <input
-                                type="text" 
+                                type="password" 
                                 id="passwordVerified" 
                                 name="passwordVerified"
                                 onChange={(e) => setPasswordVerified(e.target.value)}
+                                className={verifyUpdateError ? 'input-error' : ''} 
                                 autoComplete="current-password"
                             />
                             <motion.button 
+                                type="button"
                                 className="button"
-                                onClick={() => verifyUser()}
+                                onClick={() => handleSubmit(onSubmit)}
                                 whileHover={{
                                     opacity: .8,
                                 }}
