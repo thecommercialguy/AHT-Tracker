@@ -70,16 +70,18 @@ export const getUserDashboard = onRequest(
                 taskLegResponse = await getTaskLegsByPhoneNumber({from: from, to: to, phoneNumber: phoneNumber});
     
             } catch (error) {
+                console.error("TLR", error);
                 errorResponse(error, res);
                 return;
             }
             
-    
+            
             let agentSessionResponse;
             try {
                 agentSessionResponse = await getAgentSessionsByPhoneNumber({from: from, to: to, phoneNumber: phoneNumber});
-    
+                
             } catch (error) {
+                console.error("AGR", error);
                 errorResponse(error, res);
                 return;
             }

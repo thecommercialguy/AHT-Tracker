@@ -264,12 +264,17 @@ export const getTaskLegsByPhoneNumber = async ({from, to, phoneNumber}:GetTaskLe
             variables: { from, to, phoneNumber }
         })
     });
-
+    // const rt = await response.text();
+    // console.error(rt.slice(0,500))
+    // console.log('TLR headers:', JSON.stringify([...response.headers]));
+    // console.log('TLR headers:', response.statusText);
+    console.log(response.status)
+    console.log(response.statusText)
     if (!response.ok) {
         const errorResponse = await response.json();
+        
         const message = errorResponse?.error?.message[0]?.description || null;
-
-        console.error('Failed to fetch call logs:', response);
+        console.error('Failed to fetch call logs:', errorResponse);
         throwQueryError(response.status, message);
     }
 
@@ -374,12 +379,17 @@ export const getAgentSessionsByPhoneNumber = async ({from, to, phoneNumber}: Get
             variables: { from, to, phoneNumber }
         })
     });
-
+    // const rt = await response.text();
+    // console.error(rt.slice(0,500))
+    // console.log('ASR headers:', JSON.stringify([...response.headers]));
+    console.log(response.status)
+    console.log(response.statusText)
+    
     if (!response.ok) {
         const errorResponse = await response.json();
         const message = errorResponse?.error?.message[0]?.description || null;
 
-        console.error('Failed to fetch call logs:', response);
+        console.error('Failed to fetch call logs:', errorResponse);
         throwQueryError(response.status, message);
     }
 
